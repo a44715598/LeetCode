@@ -64,6 +64,28 @@ public class HelloWorld {
         }
         return queries_result;
     }
+    public List<Boolean> canMakePaliQueries2(String s, int[][] queries){
+        List<Boolean> query_result = new ArrayList<Boolean>();
+        int []states = new int[s.length()+1];
+        int cnt = 0;
+        for(int i=0;i<s.length();i++){
+            cnt ^= 1 << (s.charAt(i) - 'a');
+            states[i+1] = cnt;
+        }
+        for(int i=0;i<queries.length;i++){
+            int ant = states[queries[i][1]+1] ^ states[queries[i][0]];
+            int num = 0;
+            while (ant > 0){
+                if((ant & 1) == 1){
+                    num ++;
+                }
+                ant >>= 1;
+            }
+            query_result.add(num / 2 <= queries[i][2]);
+        }
+
+        return query_result;
+    }
 
 //    1096
     public List<String> braceExpansionII(String expression) {
@@ -87,9 +109,10 @@ public class HelloWorld {
     }
 
     public static void main(String[] args) {
-        String s = "  a good   example";
+        String s = "abcda";
+        int [][] queries = {{3,3,0},{1,2,0},{0,3,1},{0,3,2},{0,4,1}};
         HelloWorld hello_world = new HelloWorld();
-        String u_s = hello_world.reverseWords(s);
-        System.out.println(u_s);
+        List<Boolean> result = hello_world.canMakePaliQueries2(s, queries);
+        System.out.println(result.toString());
     }
 }
