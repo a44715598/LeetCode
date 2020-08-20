@@ -1,4 +1,7 @@
+import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
+import javax.print.DocFlavor;
 import java.util.*;
 import java.util.regex.Pattern;
 
@@ -137,7 +140,7 @@ public class HelloWorld {
         return true;
     }
 
-//    415
+    //    415
     public String addStrings(String num1, String num2) {
         StringBuilder num3 = new StringBuilder();
         int cnt = 0;
@@ -176,24 +179,147 @@ public class HelloWorld {
         return num3.reverse().toString();
     }
 
-//    468
+    //    468
     public String validIPAddress(String IP) {
 
         String pattern1 = "^(([1-9]?[0-9]|1[0-9]?[0-9]|25[0-5]|2[0-4]\\d).){3}([1-9]?[0-9]|1[0-9]?[0-9]|25[0-5]|2[0-4]\\d)$";
         String pattern2 = "^(([0-9a-fA-F]){1,4}:){7}(([0-9a-fA-F]){1,4})$";
-        if (Pattern.matches(pattern1, IP)){
+        if (Pattern.matches(pattern1, IP)) {
             return "IPv4";
         }
-        if (Pattern.matches(pattern2, IP)){
+        if (Pattern.matches(pattern2, IP)) {
             return "IPv6";
         }
         return "Neither";
     }
-    public static void main(String[] args) {
-        String IP = "001.101.101.101";
-        HelloWorld hello_world = new HelloWorld();
-        String ans = hello_world.validIPAddress(IP);
-        System.out.println(ans);
 
+    //    917
+    public String reverseOnlyLetters(String S) {
+        char temp;
+        StringBuilder SCopy = new StringBuilder(S);
+        int left = 0, right = S.length() - 1;
+        while (left < right) {
+            if ((S.charAt(left) > 64 && S.charAt(left) < 91) || (S.charAt(left) > 96 && S.charAt(left) < 133)) {
+                if ((S.charAt(right) > 64 && S.charAt(right) < 91) || (S.charAt(right) > 96 && S.charAt(right) < 133)) {
+                    SCopy.replace(left, left + 1, String.valueOf(S.charAt(right)));
+                    SCopy.replace(right, right + 1, String.valueOf(S.charAt(left)));
+                    right--;
+                    left++;
+                } else {
+                    right--;
+                }
+            } else {
+                left++;
+            }
+        }
+        return SCopy.toString();
+    }
+
+    //    1487
+    public String[] getFolderNames(String[] names) {
+        String[] new_names = new String[names.length];
+        HashMap<String, Integer> m = new HashMap<>();
+        for (int i = 0; i < names.length; i++) {
+            if (m.get(names[i]) != null) {
+                int j = m.get(names[i]);
+                while (m.get(names[i] + "(" + String.valueOf(j++) + ")") != null) {
+                }
+                m.put(names[i] + "(" + String.valueOf(j - 1) + ")", 1);
+                m.put(names[i], m.get(names[i]) + 1);
+                new_names[i] = names[i] + "(" + String.valueOf(j - 1) + ")";
+            } else {
+                m.put(names[i], 1);
+                new_names[i] = names[i];
+            }
+
+        }
+        return new_names;
+    }
+
+    //  22
+    public List<String> generateParenthesis(int n) {
+        List<String> ans = new ArrayList<String>();
+        String str = new String("");
+        int left = 0;
+        create(ans, 2 * n, str, left);
+        return ans;
+    }
+
+    public void create(List<String> ans, int n, String str, int left) {
+
+        if (left < 0){
+            return;
+        }
+        if (n == 0) {
+            if (left == 0) {
+                ans.add(str.toString());
+            }
+            return;
+        }
+//        System.out.println(str);
+        create(ans, n - 1, str + '(', left + 1);
+        create(ans, n - 1, str + ')', left - 1);
+        return;
+    }
+
+    public Boolean checkStr(String s) {
+        int left = 0;
+        int right = 0;
+        for(int i=0;i<s.length();i++){
+            if (s.charAt(i) == '('){
+                left ++;
+            }
+            if (s.charAt(i) == ')'){
+                right++;
+            }
+            if (left - right < 0){
+                return false;
+            }
+        }
+        if (left != right){
+            return false;
+        }
+        return true;
+    }
+
+    //
+    public int maxNumberOfBalloons(String text) {
+//        balloon
+        HashMap<Character, Integer> map = new HashMap<>();
+        char[] balon = {'b', 'a', 'l', 'o', 'n'};
+        for (char c : balon) {
+            map.put(c, 0);
+        }
+        for (int i = 0; i < text.length(); i++) {
+            if (text.charAt(i) == 'b' || text.charAt(i) == 'a' || text.charAt(i) == 'l' || text.charAt(i) == 'o' || text.charAt(i) == 'n') {
+                map.compute(text.charAt(i), (k, v) -> {
+                    v += 1;
+                    return v;
+                });
+            }
+        }
+        map.compute('l', (k, v) -> {
+            v /= 2;
+            return v;
+        });
+        map.compute('o', (k, v) -> {
+            v /= 2;
+            return v;
+        });
+        int min = 100000;
+        for (char c : balon) {
+            if (map.get(c) < min) {
+                min = map.get(c);
+            }
+        }
+        System.out.println(map);
+        return min;
+    }
+
+    public static void main(String[] args) {
+        int n = 3;
+        HelloWorld hello_world = new HelloWorld();
+        List<String> ans = hello_world.generateParenthesis(n);
+        System.out.println(ans);
     }
 }
