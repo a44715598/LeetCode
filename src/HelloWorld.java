@@ -1,9 +1,11 @@
 import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
+import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.print.DocFlavor;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.StreamSupport;
 
 public class HelloWorld {
     //  709
@@ -245,9 +247,10 @@ public class HelloWorld {
         return ans;
     }
 
+    //
     public void create(List<String> ans, int n, String str, int left) {
 
-        if (left < 0){
+        if (left < 0) {
             return;
         }
         if (n == 0) {
@@ -265,24 +268,24 @@ public class HelloWorld {
     public Boolean checkStr(String s) {
         int left = 0;
         int right = 0;
-        for(int i=0;i<s.length();i++){
-            if (s.charAt(i) == '('){
-                left ++;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '(') {
+                left++;
             }
-            if (s.charAt(i) == ')'){
+            if (s.charAt(i) == ')') {
                 right++;
             }
-            if (left - right < 0){
+            if (left - right < 0) {
                 return false;
             }
         }
-        if (left != right){
+        if (left != right) {
             return false;
         }
         return true;
     }
 
-    //
+    //1189
     public int maxNumberOfBalloons(String text) {
 //        balloon
         HashMap<Character, Integer> map = new HashMap<>();
@@ -316,10 +319,220 @@ public class HelloWorld {
         return min;
     }
 
+    //    824
+    public String toGoatLatin(String S) {
+        int left = 0, right = 0;
+        String str = new String("maa");
+        StringBuilder SB = new StringBuilder("");
+        for (; right < S.length(); right++) {
+            SB.append(S.charAt(right));
+            if (S.charAt(right) == ' ') {
+
+                if (S.charAt(left) != 'a' && S.charAt(left) != 'e' && S.charAt(left) != 'i' && S.charAt(left) != 'o' && S.charAt(left) != 'u' &&
+                        S.charAt(left) != 'A' && S.charAt(left) != 'E' && S.charAt(left) != 'I' && S.charAt(left) != 'O' && S.charAt(left) != 'U') {
+                    char temp = S.charAt(left);
+                    SB.replace(left, right - 1, SB.substring(left + 1, right));
+                    SB.setCharAt(right - 1, temp);
+
+                }
+                left = right + 1;
+            }
+
+        }
+        if (S.charAt(left) != 'a' && S.charAt(left) != 'e' && S.charAt(left) != 'i' && S.charAt(left) != 'o' && S.charAt(left) != 'u' &&
+                S.charAt(left) != 'A' && S.charAt(left) != 'E' && S.charAt(left) != 'I' && S.charAt(left) != 'O' && S.charAt(left) != 'U') {
+            char temp = S.charAt(left);
+            SB.replace(left, right - 1, SB.substring(left + 1, right));
+            SB.setCharAt(right - 1, temp);
+        }
+
+        right = 0;
+        for (; right < SB.length(); right++) {
+
+            if (SB.charAt(right) == ' ') {
+                SB.insert(right, str);
+                str += "a";
+                right += str.length() - 1;
+
+            }
+        }
+        SB.insert(right, str);
+        return SB.toString();
+    }
+
+    //    38
+    public String countAndSay(int n) {
+        char front = '0';
+        String s = "1";
+        String s1 = "";
+        int count = 0;
+        if (n == 1){
+            return s;
+        }
+        for (int i = 2; i <= n; i++) {
+            int j = 0;
+            for ( j = 0; j < s.length(); j++) {
+
+                if (front != s.charAt(j)) {
+                    if (count !=0){
+                        s1 += Integer.toString(count);
+                        s1 += front;
+                    }
+                    front = s.charAt(j);
+                    count = 0;
+
+                }
+                count ++;
+            }
+            s1 += Integer.toString(count);
+            s1 += front;
+            front = s.charAt(j-1);
+            count = 0;
+            s = s1;
+            s1 = "";
+        }
+        return s;
+    }
+
+//    面试17.17
+    public int[][] multiSearch(String big, String[] smalls) {
+//        List<int []> pos_list = new ArrayList<>();
+        List<Integer> pos = new ArrayList<>();
+        int [][]pos_array = new int [smalls.length][];
+        int count = -1;
+        for (String s:smalls){
+            count ++;
+            int left = 0;
+            int right = Math.max(left + s.length(),1) ;
+            for(;right<=big.length();left++,right++){
+                if (big.substring(left, right).equals(s))
+                {
+//                    System.out.println(s);
+                    pos.add(left);
+                }
+            }
+//            pos_list.add(pos);
+            int[] subpos = new int[pos.size()];
+            for (int i = 0;i<pos.size();i++){
+                subpos[i] = pos.get(i);
+            }
+            pos_array[count] = subpos;
+//            System.out.println(pos);
+            pos.clear();
+        }
+        return pos_array;
+    }
+
+//    966
+    public String[] spellcheckertimeout(String[] wordlist, String[] queries) {
+//        aeiou
+        String []ans = new String[queries.length];
+        int count = -1;
+        boolean flag = false;
+        boolean flag1 = false;
+        for (String query:queries){
+            count++;
+            flag = false;
+            flag1 =false;
+            String s = "";
+
+            for (String word:wordlist){
+                if (query.equals(word)){
+                    ans[count] = word;
+                    break;
+                }
+                else if (query.toLowerCase().equals(word.toLowerCase()) && !flag){
+                    flag = true;
+                    ans[count] = word;
+                }
+                else if (!flag1 && !flag){
+                    if (query.length() != word.length()){
+                        ans[count] = "";
+                        continue;
+                    }
+//                    System.out.println(word);
+                    for (int i=0;i<query.length();i++){     
+                        if (word.charAt(i)-query.charAt(i) == 32 || word.charAt(i)-query.charAt(i) == -32 || word.charAt(i)-query.charAt(i) == 0 ||
+                                ((word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o' || word.charAt(i) == 'u' ||
+                                        word.charAt(i) == 'A' || word.charAt(i) == 'E' || word.charAt(i) == 'I' || word.charAt(i) == 'O' || word.charAt(i) == 'U' )
+                        && (query.charAt(i) == 'a' || query.charAt(i) == 'e' || query.charAt(i) == 'i' || query.charAt(i) == 'o' || query.charAt(i) == 'u' ||
+                                        query.charAt(i) == 'A' || query.charAt(i) == 'E' || query.charAt(i) == 'I' || query.charAt(i) == 'O' || query.charAt(i) == 'U'))){
+//                            System.out.println(i);
+//                            System.out.println(query.length()-1);
+                            if (query.length() - 1 == i){
+//                                System.out.println("hhh");
+                                ans[count] = word;
+                                flag1 = true;
+                            }
+                            continue;
+                        }
+//                        System.out.println("kkk");
+                        ans[count] = "";
+                        break;
+                    }
+                }
+            }
+        }
+        return ans;
+    }
+
+    public String[] spellchecker(String[] wordlist, String[] queries){
+        String []ans = new String[queries.length];
+        Set<String> word_perfect = new HashSet<>();
+        Map<String, String> words_cap = new HashMap<>();
+        Map<String, String> words_vow = new HashMap<>();
+        for (String word:wordlist){
+            word_perfect.add(word);
+            words_cap.putIfAbsent(word.toLowerCase(), word);
+
+            words_vow.putIfAbsent(wordtostar(word), word);
+        }
+        System.out.println(word_perfect);
+        System.out.println(words_cap);
+        System.out.println(words_vow);
+        for (int i =0 ;i<queries.length;i++){
+            if(word_perfect.contains(queries[i])){
+                ans[i] = queries[i];
+                continue;
+            }
+            ans[i] = "";
+        }
+        for (int i =0 ;i<queries.length;i++){
+            if (!ans[i].equals("")){
+                continue;
+            }
+            if(words_cap.get(queries[i].toLowerCase()) != null){
+                ans[i] = words_cap.get(queries[i].toLowerCase());
+            }
+        }
+        for (int i =0 ;i<queries.length;i++){
+            if (!ans[i].equals("")){
+                continue;
+            }
+            if(words_vow.get(wordtostar(queries[i])) != null){
+                ans[i] = words_vow.get(wordtostar(queries[i]));
+            }
+        }
+        return ans;
+    }
+    private String wordtostar(String word){
+        StringBuilder word_replace = new StringBuilder(word.toLowerCase());
+        for (int i =0;i<word.length();i++){
+            if(word_replace.charAt(i) == 'a' || word_replace.charAt(i) == 'e' || word_replace.charAt(i) == 'i' || word_replace.charAt(i) == 'o' || word_replace.charAt(i) == 'u'){
+                word_replace.replace(i, i+1, "*");
+            }
+        }
+        return new String(word_replace);
+    }
     public static void main(String[] args) {
-        int n = 3;
+        String []wordlist = {"YellOw"};
+        String []queries = {"yollow"};
+
         HelloWorld hello_world = new HelloWorld();
-        List<String> ans = hello_world.generateParenthesis(n);
-        System.out.println(ans);
+        String []ans = hello_world.spellchecker(wordlist, queries);
+        for (String s: ans){
+            System.out.print(s + " ");
+        }
+
     }
 }
