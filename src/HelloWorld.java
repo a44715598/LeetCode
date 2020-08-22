@@ -1,11 +1,14 @@
+import com.sun.org.apache.bcel.internal.generic.SWAP;
 import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.print.DocFlavor;
+import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.StreamSupport;
+import java.util.Arrays.*;
 
 public class HelloWorld {
     //  709
@@ -366,15 +369,15 @@ public class HelloWorld {
         String s = "1";
         String s1 = "";
         int count = 0;
-        if (n == 1){
+        if (n == 1) {
             return s;
         }
         for (int i = 2; i <= n; i++) {
             int j = 0;
-            for ( j = 0; j < s.length(); j++) {
+            for (j = 0; j < s.length(); j++) {
 
                 if (front != s.charAt(j)) {
-                    if (count !=0){
+                    if (count != 0) {
                         s1 += Integer.toString(count);
                         s1 += front;
                     }
@@ -382,11 +385,11 @@ public class HelloWorld {
                     count = 0;
 
                 }
-                count ++;
+                count++;
             }
             s1 += Integer.toString(count);
             s1 += front;
-            front = s.charAt(j-1);
+            front = s.charAt(j - 1);
             count = 0;
             s = s1;
             s1 = "";
@@ -394,26 +397,25 @@ public class HelloWorld {
         return s;
     }
 
-//    面试17.17
+    //    面试17.17
     public int[][] multiSearch(String big, String[] smalls) {
 //        List<int []> pos_list = new ArrayList<>();
         List<Integer> pos = new ArrayList<>();
-        int [][]pos_array = new int [smalls.length][];
+        int[][] pos_array = new int[smalls.length][];
         int count = -1;
-        for (String s:smalls){
-            count ++;
+        for (String s : smalls) {
+            count++;
             int left = 0;
-            int right = Math.max(left + s.length(),1) ;
-            for(;right<=big.length();left++,right++){
-                if (big.substring(left, right).equals(s))
-                {
+            int right = Math.max(left + s.length(), 1);
+            for (; right <= big.length(); left++, right++) {
+                if (big.substring(left, right).equals(s)) {
 //                    System.out.println(s);
                     pos.add(left);
                 }
             }
 //            pos_list.add(pos);
             int[] subpos = new int[pos.size()];
-            for (int i = 0;i<pos.size();i++){
+            for (int i = 0; i < pos.size(); i++) {
                 subpos[i] = pos.get(i);
             }
             pos_array[count] = subpos;
@@ -423,43 +425,41 @@ public class HelloWorld {
         return pos_array;
     }
 
-//    966
+    //    966
     public String[] spellcheckertimeout(String[] wordlist, String[] queries) {
 //        aeiou
-        String []ans = new String[queries.length];
+        String[] ans = new String[queries.length];
         int count = -1;
         boolean flag = false;
         boolean flag1 = false;
-        for (String query:queries){
+        for (String query : queries) {
             count++;
             flag = false;
-            flag1 =false;
+            flag1 = false;
             String s = "";
 
-            for (String word:wordlist){
-                if (query.equals(word)){
+            for (String word : wordlist) {
+                if (query.equals(word)) {
                     ans[count] = word;
                     break;
-                }
-                else if (query.toLowerCase().equals(word.toLowerCase()) && !flag){
+                } else if (query.toLowerCase().equals(word.toLowerCase()) && !flag) {
                     flag = true;
                     ans[count] = word;
-                }
-                else if (!flag1 && !flag){
-                    if (query.length() != word.length()){
+                } else if (!flag1 && !flag) {
+                    if (query.length() != word.length()) {
                         ans[count] = "";
                         continue;
                     }
 //                    System.out.println(word);
-                    for (int i=0;i<query.length();i++){     
-                        if (word.charAt(i)-query.charAt(i) == 32 || word.charAt(i)-query.charAt(i) == -32 || word.charAt(i)-query.charAt(i) == 0 ||
+                    for (int i = 0; i < query.length(); i++) {
+                        if (word.charAt(i) - query.charAt(i) == 32 || word.charAt(i) - query.charAt(i) == -32 || word.charAt(i) - query.charAt(i) == 0 ||
                                 ((word.charAt(i) == 'a' || word.charAt(i) == 'e' || word.charAt(i) == 'i' || word.charAt(i) == 'o' || word.charAt(i) == 'u' ||
-                                        word.charAt(i) == 'A' || word.charAt(i) == 'E' || word.charAt(i) == 'I' || word.charAt(i) == 'O' || word.charAt(i) == 'U' )
-                        && (query.charAt(i) == 'a' || query.charAt(i) == 'e' || query.charAt(i) == 'i' || query.charAt(i) == 'o' || query.charAt(i) == 'u' ||
-                                        query.charAt(i) == 'A' || query.charAt(i) == 'E' || query.charAt(i) == 'I' || query.charAt(i) == 'O' || query.charAt(i) == 'U'))){
+                                        word.charAt(i) == 'A' || word.charAt(i) == 'E' || word.charAt(i) == 'I' || word.charAt(i) == 'O' || word.charAt(i) == 'U')
+                                        && (query.charAt(i) == 'a' || query.charAt(i) == 'e' || query.charAt(i) == 'i' || query.charAt(i) == 'o' || query.charAt(i) == 'u' ||
+                                        query.charAt(i) == 'A' || query.charAt(i) == 'E' || query.charAt(i) == 'I' || query.charAt(i) == 'O' || query.charAt(i) == 'U'))) {
 //                            System.out.println(i);
 //                            System.out.println(query.length()-1);
-                            if (query.length() - 1 == i){
+                            if (query.length() - 1 == i) {
 //                                System.out.println("hhh");
                                 ans[count] = word;
                                 flag1 = true;
@@ -476,63 +476,258 @@ public class HelloWorld {
         return ans;
     }
 
-    public String[] spellchecker(String[] wordlist, String[] queries){
-        String []ans = new String[queries.length];
+    public String[] spellchecker(String[] wordlist, String[] queries) {
+        String[] ans = new String[queries.length];
         Set<String> word_perfect = new HashSet<>();
         Map<String, String> words_cap = new HashMap<>();
         Map<String, String> words_vow = new HashMap<>();
-        for (String word:wordlist){
+        for (String word : wordlist) {
             word_perfect.add(word);
             words_cap.putIfAbsent(word.toLowerCase(), word);
-
             words_vow.putIfAbsent(wordtostar(word), word);
         }
         System.out.println(word_perfect);
         System.out.println(words_cap);
         System.out.println(words_vow);
-        for (int i =0 ;i<queries.length;i++){
-            if(word_perfect.contains(queries[i])){
+        for (int i = 0; i < queries.length; i++) {
+            if (word_perfect.contains(queries[i])) {
                 ans[i] = queries[i];
                 continue;
             }
             ans[i] = "";
         }
-        for (int i =0 ;i<queries.length;i++){
-            if (!ans[i].equals("")){
+        for (int i = 0; i < queries.length; i++) {
+            if (!ans[i].equals("")) {
                 continue;
             }
-            if(words_cap.get(queries[i].toLowerCase()) != null){
+            if (words_cap.get(queries[i].toLowerCase()) != null) {
                 ans[i] = words_cap.get(queries[i].toLowerCase());
             }
         }
-        for (int i =0 ;i<queries.length;i++){
-            if (!ans[i].equals("")){
+        for (int i = 0; i < queries.length; i++) {
+            if (!ans[i].equals("")) {
                 continue;
             }
-            if(words_vow.get(wordtostar(queries[i])) != null){
+            if (words_vow.get(wordtostar(queries[i])) != null) {
                 ans[i] = words_vow.get(wordtostar(queries[i]));
             }
         }
         return ans;
     }
-    private String wordtostar(String word){
+
+    private String wordtostar(String word) {
         StringBuilder word_replace = new StringBuilder(word.toLowerCase());
-        for (int i =0;i<word.length();i++){
-            if(word_replace.charAt(i) == 'a' || word_replace.charAt(i) == 'e' || word_replace.charAt(i) == 'i' || word_replace.charAt(i) == 'o' || word_replace.charAt(i) == 'u'){
-                word_replace.replace(i, i+1, "*");
+        for (int i = 0; i < word.length(); i++) {
+            if (word_replace.charAt(i) == 'a' || word_replace.charAt(i) == 'e' || word_replace.charAt(i) == 'i' || word_replace.charAt(i) == 'o' || word_replace.charAt(i) == 'u') {
+                word_replace.replace(i, i + 1, "*");
             }
         }
         return new String(word_replace);
     }
-    public static void main(String[] args) {
-        String []wordlist = {"YellOw"};
-        String []queries = {"yollow"};
 
-        HelloWorld hello_world = new HelloWorld();
-        String []ans = hello_world.spellchecker(wordlist, queries);
-        for (String s: ans){
-            System.out.print(s + " ");
+    //    1370
+    public String sortString(String s) {
+        char[] sc = s.toCharArray();
+        Arrays.sort(sc);
+        char front = '0';
+        int length = sc.length;
+        StringBuilder ans = new StringBuilder();
+        StringBuilder s1 = new StringBuilder(String.valueOf(sc));
+        while (length > 0) {
+            front = '0';
+            for (int i = 0; i < s1.length(); i++) {
+                if (front != s1.charAt(i)) {
+                    ans.append(s1.charAt(i));
+                    front = s1.charAt(i);
+                    s1.deleteCharAt(i);
+                    length--;
+                    i--;
+                }
+            }
+            front = '0';
+            for (int i = s1.length() - 1; i >= 0; i--) {
+
+                if (front != s1.charAt(i)) {
+                    ans.append(s1.charAt(i));
+                    front = s1.charAt(i);
+                    s1.deleteCharAt(i);
+                    length--;
+//                    System.out.println(ans);
+                }
+            }
+
         }
+
+        return ans.toString();
+    }
+
+    private String[] quickSort(String[] folder, int left, int right) {
+        if (left == right) {
+            return folder;
+        }
+
+
+        int l = left, r = right;
+        int flag_length = folder[left].length();
+        String flag_str = folder[left];
+        int flag_pos = left;
+        while (left < right) {
+
+            while (folder[right].length() >= flag_length && left < right) {
+                right--;
+            }
+            if (left < right) {
+                String temp = folder[right];
+                folder[right] = flag_str;
+                folder[flag_pos] = temp;
+                flag_pos = right;
+                right--;
+            }
+
+            while (folder[left].length() <= flag_length && left < right) {
+                left++;
+            }
+            if (left < right) {
+                String temp = folder[left];
+                folder[left] = flag_str;
+                folder[flag_pos] = temp;
+                flag_pos = left;
+                left++;
+
+            }
+
+
+        }
+
+
+        quickSort(folder, l, left);
+        quickSort(folder, left + 1, r);
+        return folder;
+    }
+
+    //    1233
+    public List<String> removeSubfolders(String[] folder) {
+
+        int left = 0;
+        int right = folder.length - 1;
+        quickSort(folder, left, right);
+        Set<String> vec = new HashSet<>();
+        List<String> ls = new ArrayList<>();
+
+        for (int j = 0; j < folder.length; j++) {
+            for (int i = 1; i < folder[j].length(); i = i + 1) {
+                if (folder[j].charAt(i) == '/') {
+                    if (vec.contains(folder[j].substring(0, i))) {
+                        break;
+                    }
+                }
+                if (i == folder[j].length() - 1) {
+                    vec.add(folder[j]);
+                    ls.add(folder[j]);
+                }
+            }
+        }
+        return ls;
+    }
+
+    //    28
+    public int strStr(String haystack, String needle) {
+        if (needle.length() == 0) {
+            return 0;
+        }
+        int left = 0;
+        int right = needle.length();
+        for (; right <= haystack.length(); left++, right++) {
+            if (haystack.substring(left, right).equals(needle)) {
+                return left;
+            }
+        }
+        return -1;
+    }
+
+    //12
+    public String intToRoman(int num) {
+        //        I             1
+        //V             5
+        //X             10
+        //L             50
+        //C             100
+        //D             500
+        //M             1000
+        StringBuilder ans = new StringBuilder();
+
+
+
+        int M_num = num / 1000;
+        int D_num = (num - M_num * 1000) / 500;
+        int C_num = (num - M_num * 1000 - D_num * 500) / 100;
+        int L_num = (num - M_num * 1000 - D_num * 500 - C_num * 100) / 50;
+        int X_num = (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50) / 10;
+        int V_num = (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10) / 5;
+        int I_num = num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 - V_num * 5;
+
+        for (int i = 0; i<M_num;i++){
+            ans.append("M");
+        }
+        for (int i = 0; i<D_num;i++){
+            if (num - M_num * 1000 >= 900){
+                ans.append("CM");
+                break;
+            }
+            ans.append("D");
+        }
+        for (int i = 0; i<C_num;i++){
+            if (num - M_num * 1000 >= 900) {
+                break;
+            }
+            if (num - M_num * 1000 - D_num * 500  >= 400){
+                ans.append("CD");
+                break;
+            }
+            ans.append("C");
+        }
+        for (int i = 0; i<L_num;i++){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100  >= 90){
+                ans.append("XC");
+                break;
+            }
+            ans.append("L");
+        }
+        for (int i = 0; i<X_num;i++){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100  >= 90){
+                break;
+            }
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50  >= 40){
+                ans.append("XL");
+                break;
+            }
+            ans.append("X");
+        }
+        for (int i = 0; i<V_num;i++){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50 - X_num * 10 >= 9){
+                ans.append("IX");
+                break;
+            }
+            ans.append("V");
+        }
+        for (int i = 0; i<I_num;i++){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50 - X_num * 10 >= 9){
+                break;
+            }
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 - V_num * 5  >= 4){
+                ans.append("IV");
+                break;
+            }
+            ans.append("I");
+        }
+        return ans.toString();
+    }
+
+    public static void main(String[] args) {
+        int num = 1994;
+        HelloWorld hello_world = new HelloWorld();
+        String ans = hello_world.intToRoman(num);
+        System.out.println(ans);
 
     }
 }
