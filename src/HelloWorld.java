@@ -657,7 +657,6 @@ public class HelloWorld {
         StringBuilder ans = new StringBuilder();
 
 
-
         int M_num = num / 1000;
         int D_num = (num - M_num * 1000) / 500;
         int C_num = (num - M_num * 1000 - D_num * 500) / 100;
@@ -666,55 +665,55 @@ public class HelloWorld {
         int V_num = (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10) / 5;
         int I_num = num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 - V_num * 5;
 
-        for (int i = 0; i<M_num;i++){
+        for (int i = 0; i < M_num; i++) {
             ans.append("M");
         }
-        for (int i = 0; i<D_num;i++){
-            if (num - M_num * 1000 >= 900){
+        for (int i = 0; i < D_num; i++) {
+            if (num - M_num * 1000 >= 900) {
                 ans.append("CM");
                 break;
             }
             ans.append("D");
         }
-        for (int i = 0; i<C_num;i++){
+        for (int i = 0; i < C_num; i++) {
             if (num - M_num * 1000 >= 900) {
                 break;
             }
-            if (num - M_num * 1000 - D_num * 500  >= 400){
+            if (num - M_num * 1000 - D_num * 500 >= 400) {
                 ans.append("CD");
                 break;
             }
             ans.append("C");
         }
-        for (int i = 0; i<L_num;i++){
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100  >= 90){
+        for (int i = 0; i < L_num; i++) {
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 >= 90) {
                 ans.append("XC");
                 break;
             }
             ans.append("L");
         }
-        for (int i = 0; i<X_num;i++){
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100  >= 90){
+        for (int i = 0; i < X_num; i++) {
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 >= 90) {
                 break;
             }
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50  >= 40){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 >= 40) {
                 ans.append("XL");
                 break;
             }
             ans.append("X");
         }
-        for (int i = 0; i<V_num;i++){
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50 - X_num * 10 >= 9){
+        for (int i = 0; i < V_num; i++) {
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 >= 9) {
                 ans.append("IX");
                 break;
             }
             ans.append("V");
         }
-        for (int i = 0; i<I_num;i++){
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num*50 - X_num * 10 >= 9){
+        for (int i = 0; i < I_num; i++) {
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 >= 9) {
                 break;
             }
-            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 - V_num * 5  >= 4){
+            if (num - M_num * 1000 - D_num * 500 - C_num * 100 - L_num * 50 - X_num * 10 - V_num * 5 >= 4) {
                 ans.append("IV");
                 break;
             }
@@ -723,10 +722,202 @@ public class HelloWorld {
         return ans.toString();
     }
 
+
+    //    1170
+    public int[] numSmallerByFrequency(String[] queries, String[] words) {
+        int[] queries_num = fStingList(queries);
+        int[] words_num = fStingList(words);
+        int[] num = new int[queries_num.length];
+        for (int i = 0; i < queries.length; i++) {
+            int count = 0;
+            for (int j = 0; j < words.length; j++) {
+                if (queries_num[i] < words_num[j]) {
+                    count++;
+                }
+            }
+            num[i] = count;
+        }
+        return num;
+    }
+
+    public int[] fStingList(String[] array) {
+        int[] array_num = new int[array.length];
+        for (int i = 0; i < array.length; i++) {
+            array_num[i] = f(array[i]);
+        }
+        return array_num;
+    }
+
+    public int f(String s) {
+        char[] c = s.toCharArray();
+        Arrays.sort(c);
+        char c0 = c[0];
+        int i = 0;
+        for (; i < s.length(); i++) {
+            if (c[i] != c0) {
+                break;
+            }
+        }
+        return i;
+    }
+
+    //    434
+    public int countSegments(String s) {
+        int count = 0;
+        boolean flag = false;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != ' ' && !flag) {
+                flag = true;
+                count++;
+                continue;
+            }
+            if (s.charAt(i) == ' ')
+                flag = false;
+        }
+        return count;
+    }
+
+    //    1545
+    public char findKthBit(int n, int k) {
+        String s = "0";
+        for (int i = 0; i < n - 1; i++) {
+            StringBuilder s_invert = invertString(s).reverse();
+            s += "1" + s_invert.toString();
+        }
+
+        return s.charAt(k - 1);
+    }
+
+    public StringBuilder invertString(String s) {
+        StringBuilder s_invert = new StringBuilder();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) == '0') {
+                s_invert.append('1');
+            } else {
+                s_invert.append('0');
+            }
+        }
+        return s_invert;
+    }
+
+    //    537
+    public String complexNumberMultiply(String a, String b) {
+        int a_num = 0, ai_num = 0;
+        int b_num = 0, bi_num = 0;
+        StringBuilder ac = new StringBuilder();
+        StringBuilder bc = new StringBuilder();
+        StringBuilder str = new StringBuilder();
+        int count1 = 0, count2 = 0;
+
+        if (a.charAt(count1) == '-'){
+            str.append('-');
+            count1++;
+        }
+        while (a.charAt(count1) != '+' && a.charAt(count1) != '-') {
+            str.append(a.charAt(count1));
+            count1++;
+        }
+
+        a_num = Integer.parseInt(str.toString());
+        str.delete(0, str.length());
+        while (a.charAt(count1) == '+' || a.charAt(count1) == '-') {
+            ac.append(a.charAt(count1));
+            count1++;
+        }
+        while (a.charAt(count1) != 'i') {
+            str.append(a.charAt(count1));
+            count1++;
+        }
+
+        ai_num = Integer.parseInt(str.toString());
+        str.delete(0, str.length());
+
+        count1 = 0;
+        if (b.charAt(count1) == '-'){
+            str.append('-');
+            count1++;
+        }
+        while (b.charAt(count1) != '+' && b.charAt(count1) != '-') {
+            str.append(b.charAt(count1));
+            count1++;
+        }
+
+        b_num = Integer.parseInt(str.toString());
+        str.delete(0, str.length());
+        while (b.charAt(count1) == '+' || b.charAt(count1) == '-') {
+            bc.append(b.charAt(count1));
+            count1++;
+        }
+        while (b.charAt(count1) != 'i') {
+            str.append(b.charAt(count1));
+            count1++;
+        }
+        bi_num = Integer.parseInt(str.toString());
+
+//        System.out.println(a+a_num+ac+ai_num);
+//        System.out.println(b+b_num+bc+bi_num);
+        int w = a_num * b_num;
+        int wi = ai_num * bi_num;
+        int w1 = a_num * bi_num;
+        int w2 = b_num * ai_num;
+        int first = 0;
+        char second = '+';
+        int third = 0;
+        StringBuilder ans = new StringBuilder();
+        if (ac.toString().equals("+-")){
+            ac.replace(0, ac.length(), "-");
+        }
+        if (bc.toString().equals("+-")){
+            bc.replace(0, bc.length(), "-");
+        }
+        if (ac.toString().equals("+") && bc.toString().equals("+")){
+            first = w - wi;
+            second = '+';
+            third = w1 + w2;
+        }
+
+        if (ac.toString().equals("-") && bc.toString().equals("-")){
+            first = w - wi;
+            second = '+';
+            third = - (w1 + w2);
+        }
+        if (ac.toString().equals("+") && bc.toString().equals("-")){
+            first = w + wi;
+            second = '+';
+            third = w2 - w1;
+        }
+        if (ac.toString().equals("-") && bc.toString().equals("+")){
+            first = w + wi;
+            second = '+';
+
+            third = w1 - w2;
+        }
+        ans.append(String.valueOf(first));
+        ans.append(second);
+        ans.append(String.valueOf(third)+'i');
+
+        return ans.toString();
+    }
+
+    public String complexNumberMultiply2(String a, String b) {
+        String x[] = a.split("\\+|i");
+        String y[] = b.split("\\+|i");
+
+        int a_real = Integer.parseInt(x[0]);
+        int a_img = Integer.parseInt(x[1]);
+        int b_real = Integer.parseInt(y[0]);
+        int b_img = Integer.parseInt(y[1]);
+        return (a_real * b_real - a_img * b_img) + "+" + (a_real * b_img + a_img * b_real) + "i";
+
+    }
+
+
     public static void main(String[] args) {
-        int num = 1994;
+
+        String a = "78+76i", b = "86+-72i";
         HelloWorld hello_world = new HelloWorld();
-        String ans = hello_world.intToRoman(num);
+//        System.out.println(hello_world.f(words[3]));
+        String ans = hello_world.complexNumberMultiply2(a, b);
         System.out.println(ans);
 
     }
