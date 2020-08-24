@@ -809,7 +809,7 @@ public class HelloWorld {
         StringBuilder str = new StringBuilder();
         int count1 = 0, count2 = 0;
 
-        if (a.charAt(count1) == '-'){
+        if (a.charAt(count1) == '-') {
             str.append('-');
             count1++;
         }
@@ -833,7 +833,7 @@ public class HelloWorld {
         str.delete(0, str.length());
 
         count1 = 0;
-        if (b.charAt(count1) == '-'){
+        if (b.charAt(count1) == '-') {
             str.append('-');
             count1++;
         }
@@ -864,29 +864,29 @@ public class HelloWorld {
         char second = '+';
         int third = 0;
         StringBuilder ans = new StringBuilder();
-        if (ac.toString().equals("+-")){
+        if (ac.toString().equals("+-")) {
             ac.replace(0, ac.length(), "-");
         }
-        if (bc.toString().equals("+-")){
+        if (bc.toString().equals("+-")) {
             bc.replace(0, bc.length(), "-");
         }
-        if (ac.toString().equals("+") && bc.toString().equals("+")){
+        if (ac.toString().equals("+") && bc.toString().equals("+")) {
             first = w - wi;
             second = '+';
             third = w1 + w2;
         }
 
-        if (ac.toString().equals("-") && bc.toString().equals("-")){
+        if (ac.toString().equals("-") && bc.toString().equals("-")) {
             first = w - wi;
             second = '+';
-            third = - (w1 + w2);
+            third = -(w1 + w2);
         }
-        if (ac.toString().equals("+") && bc.toString().equals("-")){
+        if (ac.toString().equals("+") && bc.toString().equals("-")) {
             first = w + wi;
             second = '+';
             third = w2 - w1;
         }
-        if (ac.toString().equals("-") && bc.toString().equals("+")){
+        if (ac.toString().equals("-") && bc.toString().equals("+")) {
             first = w + wi;
             second = '+';
 
@@ -894,7 +894,7 @@ public class HelloWorld {
         }
         ans.append(String.valueOf(first));
         ans.append(second);
-        ans.append(String.valueOf(third)+'i');
+        ans.append(String.valueOf(third) + 'i');
 
         return ans.toString();
     }
@@ -911,13 +911,134 @@ public class HelloWorld {
 
     }
 
+    // 剑指offer53
+    public int missingNumber(int[] nums) {
+        int left = 0;
+        int right = nums.length - 1;
+        if (nums[0] != 0) {
+            return 0;
+        }
+        if (nums.length - 1 == nums[right]) {
+            return nums[right] + 1;
+        }
+        while (right - left != 1) {
+            if (right - (right + left) / 2 < (nums[right] - nums[(left + right) / 2])) {
+                left = (right + left) / 2;
+
+            } else {
+                right = (right + left) / 2;
+
+            }
+        }
+        return (nums[left] + nums[right]) / 2;
+    }
+
+//  674
+    public int findLengthOfLCIS(int[] nums) {
+        int min = -100000;
+        int count1 = 0;
+        int count2 = 0;
+        for (int i=0;i<nums.length;i++){
+            if (nums[i] <= min){
+                if (count2 > count1){
+                    count1 = count2;
+                }
+                count2 = 0;
+            }
+            min = nums[i];
+            count2++;
+        }
+        return Math.max(count1, count2);
+    }
+
+//    1144
+    public int movesToMakeZigzag(int[] nums) {
+        int count1 = 0;
+        int count2 = 0;
+        for (int i=0;i<nums.length;i+=2){
+            if (i==0){
+                if (nums[0] >= nums[1]){
+                    count1 +=  nums[0] - nums[1] + 1;
+                }
+                continue;
+            }
+            if (i==nums.length-1){
+                if (nums[i] >= nums[i-1]){
+                    count1 += nums[i] -nums[i-1] + 1;
+                }
+                continue;
+            }
+            int k = 0;
+            if (nums[i] >= nums[i+1]){
+                k = nums[i] - nums[i+1] + 1;
+            }
+            if (nums[i] >= nums[i-1]){
+                k= Math.max(nums[i] - nums[i-1] + 1, k);
+            }
+            count1+=k;
+        }
+        for (int i=1;i<nums.length;i+=2){
+            if (i==nums.length-1){
+                if (nums[i] >= nums[i-1]){
+                    count2 += nums[i] -nums[i-1] + 1;
+                }
+                continue;
+            }
+            int k = 0;
+            if (nums[i] >= nums[i+1]){
+                k = nums[i] - nums[i+1] + 1;
+            }
+            if (nums[i] >= nums[i-1]){
+                k= Math.max(nums[i] - nums[i-1] + 1, k);
+            }
+            count2+=k;
+        }
+        return Math.min(count1, count2);
+    }
+
+//  1333
+    public List<Integer> filterRestaurants(int[][] restaurants, int veganFriendly, int maxPrice, int maxDistance) {
+//        Map<Integer,Integer> map = new HashMap();
+        List<int []> idTorating = new ArrayList<>();
+        List<Integer> idList = new ArrayList<>();
+        for (int []restaurant:restaurants){
+            if (veganFriendly == 1 && restaurant[2] == 0){
+                continue;
+            }
+            if (restaurant[3] <= maxPrice && restaurant[4] <= maxDistance){
+//                System.out.println(restaurant[0]);
+                idTorating.add(new int[]{restaurant[0], restaurant[1]});
+            }
+        }
+//        for (int []id:idTorating){
+//            System.out.println(id[0]);
+//        }
+        idTorating.sort(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return Integer.compare(o2[0], o1[0]);
+            }
+        });
+        idTorating.sort(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return Integer.compare(o2[1], o1[1]);
+            }
+        });
+
+        for (int []id:idTorating){
+            idList.add(id[0]);
+        }
+        return idList;
+
+    }
 
     public static void main(String[] args) {
 
-        String a = "78+76i", b = "86+-72i";
+        int[][] restaurants = {{1,4,1,40,10},{2,8,0,50,5},{3,8,1,30,4},{4,10,0,10,3},{5,1,1,15,1}};
+        int veganFriendly = 0, maxPrice = 50, maxDistance = 10;
         HelloWorld hello_world = new HelloWorld();
-//        System.out.println(hello_world.f(words[3]));
-        String ans = hello_world.complexNumberMultiply2(a, b);
+        List<Integer> ans = hello_world.filterRestaurants(restaurants, veganFriendly, maxPrice, maxDistance);
         System.out.println(ans);
 
     }
