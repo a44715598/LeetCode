@@ -7,6 +7,7 @@ import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.util.*;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import java.util.Arrays.*;
 
@@ -933,14 +934,14 @@ public class HelloWorld {
         return (nums[left] + nums[right]) / 2;
     }
 
-//  674
+    //  674
     public int findLengthOfLCIS(int[] nums) {
         int min = -100000;
         int count1 = 0;
         int count2 = 0;
-        for (int i=0;i<nums.length;i++){
-            if (nums[i] <= min){
-                if (count2 > count1){
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] <= min) {
+                if (count2 > count1) {
                     count1 = count2;
                 }
                 count2 = 0;
@@ -951,61 +952,61 @@ public class HelloWorld {
         return Math.max(count1, count2);
     }
 
-//    1144
+    //    1144
     public int movesToMakeZigzag(int[] nums) {
         int count1 = 0;
         int count2 = 0;
-        for (int i=0;i<nums.length;i+=2){
-            if (i==0){
-                if (nums[0] >= nums[1]){
-                    count1 +=  nums[0] - nums[1] + 1;
+        for (int i = 0; i < nums.length; i += 2) {
+            if (i == 0) {
+                if (nums[0] >= nums[1]) {
+                    count1 += nums[0] - nums[1] + 1;
                 }
                 continue;
             }
-            if (i==nums.length-1){
-                if (nums[i] >= nums[i-1]){
-                    count1 += nums[i] -nums[i-1] + 1;
+            if (i == nums.length - 1) {
+                if (nums[i] >= nums[i - 1]) {
+                    count1 += nums[i] - nums[i - 1] + 1;
                 }
                 continue;
             }
             int k = 0;
-            if (nums[i] >= nums[i+1]){
-                k = nums[i] - nums[i+1] + 1;
+            if (nums[i] >= nums[i + 1]) {
+                k = nums[i] - nums[i + 1] + 1;
             }
-            if (nums[i] >= nums[i-1]){
-                k= Math.max(nums[i] - nums[i-1] + 1, k);
+            if (nums[i] >= nums[i - 1]) {
+                k = Math.max(nums[i] - nums[i - 1] + 1, k);
             }
-            count1+=k;
+            count1 += k;
         }
-        for (int i=1;i<nums.length;i+=2){
-            if (i==nums.length-1){
-                if (nums[i] >= nums[i-1]){
-                    count2 += nums[i] -nums[i-1] + 1;
+        for (int i = 1; i < nums.length; i += 2) {
+            if (i == nums.length - 1) {
+                if (nums[i] >= nums[i - 1]) {
+                    count2 += nums[i] - nums[i - 1] + 1;
                 }
                 continue;
             }
             int k = 0;
-            if (nums[i] >= nums[i+1]){
-                k = nums[i] - nums[i+1] + 1;
+            if (nums[i] >= nums[i + 1]) {
+                k = nums[i] - nums[i + 1] + 1;
             }
-            if (nums[i] >= nums[i-1]){
-                k= Math.max(nums[i] - nums[i-1] + 1, k);
+            if (nums[i] >= nums[i - 1]) {
+                k = Math.max(nums[i] - nums[i - 1] + 1, k);
             }
-            count2+=k;
+            count2 += k;
         }
         return Math.min(count1, count2);
     }
 
-//  1333
+    //  1333
     public List<Integer> filterRestaurants(int[][] restaurants, int veganFriendly, int maxPrice, int maxDistance) {
 //        Map<Integer,Integer> map = new HashMap();
-        List<int []> idTorating = new ArrayList<>();
+        List<int[]> idTorating = new ArrayList<>();
         List<Integer> idList = new ArrayList<>();
-        for (int []restaurant:restaurants){
-            if (veganFriendly == 1 && restaurant[2] == 0){
+        for (int[] restaurant : restaurants) {
+            if (veganFriendly == 1 && restaurant[2] == 0) {
                 continue;
             }
-            if (restaurant[3] <= maxPrice && restaurant[4] <= maxDistance){
+            if (restaurant[3] <= maxPrice && restaurant[4] <= maxDistance) {
 //                System.out.println(restaurant[0]);
                 idTorating.add(new int[]{restaurant[0], restaurant[1]});
             }
@@ -1026,19 +1027,133 @@ public class HelloWorld {
             }
         });
 
-        for (int []id:idTorating){
+        for (int[] id : idTorating) {
             idList.add(id[0]);
         }
         return idList;
 
     }
 
+    //    35
+    public int searchInsert(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length - 1;
+        while (left < right) {
+            if (nums[(left + right) / 2] < target) {
+                left = (left + right) / 2 + 1;
+            } else if (nums[(left + right) / 2] > target) {
+                right = (left + right) / 2 - 1;
+            } else {
+                return (left + right) / 2;
+            }
+        }
+        if (nums[left] < target) {
+            return left + 1;
+        }
+        return left;
+    }
+
+    //    643
+    public double findMaxAverage(int[] nums, int k) {
+        double sum = 0;
+        double mean = 0;
+        for (int i = 0; i < k; i++) {
+            sum += nums[i];
+        }
+        mean = sum / k;
+        for (int i = 1; i < nums.length - k + 1; i++) {
+            sum = sum - nums[i - 1] + nums[i + k - 1];
+            if (sum / k > mean) {
+                mean = sum / k;
+            }
+        }
+        return mean;
+    }
+
+    //     457
+    public boolean circularArrayLoop(int[] nums) {
+        int index = -1;
+        int direction = 1;
+        int count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            index = i;
+            count = 0;
+            direction = nums[i] > 0?1:-1;
+            while (nums[index] / direction > 0){
+                count++;
+                if (index == (index + nums[index] + nums.length * 1000)%nums.length){
+                    break;
+                }
+                index = (index + nums[index] + nums.length * 1000)%nums.length;
+                if (count == nums.length){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    //    792
+    public int numMatchingSubseqTimeOut(String S, String[] words) {
+        int count=0;
+        int j=0;
+        int index1 = 0;
+        int index2 = 0;
+        for (String word:words){
+            j=0;
+            index1=0;
+            index2=0;
+            for (;index1<S.length();index1++){
+
+                index2 = S.substring(index1).indexOf(word.charAt(j++));
+                if (index2 == -1){
+                    break;
+                }
+                index1 += index2;
+                if (j== word.length()){
+                    count++;
+                    break;
+                }
+
+            }
+        }
+        return count;
+    }
+
+    public int numMatchingSubseq(String S, String[] words) {
+        Map<Character, List<String>> map = new HashMap<>();
+        int count = 0;
+        for (int i=97;i<123;i++){
+            map.put((char)(i), new ArrayList<>());
+        }
+        for (String word:words){
+            map.get(word.charAt(0)).add(word);
+        }
+        for (int i=0;i<S.length();i++){
+            List<String> list = new ArrayList<>(map.get(S.charAt(i)));
+//            System.out.println(map);
+            for (String j:list){
+
+                map.get(S.charAt(i)).remove(j);
+                j = j.substring(1);
+                if (j.equals("")){
+                    count++;
+                }
+                else {
+//                    System.out.println(map.get(j.charAt(0)));
+
+                    map.get(j.charAt(0)).add(j);
+                }
+            }
+        }
+        return count;
+    }
     public static void main(String[] args) {
 
-        int[][] restaurants = {{1,4,1,40,10},{2,8,0,50,5},{3,8,1,30,4},{4,10,0,10,3},{5,1,1,15,1}};
-        int veganFriendly = 0, maxPrice = 50, maxDistance = 10;
+        String S = "dsahjpjauf";
+        String []words = {"ahjpjau","ja","ahbwzgqnuk","tnmlanowax"};
         HelloWorld hello_world = new HelloWorld();
-        List<Integer> ans = hello_world.filterRestaurants(restaurants, veganFriendly, maxPrice, maxDistance);
+        int ans = hello_world.numMatchingSubseq(S, words);
         System.out.println(ans);
 
     }
