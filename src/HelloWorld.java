@@ -1078,14 +1078,14 @@ public class HelloWorld {
         for (int i = 0; i < nums.length; i++) {
             index = i;
             count = 0;
-            direction = nums[i] > 0?1:-1;
-            while (nums[index] / direction > 0){
+            direction = nums[i] > 0 ? 1 : -1;
+            while (nums[index] / direction > 0) {
                 count++;
-                if (index == (index + nums[index] + nums.length * 1000)%nums.length){
+                if (index == (index + nums[index] + nums.length * 1000) % nums.length) {
                     break;
                 }
-                index = (index + nums[index] + nums.length * 1000)%nums.length;
-                if (count == nums.length){
+                index = (index + nums[index] + nums.length * 1000) % nums.length;
+                if (count == nums.length) {
                     return true;
                 }
             }
@@ -1095,22 +1095,22 @@ public class HelloWorld {
 
     //    792
     public int numMatchingSubseqTimeOut(String S, String[] words) {
-        int count=0;
-        int j=0;
+        int count = 0;
+        int j = 0;
         int index1 = 0;
         int index2 = 0;
-        for (String word:words){
-            j=0;
-            index1=0;
-            index2=0;
-            for (;index1<S.length();index1++){
+        for (String word : words) {
+            j = 0;
+            index1 = 0;
+            index2 = 0;
+            for (; index1 < S.length(); index1++) {
 
                 index2 = S.substring(index1).indexOf(word.charAt(j++));
-                if (index2 == -1){
+                if (index2 == -1) {
                     break;
                 }
                 index1 += index2;
-                if (j== word.length()){
+                if (j == word.length()) {
                     count++;
                     break;
                 }
@@ -1123,23 +1123,22 @@ public class HelloWorld {
     public int numMatchingSubseq(String S, String[] words) {
         Map<Character, List<String>> map = new HashMap<>();
         int count = 0;
-        for (int i=97;i<123;i++){
-            map.put((char)(i), new ArrayList<>());
+        for (int i = 97; i < 123; i++) {
+            map.put((char) (i), new ArrayList<>());
         }
-        for (String word:words){
+        for (String word : words) {
             map.get(word.charAt(0)).add(word);
         }
-        for (int i=0;i<S.length();i++){
+        for (int i = 0; i < S.length(); i++) {
             List<String> list = new ArrayList<>(map.get(S.charAt(i)));
 //            System.out.println(map);
-            for (String j:list){
+            for (String j : list) {
 
                 map.get(S.charAt(i)).remove(j);
                 j = j.substring(1);
-                if (j.equals("")){
+                if (j.equals("")) {
                     count++;
-                }
-                else {
+                } else {
 //                    System.out.println(map.get(j.charAt(0)));
 
                     map.get(j.charAt(0)).add(j);
@@ -1148,12 +1147,105 @@ public class HelloWorld {
         }
         return count;
     }
+
+    //    867
+    public int[][] transpose(int[][] A) {
+        int height = A.length;
+        int width = A[0].length;
+        int[][] B = new int[width][height];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                B[j][i] = A[i][j];
+            }
+        }
+        return B;
+    }
+
+    //    面试17。10
+    public int majorityElement(int[] nums) {
+        int count = 0;
+        int flag = nums[0];
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == flag) {
+                count++;
+            } else {
+                count--;
+            }
+            if (count == 0) {
+                flag = nums[i];
+                count = 1;
+            }
+        }
+        int t = nums.length / 2 + 1;
+        count = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == flag) {
+                count++;
+            }
+            if (t == count) {
+                return flag;
+            }
+        }
+        return -1;
+    }
+
+    //    1476
+    int[][] rectangle;
+//    public HelloWorld(int[][] rectangle) {
+//         this.rectangle = rectangle;
+//    }
+
+    public void updateSubrectangle(int row1, int col1, int row2, int col2, int newValue) {
+        for (int i = row1; i <= row2; i++) {
+            for (int j = col1; j <= col2; j++) {
+                this.rectangle[i][j] = newValue;
+            }
+        }
+    }
+
+    public int getValue(int row, int col) {
+        return this.rectangle[row][col];
+    }
+
+    //     1535
+    public int getWinner(int[] arr, int k) {
+        int count = 0;
+        List<Integer> arr_list = Arrays.stream(arr).boxed().collect(Collectors.toList());
+        if (arr.length <= k){
+            int max = 0;
+            for (int i=0;i<arr.length;i++){
+                if (arr[i] > max){
+                    max = arr[i];
+                }
+            }
+            return max;
+        }
+        while (true){
+//            System.out.println(arr_list);
+            if (arr_list.get(0) > arr_list.get(1)) {
+                int temp = arr_list.get(1);
+                arr_list.remove(1);
+                arr_list.add(temp);
+                count++;
+            } else {
+                int temp = arr_list.get(0);
+                arr_list.remove(0);
+                arr_list.add(temp);
+                count = 1;
+            }
+            if (count == k) {
+                return arr_list.get(0);
+            }
+        }
+    }
+
     public static void main(String[] args) {
 
-        String S = "dsahjpjauf";
-        String []words = {"ahjpjau","ja","ahbwzgqnuk","tnmlanowax"};
+        int[] arr = {2, 1, 3, 5, 4, 6, 7};
+        int k = 2;
+
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.numMatchingSubseq(S, words);
+        int ans = hello_world.getWinner(arr, k);
         System.out.println(ans);
 
     }
