@@ -1211,16 +1211,16 @@ public class HelloWorld {
     public int getWinner(int[] arr, int k) {
         int count = 0;
         List<Integer> arr_list = Arrays.stream(arr).boxed().collect(Collectors.toList());
-        if (arr.length <= k){
+        if (arr.length <= k) {
             int max = 0;
-            for (int i=0;i<arr.length;i++){
-                if (arr[i] > max){
+            for (int i = 0; i < arr.length; i++) {
+                if (arr[i] > max) {
                     max = arr[i];
                 }
             }
             return max;
         }
-        while (true){
+        while (true) {
 //            System.out.println(arr_list);
             if (arr_list.get(0) > arr_list.get(1)) {
                 int temp = arr_list.get(1);
@@ -1239,13 +1239,194 @@ public class HelloWorld {
         }
     }
 
+    //    977
+    public void quickSortInt(int[] A, int left, int right) {
+        int head = left;
+        int tail = right;
+        if (left >= right) {
+            return;
+        }
+        int flag = A[left];
+        int flag_pos = left;
+
+        while (left < right) {
+            while (left < right && A[right] >= flag) {
+                right--;
+            }
+            A[flag_pos] = A[right];
+            flag_pos = right;
+
+            while (left < right && A[left] <= flag) {
+                left++;
+            }
+            A[flag_pos] = A[left];
+            flag_pos = left;
+        }
+
+        A[left] = flag;
+//        for (int a : A)
+//            System.out.print(a + " ");
+
+//        System.out.println();
+//        System.out.println(left);
+//        System.out.println(right);
+        quickSortInt(A, head, left - 1);
+        quickSortInt(A, left + 1, tail);
+    }
+
+    public int[] sortedSquares(int[] A) {
+        for (int i = 0; i < A.length; i++) {
+            A[i] = A[i] * A[i];
+        }
+        int left = 0;
+        int right = A.length - 1;
+        quickSortInt(A, left, right);
+        return A;
+    }
+
+    //    628
+    public int maximumProduct(int[] nums) {
+        int max1 = Integer.MIN_VALUE, max2 = Integer.MIN_VALUE, max3 = Integer.MIN_VALUE;
+        int min1 = Integer.MAX_VALUE, min2 = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] < min1) {
+                min2 = min1;
+                min1 = nums[i];
+            } else if (nums[i] < min2) {
+                min2 = nums[i];
+            }
+
+            if (nums[i] > max1) {
+                max3 = max2;
+                max2 = max1;
+                max1 = nums[i];
+            } else if (nums[i] > max2) {
+                max3 = max2;
+                max2 = nums[i];
+            } else if (nums[i] > max3) {
+                max3 = nums[i];
+            }
+        }
+
+        return Math.max(max1 * max2 * max3, min1 * min2 * max1);
+//        return ans3;
+    }
+
+    //1552
+    public int maxDistance(int[] position, int m) {
+        Arrays.sort(position);
+        int hi = (position[position.length - 1] - position[0]) / (m-1);
+        int low = 1;
+        int mid = 0;
+
+
+        while (low < hi) {
+            mid = (hi + low) / 2;
+            if (check(position, mid, m-1)) {
+                low = mid + 1;
+            } else
+                hi = mid - 1;
+        }
+        return low - 1;
+    }
+
+    public boolean check(int[] position, int mid, int m) {
+        int j = 0;
+        int count = 0;
+        for (int i =0;i<position.length;i++){
+            if (position[i] - position[j] >= mid){
+                count++;
+                j=i;
+            }
+            if (count >= m){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //  1438
+    public int longestSubarrayTimeOut(int[] nums, int limit) {
+        int min = nums[0];
+        int max = nums[0];
+        int min_pos = 0;
+        int max_pos = 0;
+        int max_count = 0;
+        int count = 0;
+//      {4,2,2,2,4,4,2,2}
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] > max) {
+                max = nums[i];
+                max_pos = i;
+                if (Math.abs(max - min) > limit) {
+                    i = min_pos;
+                    min = nums[i + 1];
+                    min_pos = i + 1;
+                    max = nums[i + 1];
+                    max_pos = i + 1;
+                    if (max_count < count)
+                        max_count = count;
+                    count = 0;
+                    continue;
+                }
+
+            }
+            if (nums[i] < min) {
+                min = nums[i];
+                min_pos = i;
+                if (Math.abs(max - min) > limit) {
+                    i = max_pos;
+                    max = nums[i + 1];
+                    max_pos = i + 1;
+                    min = nums[i + 1];
+                    min_pos = i + 1;
+                    if (max_count < count)
+                        max_count = count;
+                    count = 0;
+                    continue;
+                }
+
+            }
+            count++;
+        }
+        return Math.max(max_count, count);
+    }
+
+    public int longestSubarray(int[] nums, int limit) {
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        int i = 0, j = 0;
+        int ans = 0;
+        for (; i < nums.length; i++) {
+            if (map.get(nums[i]) == null) {
+                map.put(nums[i], 1);
+            } else
+                map.compute(nums[i], (k, v) -> {
+                    return ++v;
+                });
+            while (map.lastKey() - map.firstKey() > limit) {
+                map.compute(nums[j], (k, v) -> {
+                    return --v;
+                });
+                if (map.get(nums[j]) == 0) {
+                    map.remove(nums[j]);
+                }
+                ++j;
+            }
+            ans = Math.max(ans, i - j + 1);
+        }
+
+        return ans;
+    }
+
+//    1552
+
     public static void main(String[] args) {
 
-        int[] arr = {2, 1, 3, 5, 4, 6, 7};
-        int k = 2;
+        int[] positions = {79,74,57,22};
+        int m = 4;
 
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.getWinner(arr, k);
+        int ans = hello_world.maxDistance(positions, m);
         System.out.println(ans);
 
     }
