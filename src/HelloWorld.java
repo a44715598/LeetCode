@@ -1418,15 +1418,115 @@ public class HelloWorld {
         return ans;
     }
 
-//    1552
+//    1550
+    public boolean threeConsecutiveOdds(int[] arr) {
+        for (int i=0;i<arr.length-2;i++){
+            if (arr[i] % 2 == 1 && arr[i+1] % 2 == 1 && arr[i+2] % 2 == 1){
+                return true;
+            }
+        }
+        return false;
+    }
 
+//    219
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i=0;i<nums.length;i++){
+            if (map.get(nums[i]) == null){
+                map.put(nums[i], i);
+            }else {
+                if (i - map.get(nums[i]) <= k){
+                    return true;
+                }else{
+                    map.put(nums[i], i);
+                }
+            }
+        }
+        return false;
+    }
+
+//    228
+    public List<String> summaryRanges(int[] nums) {
+        List<String> ls = new ArrayList<>();
+        int []nums2 = new int[nums.length+1];
+        if (nums.length == 0){
+            return ls;
+        }
+        for (int i =0;i<nums.length;i++)
+        {
+            nums2[i] = nums[i];
+        }
+        nums2[nums2.length-1] = nums[nums.length-1]+2;
+
+        int left = 0;
+        for (int i =0;i<nums2.length-1;i++){
+            if (nums2[i+1] - nums2[i] != 1){
+                if (i == left){
+                    ls.add(String.valueOf(nums2[left]));
+                    left ++;
+                }else {
+                    ls.add(nums2[left] + "->" + nums2[i]);
+                    left = i + 1;
+                }
+
+            }
+        }
+        return ls;
+    }
+
+//    1267
+    public int countServers(int[][] grid) {
+        HashSet<String> vec = new HashSet<>();
+        List<Integer> true_conn_x = new ArrayList<>();
+        List<Integer> true_conn_y = new ArrayList<>();
+        int count = 0;
+        for (int i=0;i<grid.length;i++){
+            count = 0;
+            for (int j=0;j<grid[0].length;j++){
+                if (grid[i][j] == 1){
+                    count++;
+                }
+                if (count == 2){
+                    true_conn_x.add(i);
+                    break;
+                }
+            }
+        }
+        for (int i=0;i<grid[0].length;i++){
+            count = 0;
+            for (int j=0;j<grid.length;j++){
+                if (grid[j][i] == 1){
+                    count++;
+                }
+                if (count == 2){
+                    true_conn_y.add(i);
+                    break;
+                }
+            }
+        }
+
+        for (int x:true_conn_x){
+            for (int j=0;j<grid[0].length;j++){
+                if (grid[x][j] == 1){
+                    vec.add(x+" "+j);
+                }
+            }
+        }
+        for (int y:true_conn_y){
+            for (int j=0;j<grid.length;j++){
+                if (grid[j][y] == 1){
+                    vec.add(j+" "+y);
+                }
+            }
+        }
+
+        return vec.size();
+    }
     public static void main(String[] args) {
 
-        int[] positions = {79,74,57,22};
-        int m = 4;
-
+        int [][]grid = {{1,1,0,0},{0,0,1,0},{0,0,1,0},{0,0,0,1}};
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.maxDistance(positions, m);
+        int ans = hello_world.countServers(grid);
         System.out.println(ans);
 
     }
