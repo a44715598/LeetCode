@@ -1315,14 +1315,14 @@ public class HelloWorld {
     //1552
     public int maxDistance(int[] position, int m) {
         Arrays.sort(position);
-        int hi = (position[position.length - 1] - position[0]) / (m-1);
+        int hi = (position[position.length - 1] - position[0]) / (m - 1);
         int low = 1;
         int mid = 0;
 
 
         while (low < hi) {
             mid = (hi + low) / 2;
-            if (check(position, mid, m-1)) {
+            if (check(position, mid, m - 1)) {
                 low = mid + 1;
             } else
                 hi = mid - 1;
@@ -1333,12 +1333,12 @@ public class HelloWorld {
     public boolean check(int[] position, int mid, int m) {
         int j = 0;
         int count = 0;
-        for (int i =0;i<position.length;i++){
-            if (position[i] - position[j] >= mid){
+        for (int i = 0; i < position.length; i++) {
+            if (position[i] - position[j] >= mid) {
                 count++;
-                j=i;
+                j = i;
             }
-            if (count >= m){
+            if (count >= m) {
                 return true;
             }
         }
@@ -1418,26 +1418,26 @@ public class HelloWorld {
         return ans;
     }
 
-//    1550
+    //    1550
     public boolean threeConsecutiveOdds(int[] arr) {
-        for (int i=0;i<arr.length-2;i++){
-            if (arr[i] % 2 == 1 && arr[i+1] % 2 == 1 && arr[i+2] % 2 == 1){
+        for (int i = 0; i < arr.length - 2; i++) {
+            if (arr[i] % 2 == 1 && arr[i + 1] % 2 == 1 && arr[i + 2] % 2 == 1) {
                 return true;
             }
         }
         return false;
     }
 
-//    219
+    //    219
     public boolean containsNearbyDuplicate(int[] nums, int k) {
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i=0;i<nums.length;i++){
-            if (map.get(nums[i]) == null){
+        for (int i = 0; i < nums.length; i++) {
+            if (map.get(nums[i]) == null) {
                 map.put(nums[i], i);
-            }else {
-                if (i - map.get(nums[i]) <= k){
+            } else {
+                if (i - map.get(nums[i]) <= k) {
                     return true;
-                }else{
+                } else {
                     map.put(nums[i], i);
                 }
             }
@@ -1445,26 +1445,25 @@ public class HelloWorld {
         return false;
     }
 
-//    228
+    //    228
     public List<String> summaryRanges(int[] nums) {
         List<String> ls = new ArrayList<>();
-        int []nums2 = new int[nums.length+1];
-        if (nums.length == 0){
+        int[] nums2 = new int[nums.length + 1];
+        if (nums.length == 0) {
             return ls;
         }
-        for (int i =0;i<nums.length;i++)
-        {
+        for (int i = 0; i < nums.length; i++) {
             nums2[i] = nums[i];
         }
-        nums2[nums2.length-1] = nums[nums.length-1]+2;
+        nums2[nums2.length - 1] = nums[nums.length - 1] + 2;
 
         int left = 0;
-        for (int i =0;i<nums2.length-1;i++){
-            if (nums2[i+1] - nums2[i] != 1){
-                if (i == left){
+        for (int i = 0; i < nums2.length - 1; i++) {
+            if (nums2[i + 1] - nums2[i] != 1) {
+                if (i == left) {
                     ls.add(String.valueOf(nums2[left]));
-                    left ++;
-                }else {
+                    left++;
+                } else {
                     ls.add(nums2[left] + "->" + nums2[i]);
                     left = i + 1;
                 }
@@ -1474,60 +1473,144 @@ public class HelloWorld {
         return ls;
     }
 
-//    1267
+    //    1267
     public int countServers(int[][] grid) {
         HashSet<String> vec = new HashSet<>();
         List<Integer> true_conn_x = new ArrayList<>();
         List<Integer> true_conn_y = new ArrayList<>();
         int count = 0;
-        for (int i=0;i<grid.length;i++){
+        for (int i = 0; i < grid.length; i++) {
             count = 0;
-            for (int j=0;j<grid[0].length;j++){
-                if (grid[i][j] == 1){
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[i][j] == 1) {
                     count++;
                 }
-                if (count == 2){
+                if (count == 2) {
                     true_conn_x.add(i);
                     break;
                 }
             }
         }
-        for (int i=0;i<grid[0].length;i++){
+        for (int i = 0; i < grid[0].length; i++) {
             count = 0;
-            for (int j=0;j<grid.length;j++){
-                if (grid[j][i] == 1){
+            for (int j = 0; j < grid.length; j++) {
+                if (grid[j][i] == 1) {
                     count++;
                 }
-                if (count == 2){
+                if (count == 2) {
                     true_conn_y.add(i);
                     break;
                 }
             }
         }
 
-        for (int x:true_conn_x){
-            for (int j=0;j<grid[0].length;j++){
-                if (grid[x][j] == 1){
-                    vec.add(x+" "+j);
+        for (int x : true_conn_x) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (grid[x][j] == 1) {
+                    vec.add(x + " " + j);
                 }
             }
         }
-        for (int y:true_conn_y){
-            for (int j=0;j<grid.length;j++){
-                if (grid[j][y] == 1){
-                    vec.add(j+" "+y);
+        for (int y : true_conn_y) {
+            for (int j = 0; j < grid.length; j++) {
+                if (grid[j][y] == 1) {
+                    vec.add(j + " " + y);
                 }
             }
         }
 
         return vec.size();
     }
+
+    //    1
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < nums.length; i++) {
+            if (map.get(nums[i]) != null) {
+                return new int[]{i, map.get(nums[i])};
+            } else
+                map.put(target - nums[i], i);
+        }
+        return new int[]{};
+    }
+
+    //    26
+    public int removeDuplicates(int[] nums) {
+        int i = 0, j = 1;
+        for (; j < nums.length; j++) {
+            if (nums[j] != nums[i]) {
+                nums[i + 1] = nums[j];
+                i++;
+            }
+        }
+        return i + 1;
+    }
+
+    //    11
+    public int maxAreaTimeOut(int[] height) {
+        int max = 0;
+        for (int i = 0; i < height.length; i++) {
+            for (int j = i; j < height.length; j++) {
+                max = Math.max(Math.min(height[i], height[j]) * (j - i), max);
+            }
+        }
+        return max;
+    }
+
+    public int maxArea(int[] height) {
+        int max = 0;
+        int left = 0, right = height.length - 1;
+        while (left < right) {
+            if (height[left] < height[right]) {
+                max = Math.max(height[left] * (right - left), max);
+                left++;
+            } else if (height[left] > height[right]) {
+                max = Math.max(height[right] * (right - left), max);
+                right--;
+            } else {
+                max = Math.max(height[right] * (right - left), max);
+                left++;
+                right--;
+            }
+        }
+        return max;
+    }
+
+    //    15
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> llInt = new ArrayList<>();
+        Arrays.sort(nums);
+        Set<String> set = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            int left = i+1;
+            int right = nums.length - 1;
+            while (left < right) {
+                if (nums[i] + nums[left] + nums[right] > 0) {
+                    right--;
+                } else if (nums[i] + nums[left] + nums[right] < 0) {
+                    left++;
+                } else {
+                    List<Integer> lInt = new ArrayList<>();
+                    if (!set.contains(nums[i] + "" + nums[left] + "" + nums[right])){
+                        set.add(nums[i] + "" + nums[left] + "" + nums[right]);
+                        lInt.add(nums[i]);
+                        lInt.add(nums[left]);
+                        lInt.add(nums[right]);
+                        llInt.add(lInt);
+                    }
+                    left++;
+                    right--;
+                }
+            }
+        }
+        return llInt;
+    }
+
     public static void main(String[] args) {
 
-        int [][]grid = {{1,1,0,0},{0,0,1,0},{0,0,1,0},{0,0,0,1}};
+        int[] nums = {-2,0,1,1,2};
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.countServers(grid);
+        List<List<Integer>> ans = hello_world.threeSum(nums);
         System.out.println(ans);
-
     }
 }
