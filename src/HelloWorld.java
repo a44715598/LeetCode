@@ -3,6 +3,7 @@ import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.net.ssl.SSLContext;
 import javax.print.DocFlavor;
 import java.io.Serializable;
 import java.util.*;
@@ -1582,7 +1583,7 @@ public class HelloWorld {
         Arrays.sort(nums);
         Set<String> set = new HashSet<>();
         for (int i = 0; i < nums.length; i++) {
-            int left = i+1;
+            int left = i + 1;
             int right = nums.length - 1;
             while (left < right) {
                 if (nums[i] + nums[left] + nums[right] > 0) {
@@ -1591,7 +1592,7 @@ public class HelloWorld {
                     left++;
                 } else {
                     List<Integer> lInt = new ArrayList<>();
-                    if (!set.contains(nums[i] + "" + nums[left] + "" + nums[right])){
+                    if (!set.contains(nums[i] + "" + nums[left] + "" + nums[right])) {
                         set.add(nums[i] + "" + nums[left] + "" + nums[right]);
                         lInt.add(nums[i]);
                         lInt.add(nums[left]);
@@ -1607,93 +1608,95 @@ public class HelloWorld {
     }
 
 
-//  605
+    //  605
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
-        if (flowerbed.length == 1 && flowerbed[0] == 0){
+        if (flowerbed.length == 1 && flowerbed[0] == 0) {
             return true;
         }
-        for (int i=0;i<flowerbed.length-1;i++){
-            if (flowerbed[i] == 0 && flowerbed[i+1] == 0){
+        for (int i = 0; i < flowerbed.length - 1; i++) {
+            if (flowerbed[i] == 0 && flowerbed[i + 1] == 0) {
                 flowerbed[i] = 1;
                 i++;
                 n--;
             }
-            if (flowerbed[i] == 1 && flowerbed[i+1] == 0){
+            if (flowerbed[i] == 1 && flowerbed[i + 1] == 0) {
                 i++;
             }
         }
-        if (flowerbed[flowerbed.length-1] == 0 && flowerbed[flowerbed.length-2] == 0){
+        if (flowerbed[flowerbed.length - 1] == 0 && flowerbed[flowerbed.length - 2] == 0) {
             n--;
         }
-        if (n<=0){
+        if (n <= 0) {
             return true;
         }
         return false;
     }
 
-//    832
+    //    832
     public int[][] flipAndInvertImage(int[][] A) {
-        for (int []a:A){
+        for (int[] a : A) {
             int left = 0;
-            int right = a.length-1;
-            while (left<=right){
+            int right = a.length - 1;
+            while (left <= right) {
                 int temp = a[left];
                 a[left] = a[right];
                 a[right] = temp;
-                a[left] = a[left] == 0?1:0;
-                a[right] = a[right] == 0?1:0;
-                if (left == right){
-                    a[right] = a[right] == 0?1:0;
+                a[left] = a[left] == 0 ? 1 : 0;
+                a[right] = a[right] == 0 ? 1 : 0;
+                if (left == right) {
+                    a[right] = a[right] == 0 ? 1 : 0;
                 }
-                left++;right--;
+                left++;
+                right--;
             }
         }
         return A;
     }
 
-//    120
+    //    120
 //    递归
-    Integer [][]memo;
+    Integer[][] memo;
+
     public int minimumTotal1(List<List<Integer>> triangle) {
         memo = new Integer[triangle.size()][triangle.size()];
         return dfs(triangle, 0, 0);
     }
 
     public int dfs(List<List<Integer>> triangle, int i, int j) {
-        if (i == triangle.size()){
+        if (i == triangle.size()) {
             return 0;
         }
-        if (memo[i][j] != null){
+        if (memo[i][j] != null) {
             return memo[i][j];
         }
-        return memo[i][j] = Math.min(dfs(triangle, i+1, j), dfs(triangle, i+1, j+1)) + triangle.get(i).get(j);
+        return memo[i][j] = Math.min(dfs(triangle, i + 1, j), dfs(triangle, i + 1, j + 1)) + triangle.get(i).get(j);
     }
 
-//    dp[i][j]=min(dp[i+1][j],dp[i+1][j+1])+triangle[i][j]
+    //    dp[i][j]=min(dp[i+1][j],dp[i+1][j+1])+triangle[i][j]
     public int minimumTotal(List<List<Integer>> triangle) {
         int n = triangle.size();
-        int []dp = new int[n+1];
-        for (int i=n-1;i>=0;i--){
-            for (int j=0;j<=i;j++){
-                dp[j] = Math.min(dp[j], dp[j+1]) + triangle.get(i).get(j);
+        int[] dp = new int[n + 1];
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = 0; j <= i; j++) {
+                dp[j] = Math.min(dp[j], dp[j + 1]) + triangle.get(i).get(j);
             }
         }
         return dp[0];
     }
 
-//  84
+    //  84
     public int largestRectangleArea1(int[] heights) {
         int max = 0;
         int width = 0;
-        for (int i=0;i<heights.length;i++){
+        for (int i = 0; i < heights.length; i++) {
             width = 1;
-            int j = i-1;
-            int k = i+1;
-            while (j>=0 && heights[i] <= heights[j--])
+            int j = i - 1;
+            int k = i + 1;
+            while (j >= 0 && heights[i] <= heights[j--])
                 width++;
-            while (k<=heights.length-1 && heights[i] <= heights[k++])
+            while (k <= heights.length - 1 && heights[i] <= heights[k++])
                 width++;
-            max = Math.max(max, width*heights[i]);
+            max = Math.max(max, width * heights[i]);
         }
         return max;
     }
@@ -1701,19 +1704,19 @@ public class HelloWorld {
     public int largestRectangleArea2(int[] heights) {
         int max = 0;
         Deque<Integer> stack = new ArrayDeque<>();
-        if (heights.length == 1){
+        if (heights.length == 1) {
             return heights[0];
         }
-        if (heights.length == 0){
+        if (heights.length == 0) {
             return 0;
         }
         stack.add(0);
-        for (int i=1;i<heights.length;i++){
+        for (int i = 1; i < heights.length; i++) {
 
-            while (heights[stack.getLast()] >= heights[i]){
+            while (heights[stack.getLast()] >= heights[i]) {
                 int last = stack.getLast();
                 stack.removeLast();
-                if (stack.isEmpty()){
+                if (stack.isEmpty()) {
                     max = Math.max(max, (i * heights[last]));
                     break;
                 }
@@ -1722,16 +1725,16 @@ public class HelloWorld {
             }
             stack.add(i);
         }
-        while (!stack.isEmpty()){
+        while (!stack.isEmpty()) {
             int right = heights.length - 1 - stack.getLast();
             int last = stack.getLast();
             stack.removeLast();
-            if (stack.isEmpty()){
+            if (stack.isEmpty()) {
                 max = Math.max(max, heights.length * heights[last]);
                 break;
             }
             int left = last - stack.getLast();
-            max = Math.max(max, (right+left) * heights[last]);
+            max = Math.max(max, (right + left) * heights[last]);
         }
         return max;
     }
@@ -1739,26 +1742,27 @@ public class HelloWorld {
     public int largestRectangleArea(int[] heights) {
         int max = 0;
         Deque<Integer> stack = new ArrayDeque<>();
-        if (heights.length == 1){
+        if (heights.length == 1) {
             return heights[0];
         }
-        if (heights.length == 0){
+        if (heights.length == 0) {
             return 0;
         }
-        int []heights_cp = new int[heights.length+2];
-        heights_cp[0] = 0; heights_cp[heights_cp.length-1] = 0;
-        for (int i=0;i<heights.length;i++){
-            heights_cp[i+1] = heights[i];
+        int[] heights_cp = new int[heights.length + 2];
+        heights_cp[0] = 0;
+        heights_cp[heights_cp.length - 1] = 0;
+        for (int i = 0; i < heights.length; i++) {
+            heights_cp[i + 1] = heights[i];
         }
-        for (int i=0;i<heights_cp.length;i++){
-            if (stack.isEmpty()){
+        for (int i = 0; i < heights_cp.length; i++) {
+            if (stack.isEmpty()) {
                 stack.add(i);
                 continue;
             }
-            while (heights_cp[stack.getLast()] > heights_cp[i]){
+            while (heights_cp[stack.getLast()] > heights_cp[i]) {
                 int last = stack.getLast();
                 stack.removeLast();
-                max = Math.max(max, (i-stack.getLast()-1) * heights_cp[last]);
+                max = Math.max(max, (i - stack.getLast() - 1) * heights_cp[last]);
             }
             stack.add(i);
 
@@ -1766,31 +1770,34 @@ public class HelloWorld {
         return max;
     }
 
-//    474
+    //    474
 //    1。递归
-    Integer [][][]memo2;
+    Integer[][][] memo2;
+
     public int findMaxForm2(String[] strs, int m, int n) {
-        memo2 = new Integer[strs.length][m+1][n+1];
+        memo2 = new Integer[strs.length][m + 1][n + 1];
         return dfs2(strs, m, n, 0);
     }
-    public int dfs2(String []strs, int m, int n, int i) {
-        if (i == strs.length){
+
+    public int dfs2(String[] strs, int m, int n, int i) {
+        if (i == strs.length) {
             return 0;
         }
-        if (memo2[i][m][n] != null){
+        if (memo2[i][m][n] != null) {
             return memo2[i][m][n];
         }
         int num0 = countNum(strs[i], '0');
         int num1 = countNum(strs[i], '1');
-        if (m - num0 < 0 || n - num1< 0){
-            return dfs2(strs, m, n, i+1);
+        if (m - num0 < 0 || n - num1 < 0) {
+            return dfs2(strs, m, n, i + 1);
         }
-        return memo2[i][m][n] = Math.max(dfs2(strs, m, n, i+1), dfs2(strs, m-num0, n-num1, i+1) + 1);
+        return memo2[i][m][n] = Math.max(dfs2(strs, m, n, i + 1), dfs2(strs, m - num0, n - num1, i + 1) + 1);
     }
-    public int countNum(String str, char c){
+
+    public int countNum(String str, char c) {
         int count = 0;
-        for (int i=0;i<str.length();i++){
-            if (str.charAt(i) == c){
+        for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == c) {
                 count++;
             }
         }
@@ -1798,22 +1805,22 @@ public class HelloWorld {
     }
 
     public int findMaxForm(String[] strs, int m, int n) {
-        int [][]dp = new int[m+1][n+1];
-        int num0,num1;
-        for (int i=0;i<strs.length;i++){
+        int[][] dp = new int[m + 1][n + 1];
+        int num0, num1;
+        for (int i = 0; i < strs.length; i++) {
             num0 = countNum(strs[i], '0');
             num1 = countNum(strs[i], '1');
-            for (int j=m;j>=0;j--){
-                for (int k=n;k>=0;k--){
-                    if (j-num0 < 0 || k-num1 < 0){
+            for (int j = m; j >= 0; j--) {
+                for (int k = n; k >= 0; k--) {
+                    if (j - num0 < 0 || k - num1 < 0) {
                         continue;
                     }
-                    dp [j][k] = Math.max(dp[j][k], dp[j-num0][k-num1]+1);
+                    dp[j][k] = Math.max(dp[j][k], dp[j - num0][k - num1] + 1);
                 }
             }
-            for (int a=0;a<=m;a++){
-                for (int b=0;b<=n;b++){
-                    System.out.print(dp[a][b]+" ");
+            for (int a = 0; a <= m; a++) {
+                for (int b = 0; b <= n; b++) {
+                    System.out.print(dp[a][b] + " ");
                 }
                 System.out.println();
             }
@@ -1824,12 +1831,14 @@ public class HelloWorld {
 
     //        300
     int max = 0;
+
     public int lengthOfLIS1(int[] nums) {
         dfs3(nums, 0, new ArrayList<>());
         return max;
     }
-    public void dfs3(int []nums, int i, List<Integer> now_int) {
-        if (i == nums.length){
+
+    public void dfs3(int[] nums, int i, List<Integer> now_int) {
+        if (i == nums.length) {
             checkLengthOfLIS(now_int);
             return;
         }
@@ -1839,104 +1848,105 @@ public class HelloWorld {
         List<Integer> l2 = new ArrayList<>(now_int);
         l1.add(nums[i]);
 
-        dfs3(nums, i+1, l1);
-        dfs3(nums, i+1, l2);
+        dfs3(nums, i + 1, l1);
+        dfs3(nums, i + 1, l2);
     }
-    public void checkLengthOfLIS(List<Integer> now_int){
+
+    public void checkLengthOfLIS(List<Integer> now_int) {
         int a = Integer.MIN_VALUE;
         int count = 0;
-        for (int b:now_int){
-            if (a >= b){
+        for (int b : now_int) {
+            if (a >= b) {
                 return;
-            }else {
+            } else {
                 a = b;
-                count ++;
+                count++;
                 max = Math.max(max, count);
             }
         }
     }
 
     public int lengthOfLIS2(int[] nums) {
-        int []dp = new int[nums.length];
+        int[] dp = new int[nums.length];
         Arrays.fill(dp, 1);
-        if (nums.length == 1){
+        if (nums.length == 1) {
             return 1;
         }
         int max = 0;
-        for (int i=0;i<nums.length;i++){
-            for (int j=0;j<i;j++){
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < i; j++) {
                 if (nums[j] < nums[i])
-                    dp[i] = Math.max(dp[i], dp[j]+1);
-                    max = Math.max(dp[i], max);
+                    dp[i] = Math.max(dp[i], dp[j] + 1);
+                max = Math.max(dp[i], max);
             }
         }
         return max;
     }
 
     public int lengthOfLIS(int[] nums) {
-        int []tails = new int[nums.length];
+        int[] tails = new int[nums.length];
         Arrays.fill(tails, Integer.MIN_VALUE);
-        if (nums.length == 1){
+        if (nums.length == 1) {
             return 1;
         }
         int index = 0;
-        for (int num:nums){
+        for (int num : nums) {
             int i = 0;
-            int j = index-1;
+            int j = index - 1;
             int mid = 0;
-            while (i<=j){
-                mid = (i+j) / 2;
-                if (tails[mid] > num){
-                    j = mid-1;
-                }else if (tails[mid] < num){
-                    i = mid +1;
-                }else {
+            while (i <= j) {
+                mid = (i + j) / 2;
+                if (tails[mid] > num) {
+                    j = mid - 1;
+                } else if (tails[mid] < num) {
+                    i = mid + 1;
+                } else {
                     i = mid;
                     break;
                 }
             }
             tails[i] = num;
-            if (i > index-1){
-                index ++;
+            if (i > index - 1) {
+                index++;
             }
         }
         return index;
     }
 
-//    978
+    //    978
     public int maxTurbulenceSize(int[] A) {
-        int []dp1 = new int[A.length];
-        int []dp2 = new int[A.length];
-        if (A.length == 0){
+        int[] dp1 = new int[A.length];
+        int[] dp2 = new int[A.length];
+        if (A.length == 0) {
             return 0;
         }
         int max = 1;
         Arrays.fill(dp1, 1);
         Arrays.fill(dp2, 1);
 //        奇数大于偶数
-        for (int i=1;i<A.length;i++){
-            if (i % 2 == 1){
-                if (A[i-1] < A[i]){
-                    dp1[i] = dp1[i-1] + 1;
+        for (int i = 1; i < A.length; i++) {
+            if (i % 2 == 1) {
+                if (A[i - 1] < A[i]) {
+                    dp1[i] = dp1[i - 1] + 1;
                 }
             }
-            if (i % 2 == 0){
-                if (A[i] < A[i-1]){
-                    dp1[i] = dp1[i-1] + 1;
+            if (i % 2 == 0) {
+                if (A[i] < A[i - 1]) {
+                    dp1[i] = dp1[i - 1] + 1;
                 }
             }
             max = Math.max(dp1[i], max);
         }
 
-        for (int i=1;i<A.length;i++){
-            if (i % 2 == 1){
-                if (A[i-1] > A[i]){
-                    dp2[i] = dp2[i-1] + 1;
+        for (int i = 1; i < A.length; i++) {
+            if (i % 2 == 1) {
+                if (A[i - 1] > A[i]) {
+                    dp2[i] = dp2[i - 1] + 1;
                 }
             }
-            if (i % 2 == 0){
-                if (A[i] > A[i-1]){
-                    dp2[i] = dp2[i-1] + 1;
+            if (i % 2 == 0) {
+                if (A[i] > A[i - 1]) {
+                    dp2[i] = dp2[i - 1] + 1;
                 }
             }
             max = Math.max(dp2[i], max);
@@ -1945,49 +1955,140 @@ public class HelloWorld {
         return max;
     }
 
-//    730
+    //    730
     public int countPalindromicSubsequences(String S) {
-        int []dp = new int[S.length()];
-        for (int i=0;i<S.length();i++){
+        int[] dp = new int[S.length()];
+        for (int i = 0; i < S.length(); i++) {
 
         }
         return 0;
     }
 
-//    787
+    //    787
     public int findCheapestPrice(int n, int[][] flights, int src, int dst, int K) {
-        int [][]dp = new int[K+1][n];
-        for(int []d:dp)
+        int[][] dp = new int[K + 1][n];
+        for (int[] d : dp)
             Arrays.fill(d, 10000000);
         dp[0][src] = 0;
 
-        for (int []flight:flights){
+        for (int[] flight : flights) {
             if (flight[0] == src)
                 dp[0][flight[1]] = flight[2];
         }
-        for (int i=1;i<=K;i++){
-            for (int []flight:flights){
-                dp[i][flight[1]] = Math.min(Math.min(dp[i-1][flight[1]], dp[i-1][flight[0]] + flight[2]), dp[i][flight[1]]);
+        for (int i = 1; i <= K; i++) {
+            for (int[] flight : flights) {
+                dp[i][flight[1]] = Math.min(Math.min(dp[i - 1][flight[1]], dp[i - 1][flight[0]] + flight[2]), dp[i][flight[1]]);
             }
         }
-        return dp[K][dst] == 10000000 ? -1:dp[K][dst];
+        return dp[K][dst] == 10000000 ? -1 : dp[K][dst];
     }
-    public void out_list(int [][]flight_dst){
-        for (int i=0;i<flight_dst.length;i++){
-            for (int j=0;j<flight_dst[0].length;j++){
-                System.out.print(flight_dst[i][j]+" ");
+
+    public void out_list(int[][] flight_dst) {
+        for (int i = 0; i < flight_dst.length; i++) {
+            for (int j = 0; j < flight_dst[0].length; j++) {
+                System.out.print(flight_dst[i][j] + " ");
             }
             System.out.println();
         }
     }
+
+    //    837
+    public double new21Game(int N, int K, int W) {
+        return 1;
+    }
+
+    //    62
+    public int uniquePaths(int m, int n) {
+        int[] dp = new int[n];
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                dp[j] = dp[j - 1] + dp[j];
+            }
+        }
+        return dp[n - 1];
+    }
+
+    //    5 dp
+    public String longestPalindrom1(String s) {
+        int len = s.length();
+        if (len == 0)
+            return s;
+        boolean[][] dp = new boolean[len][len];
+        char[] s_array = s.toCharArray();
+        int max = 0;
+        int left = 0, right = 0;
+        for (int i = 0; i < len; i++)
+            dp[i][i] = true;
+        for (int j = 1; j < len; j++) {
+            for (int i = 0; i < j; i++) {
+                dp[i][j] = dp[i + 1][j - 1] && s_array[i] == s_array[j];
+                if (j - i < 3)
+                    dp[i][j] = s_array[i] == s_array[j];
+                if (dp[i][j] && j - i + 1 > max) {
+                    left = i;
+                    right = j;
+                    max = j - i + 1;
+                }
+            }
+        }
+        return s.substring(left, right + 1);
+    }
+
+    //    5 暴力
+    public String longestPalindrome2(String s) {
+        int len = s.length();
+        int max = 0;
+        int left = 0, right = 0;
+        for (int i = 0; i < len; i++) {
+            for (int j = i; j < len; j++) {
+                StringBuilder sb = new StringBuilder(s.substring(i, j + 1));
+                if (sb.toString().equals(sb.reverse().toString()) && j - i + 1 > max) {
+                    max = j - i + 1;
+                    left = i;
+                    right = j + 1;
+                }
+            }
+        }
+        return s.substring(left, right);
+    }
+
+    //    5 中间扩散
+    public String longestPalindrome(String s) {
+        int len = s.length();
+        int left = 0, right = 0;
+        if (len == 1)
+            return s;
+        String ans = "";
+        int max = 0;
+        for (int i = 0; i < len-1; i++) {
+            int len1 = checkPalindrome(s, i, i);
+            int len2 = checkPalindrome(s, i, i+1);
+            len1 = Math.max(len1, len2);
+            if (len1 > max) {
+                max = len1;
+                ans = s.substring(i - len1 / 2 + (len1+1)%2, i + 1 + len1 / 2);
+            }
+        }
+        return ans;
+    }
+
+    public int checkPalindrome(String s, int i, int j) {
+        int len = s.length();
+        if (s.charAt(i) != s.charAt(j))
+            return 1;
+        while (i >= 0 && j < len) {
+            if (s.charAt(i--) != s.charAt(j++))
+                return j - i - 3;
+        }
+        return j - i - 1;
+    }
+
     public static void main(String[] args) {
 
-
-        int n = 3;
-        int [][]edges = {{0,1,100},{1,2,100},{0,2,500}};
-        int src = 0, dst = 2, k = 0;
+        String s = "baaaac";
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.findCheapestPrice(n,edges,src,dst,k);
+        String ans = hello_world.longestPalindrome(s);
         System.out.println(ans);
     }
 }
