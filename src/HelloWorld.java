@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import java.util.Arrays.*;
 
+
 public class HelloWorld {
     //  709
     public String toLowerCase(String str) {
@@ -2061,13 +2062,13 @@ public class HelloWorld {
             return s;
         String ans = "";
         int max = 0;
-        for (int i = 0; i < len-1; i++) {
+        for (int i = 0; i < len - 1; i++) {
             int len1 = checkPalindrome(s, i, i);
-            int len2 = checkPalindrome(s, i, i+1);
+            int len2 = checkPalindrome(s, i, i + 1);
             len1 = Math.max(len1, len2);
             if (len1 > max) {
                 max = len1;
-                ans = s.substring(i - len1 / 2 + (len1+1)%2, i + 1 + len1 / 2);
+                ans = s.substring(i - len1 / 2 + (len1 + 1) % 2, i + 1 + len1 / 2);
             }
         }
         return ans;
@@ -2084,11 +2085,149 @@ public class HelloWorld {
         return j - i - 1;
     }
 
+
+    //    剑指03
+    public int findRepeatNumber(int[] nums) {
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != -1) {
+                if (nums[nums[i]] == -1) {
+                    return nums[i];
+                }
+                int temp = nums[nums[i]];
+                nums[nums[i]] = -1;
+                if (nums[i] != -1)
+                    nums[i] = temp;
+            }
+        }
+        return 0;
+    }
+
+    public void out_list2(int[] nums) {
+        for (int num : nums) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+
+    //    剑指04
+    public boolean findNumberIn2DArray1(int[][] matrix, int target) {
+
+        if (matrix.length == 0 || matrix[0].length == 0 || target < matrix[0][0])
+            return false;
+        int left = 0;
+        int right = matrix[0].length - 1;
+        int mid = 0;
+//        二分找行位置
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (matrix[0][mid] > target) {
+                right = mid - 1;
+            } else if (matrix[0][mid] < target) {
+                left = mid + 1;
+            } else {
+                return true;
+            }
+        }
+        int mid_pos = left == matrix[0].length ? right : left - 1;
+
+        left = 0;
+        right = matrix.length - 1;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (matrix[mid][mid_pos] > target) {
+                right = mid - 1;
+            } else if (matrix[mid][mid_pos] < target) {
+                left = mid + 1;
+            } else {
+                return true;
+            }
+        }
+//二分找列位置
+        left = 0;
+        right = matrix.length - 1;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (matrix[mid][0] > target) {
+                right = mid - 1;
+            } else if (matrix[mid][0] < target) {
+                left = mid + 1;
+            } else {
+                return true;
+            }
+        }
+        mid_pos = left == matrix.length ? right : left - 1;
+
+        left = 0;
+        right = matrix[0].length - 1;
+        while (left <= right) {
+            mid = (left + right) / 2;
+            if (matrix[mid_pos][mid] > target) {
+                right = mid - 1;
+            } else if (matrix[mid_pos][mid] < target) {
+                left = mid + 1;
+            } else {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean findNumberIn2DArray(int[][] matrix, int target) {
+        if (matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        int m = matrix.length;
+        int i = 0;
+        int j = matrix[0].length - 1;
+        while (true) {
+            if (target > matrix[i][j]) {
+                i++;
+            } else if (target < matrix[i][j]) {
+                j--;
+            } else
+                return true;
+
+            if (i == m || j < 0) {
+                return false;
+            }
+        }
+    }
+
+//    剑指05
+    public String replaceSpace(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        for (int i=0;i<sb.length();i++){
+            if (sb.charAt(i) == ' '){
+                sb.replace(i,i+1,"%20");
+            }
+        }
+        return sb.toString();
+    }
+
+//    剑指06
+
+    public int[] reversePrint(ListNode head) {
+        Stack<Integer> stack = new Stack<>();
+        List<Integer> ans= new ArrayList<>();
+        while (head.val > 0){
+            stack.push(head.val);
+            head = head.next;
+        }
+        while (!stack.isEmpty()){
+            ans.add(stack.pop());
+        }
+        int []ans2 = new int[ans.size()];
+        for (int i=0;i<ans.size();i++){
+            ans2[i] = ans.get(i);
+        }
+        return ans2;
+    }
     public static void main(String[] args) {
 
-        String s = "baaaac";
+
         HelloWorld hello_world = new HelloWorld();
-        String ans = hello_world.longestPalindrome(s);
-        System.out.println(ans);
+//        String ans = hello_world.reversePrint(head);
+//        System.out.println(ans);
     }
 }
