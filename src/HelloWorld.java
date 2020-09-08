@@ -2207,27 +2207,104 @@ public class HelloWorld {
 
 //    剑指06
 
-    public int[] reversePrint(ListNode head) {
-        Stack<Integer> stack = new Stack<>();
-        List<Integer> ans= new ArrayList<>();
-        while (head.val > 0){
-            stack.push(head.val);
-            head = head.next;
+//    public int[] reversePrint(ListNode head) {
+//        Stack<Integer> stack = new Stack<>();
+//        List<Integer> ans= new ArrayList<>();
+//        while (head.val > 0){
+//            stack.push(head.val);
+//            head = head.next;
+//        }
+//        while (!stack.isEmpty()){
+//            ans.add(stack.pop());
+//        }
+//        int []ans2 = new int[ans.size()];
+//        for (int i=0;i<ans.size();i++){
+//            ans2[i] = ans.get(i);
+//        }
+//        return ans2;
+//    }
+
+//    剑指11
+
+    public int minArray(int[] numbers) {
+        int len = numbers.length;
+        if (len == 0) {
+            return 0;
         }
-        while (!stack.isEmpty()){
-            ans.add(stack.pop());
+        int left = 0;
+        int right = len - 1;
+        while (left < right) {
+            int mid = (left + right) >>> 1;
+            if (numbers[mid] > numbers[right]) {
+                // [3, 4, 5, 1, 2]，mid 以及 mid 的左边一定不是最小数字
+                // 下一轮搜索区间是 [mid + 1, right]
+                left = mid + 1;
+            } else if (numbers[mid] == numbers[right]) {
+                // 只能把 right 排除掉，下一轮搜索区间是 [left, right - 1]
+                right = right - 1;
+            } else {
+                // 此时 numbers[mid] < numbers[right]
+                // mid 的右边一定不是最小数字，mid 有可能是，下一轮搜索区间是 [left, mid]
+                right = mid;
+            }
         }
-        int []ans2 = new int[ans.size()];
-        for (int i=0;i<ans.size();i++){
-            ans2[i] = ans.get(i);
-        }
-        return ans2;
+
+        // 最小数字一定在数组中，因此不用后处理
+        return numbers[left];
     }
+
+//    剑指10
+    public int numWays(int n) {
+        int []f = {1, 1, 2};
+        int f1 = 1, f2 = 2, f3 = 0;
+        for (int i=3;i<=n;i++){
+            f3 = (f1 + f2) % 1000000007;
+            f1 = f2;
+            f2 = f3;
+        }
+        return n > 2 ? f3 : f[n];
+    }
+    public int fib(int n) {
+        int []f = {0, 1};
+        int f1 = 0, f2 = 1, f3 = 1;
+        for (int i=2;i<=n;i++){
+            f3 = (f1 + f2) % 1000000007;
+            f1 = f2;
+            f2 = f3;
+        }
+        return n > 1 ? f3 : f[n];
+    }
+
+//    剑指07
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        List<Integer> preorder_list = new ArrayList<>();
+        List<Integer> inorder_list = new ArrayList<>();
+        for (int i=0;i<inorder.length;i++){
+            preorder_list.add(preorder[i]);
+            inorder_list.add(inorder[i]);
+        }
+        return helper(preorder_list, inorder_list);
+    }
+
+    private TreeNode helper(List<Integer> preorder_list, List<Integer> inorder_list) {
+        if (inorder_list.size() == 0){
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder_list.remove(0));
+        int mid = inorder_list.indexOf(root.val);
+        root.left = helper(preorder_list, inorder_list.subList(0, mid));
+        root.right = helper(preorder_list, inorder_list.subList(mid+1, inorder_list.size()));
+
+        return root;
+    }
+
     public static void main(String[] args) {
 
+        int []preorder = {3,1,2,4};
+        int []inorder = {1,2,3,4};
 
         HelloWorld hello_world = new HelloWorld();
-//        String ans = hello_world.reversePrint(head);
-//        System.out.println(ans);
+        TreeNode ans = hello_world.buildTree(preorder, inorder);
+        System.out.println(ans.val);
     }
 }
