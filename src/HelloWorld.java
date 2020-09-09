@@ -2194,12 +2194,12 @@ public class HelloWorld {
         }
     }
 
-//    剑指05
+    //    剑指05
     public String replaceSpace(String s) {
         StringBuilder sb = new StringBuilder(s);
-        for (int i=0;i<sb.length();i++){
-            if (sb.charAt(i) == ' '){
-                sb.replace(i,i+1,"%20");
+        for (int i = 0; i < sb.length(); i++) {
+            if (sb.charAt(i) == ' ') {
+                sb.replace(i, i + 1, "%20");
             }
         }
         return sb.toString();
@@ -2253,21 +2253,22 @@ public class HelloWorld {
         return numbers[left];
     }
 
-//    剑指10
+    //    剑指10
     public int numWays(int n) {
-        int []f = {1, 1, 2};
+        int[] f = {1, 1, 2};
         int f1 = 1, f2 = 2, f3 = 0;
-        for (int i=3;i<=n;i++){
+        for (int i = 3; i <= n; i++) {
             f3 = (f1 + f2) % 1000000007;
             f1 = f2;
             f2 = f3;
         }
         return n > 2 ? f3 : f[n];
     }
+
     public int fib(int n) {
-        int []f = {0, 1};
+        int[] f = {0, 1};
         int f1 = 0, f2 = 1, f3 = 1;
-        for (int i=2;i<=n;i++){
+        for (int i = 2; i <= n; i++) {
             f3 = (f1 + f2) % 1000000007;
             f1 = f2;
             f2 = f3;
@@ -2275,11 +2276,11 @@ public class HelloWorld {
         return n > 1 ? f3 : f[n];
     }
 
-//    剑指07
+    //    剑指07
     public TreeNode buildTree(int[] preorder, int[] inorder) {
         List<Integer> preorder_list = new ArrayList<>();
         List<Integer> inorder_list = new ArrayList<>();
-        for (int i=0;i<inorder.length;i++){
+        for (int i = 0; i < inorder.length; i++) {
             preorder_list.add(preorder[i]);
             inorder_list.add(inorder[i]);
         }
@@ -2287,24 +2288,257 @@ public class HelloWorld {
     }
 
     private TreeNode helper(List<Integer> preorder_list, List<Integer> inorder_list) {
-        if (inorder_list.size() == 0){
+        if (inorder_list.size() == 0) {
             return null;
         }
         TreeNode root = new TreeNode(preorder_list.remove(0));
         int mid = inorder_list.indexOf(root.val);
         root.left = helper(preorder_list, inorder_list.subList(0, mid));
-        root.right = helper(preorder_list, inorder_list.subList(mid+1, inorder_list.size()));
+        root.right = helper(preorder_list, inorder_list.subList(mid + 1, inorder_list.size()));
 
         return root;
     }
 
+    //    剑指13
+    public int movingCountBFS(int m, int n, int k) {
+        int[][] nums = new int[m][n];
+        int count = 0;
+        Queue<int[]> q = new LinkedList<>();
+        int[] cord = {0, 0};
+        q.add(cord);
+        int x = 0, y = 0;
+        while (!q.isEmpty()) {
+            cord = q.poll();
+            x = cord[0];
+            y = cord[1];
+            nums[x][y] = 1;
+            count++;
+            if (x + 1 < m && nums[x + 1][y] != 1 && nums[x + 1][y] != -1) {
+                if (checkValToK(x + 1, y, k))
+                    q.add(new int[]{x + 1, y});
+                nums[x + 1][y] = -1;
+            }
+
+            if (x - 1 > -1 && nums[x - 1][y] != 1 && nums[x - 1][y] != -1 && checkValToK(x - 1, y, k)) {
+                if (checkValToK(x - 1, y, k))
+                    q.add(new int[]{x - 1, y});
+                nums[x - 1][y] = -1;
+            }
+            if (y + 1 < n && nums[x][y + 1] != 1 && nums[x][y + 1] != -1 && checkValToK(x, y + 1, k)) {
+                if (checkValToK(x, y + 1, k))
+                    q.add(new int[]{x, y + 1});
+                nums[x][y + 1] = -1;
+            }
+            if (y - 1 > -1 && nums[x][y - 1] != 1 && nums[x][y - 1] != -1 && checkValToK(x, y - 1, k)) {
+                if (checkValToK(x, y - 1, k))
+                    q.add(new int[]{x, y - 1});
+                nums[x][y - 1] = -1;
+            }
+        }
+        return count;
+    }
+
+    public int movingCount(int m, int n, int k) {
+        int[][] nums = new int[m][n];
+        int count = 0;
+        Stack<int []> s = new Stack<>();
+        int []cord = {0,0};
+        s.push(cord);
+        int x = 0, y = 0;
+        nums[0][0] = 1;
+        while (!s.isEmpty()){
+            cord = s.peek();
+            x = cord[0];y = cord[1];
+            if (x + 1 < m && nums[x + 1][y] != 1 && nums[x + 1][y] != -1) {
+                if (checkValToK(x + 1, y, k)){
+                    s.push(new int[]{x + 1, y});
+                    nums[x + 1][y] = 1;
+                    continue;
+                }
+                nums[x + 1][y] = -1;
+            }
+
+            if (x - 1 > -1 && nums[x - 1][y] != 1 && nums[x - 1][y] != -1) {
+                if (checkValToK(x - 1, y, k)) {
+                    s.push(new int[]{x - 1, y});
+                    nums[x - 1][y] = 1;
+                    continue;
+                }
+                nums[x - 1][y] = -1;
+            }
+            if (y + 1 < n && nums[x][y + 1] != 1 && nums[x][y + 1] != -1) {
+                if (checkValToK(x, y + 1, k)){
+                    s.push(new int[]{x, y + 1});
+                    nums[x][y + 1] = 1;
+                    continue;
+                }
+                nums[x][y + 1] = -1;
+            }
+            if (y - 1 > -1 && nums[x][y - 1] != 1 && nums[x][y - 1] != -1) {
+                if (checkValToK(x, y - 1, k)){
+                    s.push(new int[]{x, y - 1});
+                    nums[x][y - 1] = 1;
+                    continue;
+                }
+                nums[x][y - 1] = -1;
+            }
+            count ++;
+            s.pop();
+        }
+        return count;
+    }
+
+    private boolean checkValToK(int x, int y, int k) {
+        String sx = String.valueOf(x);
+        String sy = String.valueOf(y);
+        int sum = 0;
+        for (int i = 0; i < sx.length(); i++) {
+            sum += (sx.charAt(i) - 48);
+        }
+        for (int i = 0; i < sy.length(); i++) {
+            sum += (sy.charAt(i) - 48);
+        }
+        return k >= sum;
+    }
+
+    //    剑指14-1
+    public int cuttingRope2(int n) {
+        int ans = 1;
+        if (n < 4 && n != 2) {
+            return n;
+        }
+        if (n == 2)
+            return 1;
+        while (n > 4) {
+            n -= 3;
+            ans *= 3;
+        }
+        if (n == 2) {
+            return ans * 2;
+        }
+        if (n == 3)
+            return ans * 3;
+        if (n == 4)
+            return ans * 4;
+        return ans;
+    }
+
+    public int cuttingRope3(int n) {
+        int []dp = new int[n+1];
+        int ans = 1;
+        dp[2] = 1;
+        for (int i = 3;i<=n;i++){
+            for (int j=1;j<i;j++){
+                dp[i] = Math.max(dp[i], Math.max((i-j)*j, dp[i-j] * j));
+            }
+        }
+        return dp[n];
+    }
+
+    public int cuttingRope(int n) {
+        int []dp = new int[3];
+        Arrays.fill(dp, 1);
+        dp[0] = 0;
+        for (int i=3;i<n+1;i++){
+            dp[i%3]  = Math.max(Math.max(Math.max(i-1, dp[(i-1)%3]), 2*Math.max(i-2, dp[(i-2)%3])), 3*Math.max(i-3, dp[(i-3)%3]));
+        }
+        return dp[n%3];
+    }
+
+//    剑指12
+    public boolean exist1(char[][] board, String word) {
+
+        int m=board.length,n=board[0].length;
+        int index = 0;
+        int [][]check = new int[m][n];
+        Stack<int[]> s = new Stack<>();
+        int []cord = {0,0};
+        int x,y;
+        for (int i=0;i<m;i++){
+            for (int j=0;j<n;j++){
+                if (board[i][j] == word.charAt(index)) {
+                    index++;
+                    cord[0] = i;cord[1]=j;
+                    check[i][j] = 1;
+                    s.push(cord);
+                    while (!s.isEmpty()) {
+                        cord = s.peek();
+                        x = cord[0];
+                        y = cord[1];
+                        System.out.println(x+" "+y);
+                        if (index == word.length())
+                            return true;
+                        if (y + 1 < n && check[x][y + 1] != 1 && board[x][y + 1] == word.charAt(index)) {
+                            s.push(new int[]{x, y + 1});
+                            check[x][y + 1] = 1;
+                            index++;
+                            continue;
+                        }
+                        if (x + 1 < m && check[x + 1][y] != 1 && board[x + 1][y] == word.charAt(index)) {
+                            s.push(new int[]{x + 1, y});
+                            check[x + 1][y] = 1;
+                            index++;
+                            continue;
+                        }
+                        if (x - 1 > -1 && check[x - 1][y] != 1 && board[x - 1][y] == word.charAt(index)) {
+                            s.push(new int[]{x - 1, y});
+                            check[x - 1][y] = 1;
+                            index++;
+                            continue;
+                        }
+                        if (y - 1 > -1 && check[x][y - 1] != 1 && board[x][y - 1] == word.charAt(index)) {
+                            s.push(new int[]{x, y - 1});
+                            check[x][y - 1] = 1;
+                            index++;
+                            continue;
+                        }
+                        cord = s.pop();
+                        index--;
+                    }
+                    for (int k=0;k<m;k++){
+                        Arrays.fill(check[k], 0);
+                    }
+                    index = 0;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public boolean exist(char[][] board, String word) {
+
+        int k = 0;
+        int m=board.length,n=board[0].length;
+        for (int i=0;i<m;i++){
+            for (int j=0;j<n;j++){
+                if (dfs(board, word, i, j, k))
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean dfs(char[][] board, String word, int i, int j, int k) {
+
+        if (i >= board.length || i<= -1 || j >= board[0].length || j<= -1 || board[i][j] != word.charAt(k)){
+            return false;
+        }
+        if (k == word.length()-1)
+            return true;
+        char temp = board[i][j];
+        board[i][j] = '/';
+        boolean res = dfs(board, word, i+1, j, k+1) || dfs(board, word, i-1, j, k+1) || dfs(board, word, i, j+1, k+1) ||dfs(board, word, i, j-1, k+1);
+        board[i][j] = temp;
+        return res;
+    }
     public static void main(String[] args) {
 
-        int []preorder = {3,1,2,4};
-        int []inorder = {1,2,3,4};
+        char [][]board = {{'A','B','C','E'},{'S','F','E','S'},{'A','D','E','E'}};
+        String word = "ABCESEEEFS";
 
         HelloWorld hello_world = new HelloWorld();
-        TreeNode ans = hello_world.buildTree(preorder, inorder);
-        System.out.println(ans.val);
+        boolean ans = hello_world.exist(board, word);
+        System.out.println(ans);
     }
 }
