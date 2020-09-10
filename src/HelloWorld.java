@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 import java.util.Arrays.*;
-
+import java.math.BigDecimal;
 
 public class HelloWorld {
     //  709
@@ -2532,13 +2532,66 @@ public class HelloWorld {
         board[i][j] = temp;
         return res;
     }
+//    剑指15
+    public int hammingWeight(int n) {
+        int count = 0;
+        for (int i=0;i<100;i++){
+            if (n>=Math.pow(2,i) && n<Math.pow(2,i+1)){
+                n -= Math.pow(2,i);
+                i = -1;
+                count ++;
+                if (n == 0){
+                    return count;
+                }
+            }
+        }
+        return count;
+    }
+//  剑指16
+    public double myPow(double x, int n) {
+        double sum = 1;
+        int count = 1;
+        if (n<0){
+            n = -n;
+            x = 1.0 / x;
+        }
+        while (n != 0){
+            sum = sum * ((n & 1) == 1?x:1);
+            x *= x;
+            n >>>= 1;
+        }
+        return sum;
+    }
+//   剑指17
+    public int[] printNumbers(int n) {
+        int k = (int)Math.pow(10, n);
+        int []nums = new int[k-1];
+        for (int i=1;i<k;i++){
+            nums[i-1] = i;
+        }
+        return nums;
+    }
+
+//    剑指20 错误
+    public boolean isNumber(String s) {
+        try {
+            Float.valueOf(s);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+    }
+
+
+//  剑指19 dp和递归
+    public boolean isMatch(String s, String p) {
+        return true;
+    }
     public static void main(String[] args) {
-
-        char [][]board = {{'A','B','C','E'},{'S','F','E','S'},{'A','D','E','E'}};
-        String word = "ABCESEEEFS";
-
+        String s = "aaa";
+        String p = "ab*ac*a";
         HelloWorld hello_world = new HelloWorld();
-        boolean ans = hello_world.exist(board, word);
-        System.out.println(ans);
+        boolean ans = hello_world.isMatch(s, p);
+        System.out.print(ans);
     }
 }
