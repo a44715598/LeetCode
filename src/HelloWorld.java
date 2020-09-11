@@ -2584,14 +2584,154 @@ public class HelloWorld {
 
 
 //  剑指19 dp和递归
-    public boolean isMatch(String s, String p) {
+//    判断所有条件，失败
+    public boolean isMatch2(String s, String p1) {
+        StringBuilder p = new StringBuilder(p1);
+        int i=0, j=0;
+        if (s.length() == 0 && (p.length() == 0 || (p.length() <= 2 && p.charAt(p.length()-1) == '*')))
+            return true;
+        while (i<s.length()&&j<p.length()){
+            if (s.charAt(i) == p.charAt(j)){
+                i++;j++;
+                continue;
+            }
+            if (p.charAt(j) == '.'){
+                i++;j++;
+                continue;
+            }
+            if (p.charAt(j) == '*'){
+                if (s.charAt(i) == p.charAt(j-1) || p.charAt(j-1) == '.'){
+                    if (j+1 < p.length() && p.charAt(j-1) == p.charAt(j+1))
+                        p.delete(j+1,j+2);
+                    i++;
+                    continue;
+                }
+                if (j+1 < p.length() && (s.charAt(i) == p.charAt(j+1) || p.charAt(j+1) == '.')){
+                    i++;j+=2;
+                    continue;
+                }
+                return false;
+            }
+            if (j+1 < p.length() && p.charAt(j+1) == '*'){
+                j++;
+                continue;
+            }
+            return false;
+        }
+        if (i < s.length() || j<p.length()-1 ||(j == p.length()-1 && p.charAt(j) != '*'))
+            return false;
         return true;
     }
+
+//    尝试递归
+
+    public boolean isMatch(String s, String p) {
+        if (s.length() == 0){
+            if (p.length() % 2 == 1)
+                return false;
+            for (int i=1;i<p.length();i+=2){
+                if (p.charAt(i) != '*'){
+                    return false;
+                }
+            }
+            return true;
+        }
+        if (p.length() == 0){
+            return false;
+        }
+        char c1 = s.charAt(0),c2 = p.charAt(0),c3='a';
+        if (p.length() >= 2){
+            c3 = p.charAt(1);
+        }
+        if (c3 != '*'){
+            if (c1 == c2 || c2 == '.'){
+                return isMatch(s.substring(1),p.substring(1));
+            }
+            return false;
+        }
+        else {
+            if (c1 == c2 || c2 == '.'){
+                return isMatch(s.substring(1),p) || isMatch(s,p.substring(2));
+            }
+            return isMatch(s,p.substring(2));
+        }
+    }
+    public boolean matchGo(String s,String p,int i,int j){
+        return true;
+    }
+//    剑14
+    public int cuttingRope4(int n) {
+        long sum = 1;
+        while (n > 4){
+            n-=3;
+            sum = (sum * 3) % 1000000007;
+        }
+        if (n < 4)
+            return sum == 1? n-1:Integer.parseInt(String.valueOf((sum*n)%1000000007));
+        return Integer.parseInt(String.valueOf((sum * 4) % 1000000007));
+    }
+    public int cuttingRope5(int n) {
+        long sum = 1;
+        long a = n/3;
+        if (n == 3 || n==2)
+            return n-1;
+        if (n%3 == 2){
+            sum=2;
+        }
+        if (n%3 == 1){
+            a = n/3 - 1;
+            sum = 4;
+        }
+        long x = 3;
+        while (a > 0){
+            if (a % 2 == 1)
+                sum = (sum * x) % 1000000007;
+            x= (x*x) % 1000000007;
+            a = a/2;
+        }
+        return Integer.parseInt(String.valueOf((sum) % 1000000007));
+    }
+
+//    剑指21
+    public int[] exchange2(int[] nums) {
+        int i = 0,j = 0;
+        while (i<nums.length && j<nums.length){
+            if (nums[i] % 2 == 1){
+                i++;continue;
+            }
+            j = Math.max(i, j);
+            if (nums[j] % 2 == 1){
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+                i++;
+            }
+            j++;
+        }
+        return nums;
+    }
+    public int[] exchange(int[] nums) {
+        int i = 0,j = nums.length-1;
+        while (i<j){
+            if (nums[i] % 2 == 1){
+                i++;
+                continue;
+            }
+            if (nums[j] % 2 == 0){
+                j--;
+                continue;
+            }
+            int temp = nums[i];
+            nums[i] = nums[j];
+            nums[j] = temp;
+        }
+        return nums;
+    }
     public static void main(String[] args) {
-        String s = "aaa";
-        String p = "ab*ac*a";
+        int n = 120;
         HelloWorld hello_world = new HelloWorld();
-        boolean ans = hello_world.isMatch(s, p);
-        System.out.print(ans);
+        int ans = hello_world.cuttingRope5(n);
+//        hello_world.out_list2(ans);
+        System.out.println(ans);
     }
 }
