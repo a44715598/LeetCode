@@ -2727,10 +2727,33 @@ public class HelloWorld {
         }
         return nums;
     }
+//    665
+    public boolean checkPossibility(int[] nums) {
+        int count = 0;
+        for(int i=0;i<nums.length-1;i++){
+            if (nums[i] > nums[i+1]){
+//                System.out.println(i);
+                if (i==0){
+                    count++;
+                    nums[i] = nums[i+1];
+                    continue;
+                }
+                if (nums[i-1] > nums[i+1]){
+                    nums[i+1] = nums[i];
+                }else
+                    nums[i] = nums[i+1];
+                count++;
+                if (count == 2)
+                    return false;
+            }
+
+        }
+        return true;
+    }
     public static void main(String[] args) {
-        int n = 120;
+        int []nums = {-1,4,2,3};
         HelloWorld hello_world = new HelloWorld();
-        int ans = hello_world.cuttingRope5(n);
+        boolean ans = hello_world.checkPossibility(nums);
 //        hello_world.out_list2(ans);
         System.out.println(ans);
     }

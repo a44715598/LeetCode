@@ -737,7 +737,7 @@ public class JZPractice {
         return nums;
     }
 //    剑指24
-    public ListNode reverseList(ListNode head) {
+    public ListNode reverseList2(ListNode head) {
         if (head == null)
             return head;
         ListNode tail = head.next;
@@ -751,6 +751,7 @@ public class JZPractice {
         }
         return head;
     }
+
     //剑指25
     public ListNode mergeTwoLists(ListNode l1, ListNode l2) {
 
@@ -909,11 +910,123 @@ public class JZPractice {
         }
         return pmt;
     }
+
+    public void midOrderList(TreeNode root, List<Integer> midList){
+        if (root == null)
+            return;
+        midOrderList(root.left, midList);
+        midList.add(root.val);
+        midOrderList(root.right, midList);
+    }
+//    剑指28
+    public boolean isSymmetric2(TreeNode root) {
+        if (root == null)
+            return true;
+        List<Integer> preList1 = new ArrayList<>();
+        List<Integer> midList1 = new ArrayList<>();
+        List<Integer> preList2 = new ArrayList<>();
+        List<Integer> midList2 = new ArrayList<>();
+        preOrderList(root, preList1);
+        midOrderList(root, midList1);
+        root = mirrorTree(root);
+        preOrderList(root, preList2);
+        midOrderList(root, midList2);
+        if (preList1.size() != preList2.size() || midList1.size() != midList2.size()){
+            return false;
+        }
+        for (int i=0;i<preList1.size();i++){
+            if (preList1.get(i) != preList2.get(i)){
+                return false;
+            }
+        }
+        for (int i=0;i<midList1.size();i++){
+            if (midList1.get(i) != midList2.get(i)){
+                return false;
+            }
+        }
+
+        return true;
+    }
+    public boolean isSymmetric(TreeNode root) {
+        if (root == null)
+            return true;
+        return helpSymmetric(root.left, root.right);
+    }
+    public boolean helpSymmetric(TreeNode left, TreeNode right) {
+        if (left == null && right == null)
+            return true;
+        if (left != null && right == null)
+            return false;
+        if (left == null)
+            return false;
+        if (left.val != right.val)
+            return false;
+        return helpSymmetric(left.left, right.right) && helpSymmetric(left.right, right.left);
+    }
+//    剑指29
+    public int[] spiralOrder(int[][] matrix) {
+        if (matrix.length == 0 || matrix[0].length == 0)
+            return new int[]{};
+        int col1 = 0, col2 = matrix.length-1;
+        int row1 = 0, row2 = matrix[0].length-1;
+        int []ans = new int[matrix.length * matrix[0].length];
+        int count = 0,i = 0;
+        while (true){
+//            new HelloWorld().out_list2(ans);
+//            System.out.println(row1+" "+row2+" "+col1+" "+col2);
+            for (i=row1;i<=row2;i++){
+                ans[count++] = matrix[col1][i];
+            }
+            col1 += 1;
+            if (col1 > col2)
+                break;
+            for (i=col1;i<=col2;i++){
+                ans[count++] = matrix[i][row2];
+            }
+            row2 -= 1;
+            if (row1 > row2)
+                break;
+
+            for (i=row2;i>=row1;i--){
+                ans[count++] = matrix[col2][i];
+            }
+            col2 -= 1;
+            if (col1 > col2){
+                break;
+            }
+            for (i=col2;i>=col1;i--){
+                ans[count++] = matrix[i][row1];
+            }
+            row1 += 1;
+            if (row1 > row2)
+                break;
+        }
+        return ans;
+    }
+
+//    剑指31
+    public boolean validateStackSequences(int[] pushed, int[] popped) {
+        if (pushed.length == 0)
+            return true;
+        int i=0;
+        int j=0;
+        Stack<Integer> s = new Stack<>();
+        while (i < pushed.length){
+            while (s.isEmpty() || (i < pushed.length && s.peek() != popped[j])){
+                s.push(pushed[i++]);
+            }
+            while (!s.isEmpty() && j < popped.length && s.peek() == popped[j]){
+                s.pop();
+                j++;
+            }
+        }
+        return j == popped.length;
+    }
     public static void main(String[] args) {
-        String s = "ababababca";
-        String p = "abababca";
+        int []pushed = {1,2,3,4,5};
+        int []popped = {4,5,3,2,1};
         JZPractice jzp = new JZPractice();
-        int ans = jzp.kmp(s, p);
+        boolean ans = jzp.validateStackSequences(pushed, popped);
 //        new HelloWorld().out_list2(ans);
         System.out.println(ans);
     }
