@@ -1,5 +1,6 @@
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
+import javax.swing.*;
 import java.util.*;
 
 public class JZPractice {
@@ -1022,11 +1023,335 @@ public class JZPractice {
         }
         return j == popped.length;
     }
+//    剑指32-1
+    public int[] levelOrder(TreeNode root) {
+        if (root == null)
+            return new int[]{};
+        Queue<TreeNode> q = new LinkedList<>();
+        List<Integer> treeList = new ArrayList<>();
+        q.add(root);
+        while (!q.isEmpty())
+        {
+            TreeNode t = q.poll();
+            treeList.add(t.val);
+            if (t.left != null)
+                q.add(t.left);
+            if (t.right != null)
+                q.add(t.right);
+        }
+        int[] ans = new int[treeList.size()];
+        for(int i = 0; i < treeList.size(); i++)
+            ans[i] = treeList.get(i);
+        return ans;
+    }
+
+//    剑指32-2
+    public List<List<Integer>> levelOrder2(TreeNode root) {
+        List<List<Integer>> llint = new ArrayList<>();
+        if (root == null){
+            return llint;
+        }
+        List<Integer> lint = new ArrayList<>();
+        lint.add(root.val);
+        llint.add(lint);
+        recur(root.left, llint, 2);
+        recur(root.right, llint, 2);
+        return llint;
+    }
+    public void recur(TreeNode root, List<List<Integer>> llint, int depth){
+        if (root == null)
+            return;
+        if (llint.size() < depth){
+            List<Integer> lint = new ArrayList<>();
+            lint.add(root.val);
+            llint.add(lint);
+        }else
+            llint.get(depth-1).add(root.val);
+        recur(root.left, llint, depth+1);
+        recur(root.right, llint, depth+1);
+    }
+
+    public List<List<Integer>> levelOrder2_2(TreeNode root) {
+        List<List<Integer>> llint = new ArrayList<>();
+        if (root == null)
+            return llint;
+        Queue<TreeNode> q = new LinkedList<>();
+        q.add(root);
+        while (!q.isEmpty())
+        {
+            List<Integer> lint = new ArrayList<>();
+            int len = q.size();
+            for (int i=0;i<len;i++){
+                TreeNode t = q.poll();
+                lint.add(t.val);
+                if (t.left != null)
+                    q.add(t.left);
+                if (t.right != null)
+                    q.add(t.right);
+            }
+            llint.add(lint);
+        }
+        return llint;
+    }
+
+//    剑指32-3
+    public List<List<Integer>> levelOrder3(TreeNode root) {
+        List<List<Integer>> llint = levelOrder2(root);
+        int depth = llint.size();
+        for (int i=0;i<depth;i++){
+            if (i % 2 == 1){
+                Collections.reverse(llint.get(i));
+            }
+        }
+        return llint;
+    }
+
+
+//    94
+    public List<Integer> inorderTraversal2(TreeNode root) {
+        List<Integer> lint = new ArrayList<>();
+        if (root == null)
+            return lint;
+        Stack<TreeNode> s = new Stack<>();
+        s.push(root);
+        TreeNode t = root;
+        while (!s.isEmpty()){
+            t = s.pop();
+            while (t.left != null){
+                s.push(t);
+                t = t.left;
+            }
+            lint.add(t.val);
+            if (t.right != null){
+                s.push(t.right);
+                continue;
+            }
+            while (!s.isEmpty() && s.peek().right == null){
+                lint.add(s.pop().val);
+            }
+            if (s.isEmpty())
+                return lint;
+            lint.add(s.peek().val);
+            s.push(s.pop().right);
+        }
+        return lint;
+    }
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> lint = new ArrayList<>();
+        Stack<TreeNode> s = new Stack<>();
+        TreeNode t = root;
+        while (t!=null || !s.isEmpty()){
+            while (t != null){
+                s.push(t);
+                t = t.left;
+            }
+            t = s.pop();
+            lint.add(t.val);
+            t = t.right;
+        }
+        return lint;
+    }
+
+    //剑指32
+    public List<List<Integer>> pathSum(TreeNode root, int sum) {
+        List<List<Integer>> llint = new ArrayList<>();
+        if (root == null || root.val > sum){
+            return llint;
+        }
+        List<Integer> lint = new ArrayList<>();
+        if (root.val == sum && root.left == null && root.right == null){
+            lint.add(root.val);
+            llint.add(lint);
+            return llint;
+        }
+        lint.add(root.val);
+        recur(root.left, root.val, sum, lint, llint);
+        recur(root.right, root.val, sum, lint, llint);
+        return llint;
+    }
+    public void recur(TreeNode root, int ans, int sum, List<Integer> lint, List<List<Integer>> llint){
+        if (root == null || (root.val + ans == sum && (root.left != null || root.right != null))){
+            return;
+        }
+        List<Integer> lint1 = new ArrayList<>(lint);
+        if (root.val + ans == sum && root.left == null && root.right == null){
+            lint1.add(root.val);
+            llint.add(lint1);
+            return;
+        }
+        lint1.add(root.val);
+        recur(root.left, root.val + ans, sum, lint1, llint);
+        recur(root.right, root.val + ans, sum, lint1, llint);
+    }
+
+    public List<List<Integer>> pathSum2(TreeNode root, int sum){
+        List<List<Integer>> llint = new ArrayList<>();
+        if (root == null)
+            return llint;
+        TreeNode t = root;
+        Stack<TreeNode> s = new Stack<>();
+        List<Integer> lint = new ArrayList<>();
+        int ans = 0;
+        while (t!=null || !s.isEmpty()){
+            while (t != null){
+                s.push(t);
+                ans += t.val;
+                lint.add(t.val);
+                t = t.left;
+            }
+            t = s.pop();
+            if(ans == sum && t == null && t.left == null)
+                llint.add(new ArrayList<>(lint));
+            ans -= t.val;
+            lint.remove(llint.size() - 1);
+            t = t.right;
+        }
+        return llint;
+    }
+
+//    剑指33
+    public boolean verifyPostorder(int[] postorder) {
+        if (postorder.length == 0 || postorder.length == 1)
+            return true;
+        return dfs(postorder, 0, postorder.length-1);
+
+    }
+    public boolean dfs(int []postorder,int left,int right){
+        if (left >= right)
+            return true;
+        int root = postorder[right];
+        int i = left;
+        while (postorder[i] < root)
+            i++;
+        int m = i;
+        for (;i<right;i++){
+            if (postorder[i] < root)
+                return false;
+        }
+        return dfs(postorder, left, m-1) && dfs(postorder, m, right-1);
+    }
+//    剑指35
+    public Node copyRandomList(Node head) {
+        if (head == null)
+            return null;
+        Node res = head;
+        while (res != null){
+            Node cp = new Node(res.val);
+            Node res_next = res.next;
+            res.next = cp;
+            cp.next = res_next;
+            res = res_next;
+        }
+//        然后接上随机的结点
+        res = head;
+        while (res != null){
+            res.next.random = res.random != null?res.random.next:null;
+            res = res.next.next;
+        }
+//        然后再把原来的链表拆开，注意哦不用管random指针
+        res = head;
+        Node head1 = res.next;
+        Node cp = res.next;
+        while (res != null){
+            res.next = res.next.next;
+            if(cp.next == null)
+                break;
+            cp.next = cp.next.next;
+            res = res.next;
+            cp = cp.next;
+        }
+        return head1;
+    }
+
+//    36二叉搜索树与双向链表,两种节点噢
+//    public Node treeToDoublyList(Node root) {
+//        if (root == null)
+//            return null;
+//        Stack<Node> s = new Stack<>();
+//        Node t = root;
+//        Node front = null;
+//        Node tail = null;
+//        Node head = null;
+//        while (t!=null || !s.isEmpty()){
+//            while (t != null){
+//                s.push(t);
+//                t = t.left;
+//            }
+//            t = s.pop();
+//            if (front == null){
+//                front = t;
+//                head = t;
+//                t = t.right;
+//                continue;
+//            }
+//            if (tail == null){
+//                tail = t;
+//                front.right = tail;
+//                tail.left = front;
+//                t = t.right;
+//                continue;
+//            }
+//            front = tail;
+//            tail = t;
+//            front.right = tail;
+//            tail.left = front;
+//            t = t.right;
+//        }
+//        if (tail == null){
+//            head.right = head;
+//            head.left = head;
+//            return head;
+//        }
+//        head.left = tail;
+//        tail.right = head;
+//        return head;
+//    }
+
+//    剑指37
+// Encodes a tree to a single string.
+//    public String serialize(TreeNode root) {
+//
+//    }
+
+    // Decodes your encoded data to tree.
+//    public TreeNode deserialize(String data) {
+//
+//    }
+
+//    剑指38
+    List<String> res = new ArrayList<>();
+    char []c;
+    public String[] permutation(String s) {
+        c = s.toCharArray();
+        dfs(0);
+        return res.toArray(new String[res.size()]);
+    }
+    public void dfs(int x){
+        if (x == c.length - 1)
+            res.add(String.valueOf(c));
+        Set<Character> set = new HashSet<>();
+        for (int i=x;i<c.length;i++){
+            if(set.contains(c[i]))
+                continue;
+            set.add(c[i]);
+            swap(i,x);
+            dfs(x+1);
+            swap(i,x);
+        }
+    }
+    public void swap(int i, int j){
+        char temp = c[i];
+        c[i] = c[j];
+        c[j] = temp;
+    }
+//  37
+    public void solveSudoku(char[][] board) {
+//        BitSet bs = new BitSet();
+    }
     public static void main(String[] args) {
-        int []pushed = {1,2,3,4,5};
-        int []popped = {4,5,3,2,1};
+        int []postorder = {1,6,3,2,5};
         JZPractice jzp = new JZPractice();
-        boolean ans = jzp.validateStackSequences(pushed, popped);
+        boolean ans = jzp.verifyPostorder(postorder);
 //        new HelloWorld().out_list2(ans);
         System.out.println(ans);
     }
