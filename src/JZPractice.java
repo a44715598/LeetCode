@@ -1348,10 +1348,136 @@ public class JZPractice {
     public void solveSudoku(char[][] board) {
 //        BitSet bs = new BitSet();
     }
+//    剑指39
+    public int majorityElement(int[] nums) {
+        int count = 1;
+        int ans = nums[0];
+        for (int i=1;i<nums.length;i++){
+            if (nums[i] == ans)
+                count++;
+            else{
+                count--;
+                if (count == 0){
+                    ans = nums[i];
+                    count++;
+                }
+            }
+        }
+        return ans;
+    }
+//    剑指40
+    public int[] getLeastNumbers2(int[] arr, int k) {
+        List<Integer> lint = new LinkedList<>();
+        for (int i=0;i<k;i++){
+            lint.add(Integer.MAX_VALUE);
+        }
+        for (int i=0;i<arr.length;i++){
+            for (int j=0;j<k;j++){
+                if (arr[i] < lint.get(j)){
+                    lint.add(j, arr[i]);
+                    lint.remove(k);
+                    break;
+                }
+            }
+        }
+        int []ans = new int[k];
+        for (int j=0;j<k;j++){
+            ans[j] = lint.get(j);
+        }
+        return ans;
+    }
+
+    public int[] getLeastNumbers(int[] arr, int k) {
+        if (arr.length == 0 || k==0){
+            return new int[]{};
+        }
+        quickSort(arr, 0, arr.length-1, k-1);
+        int [] ans = new int[k];
+        for (int i=0;i<k;i++){
+            ans[i] = arr[i];
+        }
+        return ans;
+    }
+
+    public void quickSort(int[] arr, int left, int right, int k) {
+        int j = partition(arr, left, right);
+        if (k == j)
+            return;
+        if (j > k)
+            quickSort(arr, left, j-1, k);
+        else
+            quickSort(arr, j+1, right, k);
+    }
+
+    public int partition(int []arr, int left, int right){
+        int flag = arr[left];
+        int flag_pos = left;
+        while (left < right){
+            while (left<right && flag <= arr[right])
+                right --;
+            if (left<right){
+                arr[flag_pos] = arr[right];
+                flag_pos = right;
+            }
+            while (left < right && flag >= arr[left])
+                left ++;
+            if (left<right){
+                arr[flag_pos] = arr[left];
+                flag_pos = left;
+            }
+        }
+        arr[left] = flag;
+        return flag_pos;
+    }
+
+//    226 翻转二叉树
+    public TreeNode invertTree(TreeNode root) {
+        if (root == null)
+            return null;
+        TreeNode right = invertTree(root.right);
+        TreeNode left = invertTree(root.left);
+        root.right = left;
+        root.left = right;
+        return root;
+    }
+
+//    剑指42
+    public int maxSubArray(int[] nums) {
+        int dp = nums[0];
+        int max = dp;
+        for (int i=1;i<nums.length;i++){
+            dp = dp > 0?dp+nums[i]:nums[i];
+            max = Math.max(dp, max);
+        }
+        return max;
+    }
+//    剑指43
+    public int countDigitOne(int n) {
+       return 0;
+    }
+    public int findNthDigit(int n) {
+        if (n < 10)
+            return n;
+        int num1 = 0;
+        int num2 = 1;
+        double sum = 1;
+        while (n - sum > 0)
+        {
+            sum = sum + 9 * Math.pow(10,num1++) * (num2++);
+        }
+        num1 = num1 - 1;num2=num2 -1;
+        sum -= 9 * Math.pow(10,num1) * num2;
+        int num_pos = (n - (int)sum) / (num2);
+        int pos = (n - (int)sum) % (num2);
+        System.out.println(num1+" "+num2+" "+sum+" "+num_pos+" "+pos);
+        int ans = String.valueOf((int)Math.pow(10,num1) + num_pos).charAt(pos) - 48;
+
+        return ans;
+    }
     public static void main(String[] args) {
-        int []postorder = {1,6,3,2,5};
+        int n = 11;
         JZPractice jzp = new JZPractice();
-        boolean ans = jzp.verifyPostorder(postorder);
+        int ans = jzp.findNthDigit(n);
 //        new HelloWorld().out_list2(ans);
         System.out.println(ans);
     }
