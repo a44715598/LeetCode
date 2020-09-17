@@ -1451,9 +1451,28 @@ public class JZPractice {
         }
         return max;
     }
-//    剑指43
+//    剑指43  好好斟酌
     public int countDigitOne(int n) {
-       return 0;
+        int high = n / 10; //高位数
+        int cur = n%10;     //当前位值
+        int low = 0;    //低位数
+        int digit = 1;  //什么指数级别的位数
+        int count = 0;
+        while (high != 0 || cur !=0){
+//            System.out.print(high+" "+cur+" "+low+" "+digit + " ");
+            if (cur == 0)
+                count += high * (int)Math.pow(10, digit-1);
+            else if (cur==1)
+                count += high * (int)Math.pow(10, digit-1) + low + 1;
+            else
+                count += (high + 1) * (int)Math.pow(10, digit-1);
+//            System.out.println(count);
+            digit ++;
+            high = high / 10;
+            cur = n % (int)Math.pow(10, digit) / (int)Math.pow(10, digit-1);
+            low = n % (int)Math.pow(10, digit-1);
+        }
+        return count;
     }
     public int findNthDigit(int n) {
         if (n < 10)
@@ -1474,10 +1493,97 @@ public class JZPractice {
 
         return ans;
     }
+
+//    剑指50
+    public char firstUniqChar(String s) {
+        Map<Character, Integer> map = new LinkedHashMap<>();
+        for (int i=0;i<s.length();i++){
+            map.putIfAbsent(s.charAt(i), 0);
+            map.compute(s.charAt(i), (x,y)->(y+1));
+        }
+        for (char c:map.keySet())
+        {
+            if (map.get(c) == 1)
+                return c;
+        }
+        return ' ';
+    }
+//  剑指57
+    public int[] twoSum(int[] nums, int target) {
+        int i=0;
+        int j=nums.length-1;
+        while (i<j){
+            if (nums[i] + nums[j] > target)
+                j--;
+            else if (nums[i] + nums[j] < target)
+                i++;
+            else
+                return new int[]{nums[i],nums[j]};
+        }
+        return new int[]{nums[i],nums[j]};
+    }
+    public int[] twoSum2(int[] nums, int target) {
+        Map<Integer,Integer> map = new HashMap<>();
+        for (int i=0;i<nums.length;i++)
+        {
+            if (map.get(nums[i]) != null)
+                return new int[]{nums[i], target-nums[i]};
+            map.put(target-nums[i], nums[i]);
+        }
+        return new int[]{2,2};
+    }
+//    剑指51
+    public int reversePairsTimeOut(int[] nums) {
+        int count = 0;
+        for (int i=0;i<nums.length;i++){
+            for (int j=i;j<nums.length;j++){
+                if (nums[i] > nums[j])
+                    count++;
+            }
+        }
+        return count;
+    }
+    int count = 0;
+    public int reversePairs(int[] nums) {
+        if (nums.length < 2)
+            return 0;
+        mergeSortCount(nums,0,nums.length-1);
+        return count;
+    }
+    public void mergeSortCount(int []nums, int left, int right){
+        if (right - left + 1 <= 1)
+            return;
+        int mid = (left+right) / 2;
+        mergeSortCount(nums, left, mid);
+        mergeSortCount(nums, mid+1, right);
+        int len1 = mid - left + 1;
+        int len2 = right - mid;
+        int []nums1 = new int[len1];
+        int []nums2 = new int[len2];
+        int i=left,j=0,k=left;
+        for (;i<=mid;i++,j++)
+            nums1[j] = nums[i];
+        i=mid+1;j=0;
+        for (;i<=right;i++,j++)
+            nums2[j] = nums[i];
+        i=0;j=0;
+        while (i<len1 && j<len2){
+            if (nums1[i] <= nums2[j]){
+                nums[k++] = nums1[i++];
+            }else {
+                nums[k++] = nums2[j++];
+                count += len1 - i;
+            }
+        }
+        while (i<len1)
+            nums[k++] = nums1[i++];
+        while (j<len2)
+            nums[k++] = nums2[j++];
+    }
     public static void main(String[] args) {
-        int n = 11;
+        int []nums = {7,5,6,3,2,1};
         JZPractice jzp = new JZPractice();
-        int ans = jzp.findNthDigit(n);
+        int ans = jzp.reversePairs(nums);
 //        new HelloWorld().out_list2(ans);
         System.out.println(ans);
     }
