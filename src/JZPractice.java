@@ -351,16 +351,17 @@ public class JZPractice {
     public int movingCount(int m, int n, int k) {
         int[][] nums = new int[m][n];
         int count = 0;
-        Stack<int []> s = new Stack<>();
-        int []cord = {0,0};
+        Stack<int[]> s = new Stack<>();
+        int[] cord = {0, 0};
         s.push(cord);
         int x = 0, y = 0;
         nums[0][0] = 1;
-        while (!s.isEmpty()){
+        while (!s.isEmpty()) {
             cord = s.peek();
-            x = cord[0];y = cord[1];
+            x = cord[0];
+            y = cord[1];
             if (x + 1 < m && nums[x + 1][y] != 1 && nums[x + 1][y] != -1) {
-                if (checkValToK(x + 1, y, k)){
+                if (checkValToK(x + 1, y, k)) {
                     s.push(new int[]{x + 1, y});
                     nums[x + 1][y] = 1;
                     continue;
@@ -377,7 +378,7 @@ public class JZPractice {
                 nums[x - 1][y] = -1;
             }
             if (y + 1 < n && nums[x][y + 1] != 1 && nums[x][y + 1] != -1) {
-                if (checkValToK(x, y + 1, k)){
+                if (checkValToK(x, y + 1, k)) {
                     s.push(new int[]{x, y + 1});
                     nums[x][y + 1] = 1;
                     continue;
@@ -385,14 +386,14 @@ public class JZPractice {
                 nums[x][y + 1] = -1;
             }
             if (y - 1 > -1 && nums[x][y - 1] != 1 && nums[x][y - 1] != -1) {
-                if (checkValToK(x, y - 1, k)){
+                if (checkValToK(x, y - 1, k)) {
                     s.push(new int[]{x, y - 1});
                     nums[x][y - 1] = 1;
                     continue;
                 }
                 nums[x][y - 1] = -1;
             }
-            count ++;
+            count++;
             s.pop();
         }
         return count;
@@ -434,48 +435,49 @@ public class JZPractice {
     }
 
     public int cuttingRope3(int n) {
-        int []dp = new int[n+1];
+        int[] dp = new int[n + 1];
         int ans = 1;
         dp[2] = 1;
-        for (int i = 3;i<=n;i++){
-            for (int j=1;j<i;j++){
-                dp[i] = Math.max(dp[i], Math.max((i-j)*j, dp[i-j] * j));
+        for (int i = 3; i <= n; i++) {
+            for (int j = 1; j < i; j++) {
+                dp[i] = Math.max(dp[i], Math.max((i - j) * j, dp[i - j] * j));
             }
         }
         return dp[n];
     }
 
     public int cuttingRope(int n) {
-        int []dp = new int[3];
+        int[] dp = new int[3];
         Arrays.fill(dp, 1);
         dp[0] = 0;
-        for (int i=3;i<n+1;i++){
-            dp[i%3]  = Math.max(Math.max(Math.max(i-1, dp[(i-1)%3]), 2*Math.max(i-2, dp[(i-2)%3])), 3*Math.max(i-3, dp[(i-3)%3]));
+        for (int i = 3; i < n + 1; i++) {
+            dp[i % 3] = Math.max(Math.max(Math.max(i - 1, dp[(i - 1) % 3]), 2 * Math.max(i - 2, dp[(i - 2) % 3])), 3 * Math.max(i - 3, dp[(i - 3) % 3]));
         }
-        return dp[n%3];
+        return dp[n % 3];
     }
 
     //    剑指12
     public boolean exist1(char[][] board, String word) {
 
-        int m=board.length,n=board[0].length;
+        int m = board.length, n = board[0].length;
         int index = 0;
-        int [][]check = new int[m][n];
+        int[][] check = new int[m][n];
         Stack<int[]> s = new Stack<>();
-        int []cord = {0,0};
-        int x,y;
-        for (int i=0;i<m;i++){
-            for (int j=0;j<n;j++){
+        int[] cord = {0, 0};
+        int x, y;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (board[i][j] == word.charAt(index)) {
                     index++;
-                    cord[0] = i;cord[1]=j;
+                    cord[0] = i;
+                    cord[1] = j;
                     check[i][j] = 1;
                     s.push(cord);
                     while (!s.isEmpty()) {
                         cord = s.peek();
                         x = cord[0];
                         y = cord[1];
-                        System.out.println(x+" "+y);
+                        System.out.println(x + " " + y);
                         if (index == word.length())
                             return true;
                         if (y + 1 < n && check[x][y + 1] != 1 && board[x][y + 1] == word.charAt(index)) {
@@ -505,7 +507,7 @@ public class JZPractice {
                         cord = s.pop();
                         index--;
                     }
-                    for (int k=0;k<m;k++){
+                    for (int k = 0; k < m; k++) {
                         Arrays.fill(check[k], 0);
                     }
                     index = 0;
@@ -519,9 +521,9 @@ public class JZPractice {
     public boolean exist(char[][] board, String word) {
 
         int k = 0;
-        int m=board.length,n=board[0].length;
-        for (int i=0;i<m;i++){
-            for (int j=0;j<n;j++){
+        int m = board.length, n = board[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
                 if (dfs(board, word, i, j, k))
                     return true;
             }
@@ -531,53 +533,56 @@ public class JZPractice {
 
     public boolean dfs(char[][] board, String word, int i, int j, int k) {
 
-        if (i >= board.length || i<= -1 || j >= board[0].length || j<= -1 || board[i][j] != word.charAt(k)){
+        if (i >= board.length || i <= -1 || j >= board[0].length || j <= -1 || board[i][j] != word.charAt(k)) {
             return false;
         }
-        if (k == word.length()-1)
+        if (k == word.length() - 1)
             return true;
         char temp = board[i][j];
         board[i][j] = '/';
-        boolean res = dfs(board, word, i+1, j, k+1) || dfs(board, word, i-1, j, k+1) || dfs(board, word, i, j+1, k+1) ||dfs(board, word, i, j-1, k+1);
+        boolean res = dfs(board, word, i + 1, j, k + 1) || dfs(board, word, i - 1, j, k + 1) || dfs(board, word, i, j + 1, k + 1) || dfs(board, word, i, j - 1, k + 1);
         board[i][j] = temp;
         return res;
     }
+
     //    剑指15
     public int hammingWeight(int n) {
         int count = 0;
-        for (int i=0;i<100;i++){
-            if (n>=Math.pow(2,i) && n<Math.pow(2,i+1)){
-                n -= Math.pow(2,i);
+        for (int i = 0; i < 100; i++) {
+            if (n >= Math.pow(2, i) && n < Math.pow(2, i + 1)) {
+                n -= Math.pow(2, i);
                 i = -1;
-                count ++;
-                if (n == 0){
+                count++;
+                if (n == 0) {
                     return count;
                 }
             }
         }
         return count;
     }
+
     //  剑指16
     public double myPow(double x, int n) {
         double sum = 1;
         int count = 1;
-        if (n<0){
+        if (n < 0) {
             n = -n;
             x = 1.0 / x;
         }
-        while (n != 0){
-            sum = sum * ((n & 1) == 1?x:1);
+        while (n != 0) {
+            sum = sum * ((n & 1) == 1 ? x : 1);
             x *= x;
             n >>>= 1;
         }
         return sum;
     }
+
     //   剑指17
     public int[] printNumbers(int n) {
-        int k = (int)Math.pow(10, n);
-        int []nums = new int[k-1];
-        for (int i=1;i<k;i++){
-            nums[i-1] = i;
+        int k = (int) Math.pow(10, n);
+        int[] nums = new int[k - 1];
+        for (int i = 1; i < k; i++) {
+            nums[i - 1] = i;
         }
         return nums;
     }
@@ -587,7 +592,7 @@ public class JZPractice {
         try {
             Float.valueOf(s);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -597,38 +602,41 @@ public class JZPractice {
 //    判断所有条件，失败
     public boolean isMatch2(String s, String p1) {
         StringBuilder p = new StringBuilder(p1);
-        int i=0, j=0;
-        if (s.length() == 0 && (p.length() == 0 || (p.length() <= 2 && p.charAt(p.length()-1) == '*')))
+        int i = 0, j = 0;
+        if (s.length() == 0 && (p.length() == 0 || (p.length() <= 2 && p.charAt(p.length() - 1) == '*')))
             return true;
-        while (i<s.length()&&j<p.length()){
-            if (s.charAt(i) == p.charAt(j)){
-                i++;j++;
+        while (i < s.length() && j < p.length()) {
+            if (s.charAt(i) == p.charAt(j)) {
+                i++;
+                j++;
                 continue;
             }
-            if (p.charAt(j) == '.'){
-                i++;j++;
+            if (p.charAt(j) == '.') {
+                i++;
+                j++;
                 continue;
             }
-            if (p.charAt(j) == '*'){
-                if (s.charAt(i) == p.charAt(j-1) || p.charAt(j-1) == '.'){
-                    if (j+1 < p.length() && p.charAt(j-1) == p.charAt(j+1))
-                        p.delete(j+1,j+2);
+            if (p.charAt(j) == '*') {
+                if (s.charAt(i) == p.charAt(j - 1) || p.charAt(j - 1) == '.') {
+                    if (j + 1 < p.length() && p.charAt(j - 1) == p.charAt(j + 1))
+                        p.delete(j + 1, j + 2);
                     i++;
                     continue;
                 }
-                if (j+1 < p.length() && (s.charAt(i) == p.charAt(j+1) || p.charAt(j+1) == '.')){
-                    i++;j+=2;
+                if (j + 1 < p.length() && (s.charAt(i) == p.charAt(j + 1) || p.charAt(j + 1) == '.')) {
+                    i++;
+                    j += 2;
                     continue;
                 }
                 return false;
             }
-            if (j+1 < p.length() && p.charAt(j+1) == '*'){
+            if (j + 1 < p.length() && p.charAt(j + 1) == '*') {
                 j++;
                 continue;
             }
             return false;
         }
-        if (i < s.length() || j<p.length()-1 ||(j == p.length()-1 && p.charAt(j) != '*'))
+        if (i < s.length() || j < p.length() - 1 || (j == p.length() - 1 && p.charAt(j) != '*'))
             return false;
         return true;
     }
@@ -636,81 +644,84 @@ public class JZPractice {
 //    尝试递归
 
     public boolean isMatch(String s, String p) {
-        if (s.length() == 0){
+        if (s.length() == 0) {
             if (p.length() % 2 == 1)
                 return false;
-            for (int i=1;i<p.length();i+=2){
-                if (p.charAt(i) != '*'){
+            for (int i = 1; i < p.length(); i += 2) {
+                if (p.charAt(i) != '*') {
                     return false;
                 }
             }
             return true;
         }
-        if (p.length() == 0){
+        if (p.length() == 0) {
             return false;
         }
-        char c1 = s.charAt(0),c2 = p.charAt(0),c3='a';
-        if (p.length() >= 2){
+        char c1 = s.charAt(0), c2 = p.charAt(0), c3 = 'a';
+        if (p.length() >= 2) {
             c3 = p.charAt(1);
         }
-        if (c3 != '*'){
-            if (c1 == c2 || c2 == '.'){
-                return isMatch(s.substring(1),p.substring(1));
+        if (c3 != '*') {
+            if (c1 == c2 || c2 == '.') {
+                return isMatch(s.substring(1), p.substring(1));
             }
             return false;
-        }
-        else {
-            if (c1 == c2 || c2 == '.'){
-                return isMatch(s.substring(1),p) || isMatch(s,p.substring(2));
+        } else {
+            if (c1 == c2 || c2 == '.') {
+                return isMatch(s.substring(1), p) || isMatch(s, p.substring(2));
             }
-            return isMatch(s,p.substring(2));
+            return isMatch(s, p.substring(2));
         }
     }
-    public boolean matchGo(String s,String p,int i,int j){
+
+    public boolean matchGo(String s, String p, int i, int j) {
         return true;
     }
+
     //    剑14
     public int cuttingRope4(int n) {
         long sum = 1;
-        while (n > 4){
-            n-=3;
+        while (n > 4) {
+            n -= 3;
             sum = (sum * 3) % 1000000007;
         }
         if (n < 4)
-            return sum == 1? n-1:Integer.parseInt(String.valueOf((sum*n)%1000000007));
+            return sum == 1 ? n - 1 : Integer.parseInt(String.valueOf((sum * n) % 1000000007));
         return Integer.parseInt(String.valueOf((sum * 4) % 1000000007));
     }
+
     public int cuttingRope5(int n) {
         long sum = 1;
-        long a = n/3;
-        if (n == 3 || n==2)
-            return n-1;
-        if (n%3 == 2){
-            sum=2;
+        long a = n / 3;
+        if (n == 3 || n == 2)
+            return n - 1;
+        if (n % 3 == 2) {
+            sum = 2;
         }
-        if (n%3 == 1){
-            a = n/3 - 1;
+        if (n % 3 == 1) {
+            a = n / 3 - 1;
             sum = 4;
         }
         long x = 3;
-        while (a > 0){
+        while (a > 0) {
             if (a % 2 == 1)
                 sum = (sum * x) % 1000000007;
-            x= (x*x) % 1000000007;
-            a = a/2;
+            x = (x * x) % 1000000007;
+            a = a / 2;
         }
         return Integer.parseInt(String.valueOf((sum) % 1000000007));
     }
 
     //    剑指21
     public int[] exchange2(int[] nums) {
-        int i = 0,j = 0;
-        while (i<nums.length && j<nums.length){
-            if (nums[i] % 2 == 1){
-                i++;continue;
+        int i = 0, j = 0;
+        while (i < nums.length && j < nums.length) {
+            if (nums[i] % 2 == 1) {
+                i++;
+                continue;
             }
             j = Math.max(i, j);
-            if (nums[j] % 2 == 1){
+            if (nums[j] % 2 == 1) {
                 int temp = nums[i];
                 nums[i] = nums[j];
                 nums[j] = temp;
@@ -720,14 +731,15 @@ public class JZPractice {
         }
         return nums;
     }
+
     public int[] exchange(int[] nums) {
-        int i = 0,j = nums.length-1;
-        while (i<j){
-            if (nums[i] % 2 == 1){
+        int i = 0, j = nums.length - 1;
+        while (i < j) {
+            if (nums[i] % 2 == 1) {
                 i++;
                 continue;
             }
-            if (nums[j] % 2 == 0){
+            if (nums[j] % 2 == 0) {
                 j--;
                 continue;
             }
@@ -737,14 +749,15 @@ public class JZPractice {
         }
         return nums;
     }
-//    剑指24
+
+    //    剑指24
     public ListNode reverseList2(ListNode head) {
         if (head == null)
             return head;
         ListNode tail = head.next;
         ListNode temp = tail;
         head.next = null;
-        while (tail != null){
+        while (tail != null) {
             temp = tail.next;
             tail.next = head;
             head = tail;
@@ -758,23 +771,24 @@ public class JZPractice {
 
         ListNode l3 = new ListNode(-1);
         ListNode head = l3;
-        while (l1 != null && l2 != null){
-            if (l1.val <= l2.val){
+        while (l1 != null && l2 != null) {
+            if (l1.val <= l2.val) {
                 l3.next = l1;
                 l1 = l1.next;
-            }else {
+            } else {
                 l3.next = l2;
                 l2 = l2.next;
             }
             l3 = l3.next;
         }
-        if (l1 == null){
+        if (l1 == null) {
             l3.next = l2;
-        }else
+        } else
             l3.next = l1;
         return head.next;
     }
-//    剑指26
+
+    //    剑指26
     public boolean isSubStructure2(TreeNode A, TreeNode B) {
         List<Integer> listA = new ArrayList<>();
         List<Integer> listB = new ArrayList<>();
@@ -782,11 +796,12 @@ public class JZPractice {
         preOrderList(B, listB);
         System.out.println(listA);
         System.out.println(listB);
-        int i=0,j=0;
-        while (i<listA.size() && j<listB.size()){
-            if (listA.get(i) == listB.get(j)){
-                i++;j++;
-            }else {
+        int i = 0, j = 0;
+        while (i < listA.size() && j < listB.size()) {
+            if (listA.get(i) == listB.get(j)) {
+                i++;
+                j++;
+            } else {
                 i = i - j + 1;
                 j = 0;
             }
@@ -795,17 +810,19 @@ public class JZPractice {
             return true;
         return false;
     }
-    public void preOrderList(TreeNode root, List<Integer> list){
+
+    public void preOrderList(TreeNode root, List<Integer> list) {
         if (root == null)
             return;
         list.add(root.val);
-        preOrderList(root.left,list);
-        preOrderList(root.right,list);
+        preOrderList(root.left, list);
+        preOrderList(root.right, list);
     }
 
     public boolean isSubStructure(TreeNode A, TreeNode B) {
-        return (A!=null && B!=null) && (recur(A, B) || isSubStructure(A.left,B) || isSubStructure(A.right,B));
+        return (A != null && B != null) && (recur(A, B) || isSubStructure(A.left, B) || isSubStructure(A.right, B));
     }
+
     public boolean recur(TreeNode A, TreeNode B) {
         if (B == null)
             return true;
@@ -813,14 +830,15 @@ public class JZPractice {
             return false;
         if (A.val != B.val)
             return false;
-        return recur(A.left,B.left) && recur(A.right, B.right);
+        return recur(A.left, B.left) && recur(A.right, B.right);
     }
-//    剑指27
+
+    //    剑指27
     public TreeNode mirrorTree(TreeNode root) {
         TreeNode temp;
-        if(root == null)
+        if (root == null)
             return root;
-        if (root.left != null || root.right!=null){
+        if (root.left != null || root.right != null) {
             temp = root.left;
             root.left = root.right;
             root.right = temp;
@@ -830,11 +848,11 @@ public class JZPractice {
         return root;
     }
 
-//    kmp算法
-    public int kmp(String s, String p){
-        int i=0,j=0;
-        int []next = next(p);
-        while (i<s.length() && j<p.length()){
+    //    kmp算法
+    public int kmp(String s, String p) {
+        int i = 0, j = 0;
+        int[] next = next(p);
+        while (i < s.length() && j < p.length()) {
 //            这种写法也是可以的
 //            if (s.charAt(i) == p.charAt(j)){
 //                i++;j++;
@@ -845,65 +863,66 @@ public class JZPractice {
 //                i++;
 //            }
 //            j=-1这种写法的目的是什么呢？就是说如果i和j的0号位的匹配不上，那么我们只能把i后移一位再比较，用什么代替后移i呢，就是将j=-1，进入第一个if语句，后移i。
-            if (j==-1 || s.charAt(i) == p.charAt(j)){
-                i++;j++;
-            }
-            else
+            if (j == -1 || s.charAt(i) == p.charAt(j)) {
+                i++;
+                j++;
+            } else
                 j = next[j];
         }
         if (j == p.length())
-            return i-j;
+            return i - j;
         return -1;
     }
-    public int[]next(String p){
-        int []next = new int[p.length() + 1];
+
+    public int[] next(String p) {
+        int[] next = new int[p.length() + 1];
         next[0] = -1;
-        int i=0,j=-1;
-        while (i<p.length()){
+        int i = 0, j = -1;
+        while (i < p.length()) {
 //            这个j = -1也是为了后移i而准备的，但是如果匹配上了，那么next[i]就可以不停的+1了
-            if (j == -1||p.charAt(i) == p.charAt(j)){
-                i++;j++;
+            if (j == -1 || p.charAt(i) == p.charAt(j)) {
+                i++;
+                j++;
                 next[i] = j;
-            }
-            else
+            } else
                 j = next[j]; //这个地方太难了，我们发现这里是干什么呢，这里是把j移动到[0，j-1]字符串那个最长前缀后面一个位置p，
-                                // 因为i前面的几个字符后j和p前面的字符相同，这样就可以接着比较，同时j也可以接着增大
+            // 因为i前面的几个字符后j和p前面的字符相同，这样就可以接着比较，同时j也可以接着增大
         }
         return next;
     }
 
-    public int kmp2(String s, String p){
-        int i=0;
-        int j=0;
-        int []pmt = pmt(p);
-        while (i<s.length() && j<p.length()){
-            if (s.charAt(i) == p.charAt(j))
-            {
-                i++;j++;
-            }
-            else if(j > 0){
-                j = pmt[j-1];
-            }else {
+    public int kmp2(String s, String p) {
+        int i = 0;
+        int j = 0;
+        int[] pmt = pmt(p);
+        while (i < s.length() && j < p.length()) {
+            if (s.charAt(i) == p.charAt(j)) {
+                i++;
+                j++;
+            } else if (j > 0) {
+                j = pmt[j - 1];
+            } else {
                 i++;
             }
         }
         if (j == p.length())
-            return i-j;
+            return i - j;
         return -1;
     }
-    public int[]pmt(String p){
-        int []pmt = new int[p.length()+1];
+
+    public int[] pmt(String p) {
+        int[] pmt = new int[p.length() + 1];
         pmt[0] = 0;
         pmt[1] = 0;
-        int i=1;
-        int j=0;
-        while (i<p.length()){
+        int i = 1;
+        int j = 0;
+        while (i < p.length()) {
             new HelloWorld().out_list2(pmt);
-            if (p.charAt(i) == p.charAt(j)){
-                i++;j++;
+            if (p.charAt(i) == p.charAt(j)) {
+                i++;
+                j++;
                 pmt[i] = j;
-            }
-            else{
+            } else {
                 j = pmt[j];
                 i++;
             }
@@ -912,14 +931,15 @@ public class JZPractice {
         return pmt;
     }
 
-    public void midOrderList(TreeNode root, List<Integer> midList){
+    public void midOrderList(TreeNode root, List<Integer> midList) {
         if (root == null)
             return;
         midOrderList(root.left, midList);
         midList.add(root.val);
         midOrderList(root.right, midList);
     }
-//    剑指28
+
+    //    剑指28
     public boolean isSymmetric2(TreeNode root) {
         if (root == null)
             return true;
@@ -932,27 +952,29 @@ public class JZPractice {
         root = mirrorTree(root);
         preOrderList(root, preList2);
         midOrderList(root, midList2);
-        if (preList1.size() != preList2.size() || midList1.size() != midList2.size()){
+        if (preList1.size() != preList2.size() || midList1.size() != midList2.size()) {
             return false;
         }
-        for (int i=0;i<preList1.size();i++){
-            if (preList1.get(i) != preList2.get(i)){
+        for (int i = 0; i < preList1.size(); i++) {
+            if (preList1.get(i) != preList2.get(i)) {
                 return false;
             }
         }
-        for (int i=0;i<midList1.size();i++){
-            if (midList1.get(i) != midList2.get(i)){
+        for (int i = 0; i < midList1.size(); i++) {
+            if (midList1.get(i) != midList2.get(i)) {
                 return false;
             }
         }
 
         return true;
     }
+
     public boolean isSymmetric(TreeNode root) {
         if (root == null)
             return true;
         return helpSymmetric(root.left, root.right);
     }
+
     public boolean helpSymmetric(TreeNode left, TreeNode right) {
         if (left == null && right == null)
             return true;
@@ -964,38 +986,39 @@ public class JZPractice {
             return false;
         return helpSymmetric(left.left, right.right) && helpSymmetric(left.right, right.left);
     }
-//    剑指29
+
+    //    剑指29
     public int[] spiralOrder(int[][] matrix) {
         if (matrix.length == 0 || matrix[0].length == 0)
             return new int[]{};
-        int col1 = 0, col2 = matrix.length-1;
-        int row1 = 0, row2 = matrix[0].length-1;
-        int []ans = new int[matrix.length * matrix[0].length];
-        int count = 0,i = 0;
-        while (true){
+        int col1 = 0, col2 = matrix.length - 1;
+        int row1 = 0, row2 = matrix[0].length - 1;
+        int[] ans = new int[matrix.length * matrix[0].length];
+        int count = 0, i = 0;
+        while (true) {
 //            new HelloWorld().out_list2(ans);
 //            System.out.println(row1+" "+row2+" "+col1+" "+col2);
-            for (i=row1;i<=row2;i++){
+            for (i = row1; i <= row2; i++) {
                 ans[count++] = matrix[col1][i];
             }
             col1 += 1;
             if (col1 > col2)
                 break;
-            for (i=col1;i<=col2;i++){
+            for (i = col1; i <= col2; i++) {
                 ans[count++] = matrix[i][row2];
             }
             row2 -= 1;
             if (row1 > row2)
                 break;
 
-            for (i=row2;i>=row1;i--){
+            for (i = row2; i >= row1; i--) {
                 ans[count++] = matrix[col2][i];
             }
             col2 -= 1;
-            if (col1 > col2){
+            if (col1 > col2) {
                 break;
             }
-            for (i=col2;i>=col1;i--){
+            for (i = col2; i >= col1; i--) {
                 ans[count++] = matrix[i][row1];
             }
             row1 += 1;
@@ -1005,33 +1028,33 @@ public class JZPractice {
         return ans;
     }
 
-//    剑指31
+    //    剑指31
     public boolean validateStackSequences(int[] pushed, int[] popped) {
         if (pushed.length == 0)
             return true;
-        int i=0;
-        int j=0;
+        int i = 0;
+        int j = 0;
         Stack<Integer> s = new Stack<>();
-        while (i < pushed.length){
-            while (s.isEmpty() || (i < pushed.length && s.peek() != popped[j])){
+        while (i < pushed.length) {
+            while (s.isEmpty() || (i < pushed.length && s.peek() != popped[j])) {
                 s.push(pushed[i++]);
             }
-            while (!s.isEmpty() && j < popped.length && s.peek() == popped[j]){
+            while (!s.isEmpty() && j < popped.length && s.peek() == popped[j]) {
                 s.pop();
                 j++;
             }
         }
         return j == popped.length;
     }
-//    剑指32-1
+
+    //    剑指32-1
     public int[] levelOrder(TreeNode root) {
         if (root == null)
             return new int[]{};
         Queue<TreeNode> q = new LinkedList<>();
         List<Integer> treeList = new ArrayList<>();
         q.add(root);
-        while (!q.isEmpty())
-        {
+        while (!q.isEmpty()) {
             TreeNode t = q.poll();
             treeList.add(t.val);
             if (t.left != null)
@@ -1040,15 +1063,15 @@ public class JZPractice {
                 q.add(t.right);
         }
         int[] ans = new int[treeList.size()];
-        for(int i = 0; i < treeList.size(); i++)
+        for (int i = 0; i < treeList.size(); i++)
             ans[i] = treeList.get(i);
         return ans;
     }
 
-//    剑指32-2
+    //    剑指32-2
     public List<List<Integer>> levelOrder2(TreeNode root) {
         List<List<Integer>> llint = new ArrayList<>();
-        if (root == null){
+        if (root == null) {
             return llint;
         }
         List<Integer> lint = new ArrayList<>();
@@ -1058,17 +1081,18 @@ public class JZPractice {
         recur(root.right, llint, 2);
         return llint;
     }
-    public void recur(TreeNode root, List<List<Integer>> llint, int depth){
+
+    public void recur(TreeNode root, List<List<Integer>> llint, int depth) {
         if (root == null)
             return;
-        if (llint.size() < depth){
+        if (llint.size() < depth) {
             List<Integer> lint = new ArrayList<>();
             lint.add(root.val);
             llint.add(lint);
-        }else
-            llint.get(depth-1).add(root.val);
-        recur(root.left, llint, depth+1);
-        recur(root.right, llint, depth+1);
+        } else
+            llint.get(depth - 1).add(root.val);
+        recur(root.left, llint, depth + 1);
+        recur(root.right, llint, depth + 1);
     }
 
     public List<List<Integer>> levelOrder2_2(TreeNode root) {
@@ -1077,11 +1101,10 @@ public class JZPractice {
             return llint;
         Queue<TreeNode> q = new LinkedList<>();
         q.add(root);
-        while (!q.isEmpty())
-        {
+        while (!q.isEmpty()) {
             List<Integer> lint = new ArrayList<>();
             int len = q.size();
-            for (int i=0;i<len;i++){
+            for (int i = 0; i < len; i++) {
                 TreeNode t = q.poll();
                 lint.add(t.val);
                 if (t.left != null)
@@ -1094,12 +1117,12 @@ public class JZPractice {
         return llint;
     }
 
-//    剑指32-3
+    //    剑指32-3
     public List<List<Integer>> levelOrder3(TreeNode root) {
         List<List<Integer>> llint = levelOrder2(root);
         int depth = llint.size();
-        for (int i=0;i<depth;i++){
-            if (i % 2 == 1){
+        for (int i = 0; i < depth; i++) {
+            if (i % 2 == 1) {
                 Collections.reverse(llint.get(i));
             }
         }
@@ -1107,7 +1130,7 @@ public class JZPractice {
     }
 
 
-//    94
+    //    94
     public List<Integer> inorderTraversal2(TreeNode root) {
         List<Integer> lint = new ArrayList<>();
         if (root == null)
@@ -1115,18 +1138,18 @@ public class JZPractice {
         Stack<TreeNode> s = new Stack<>();
         s.push(root);
         TreeNode t = root;
-        while (!s.isEmpty()){
+        while (!s.isEmpty()) {
             t = s.pop();
-            while (t.left != null){
+            while (t.left != null) {
                 s.push(t);
                 t = t.left;
             }
             lint.add(t.val);
-            if (t.right != null){
+            if (t.right != null) {
                 s.push(t.right);
                 continue;
             }
-            while (!s.isEmpty() && s.peek().right == null){
+            while (!s.isEmpty() && s.peek().right == null) {
                 lint.add(s.pop().val);
             }
             if (s.isEmpty())
@@ -1136,12 +1159,13 @@ public class JZPractice {
         }
         return lint;
     }
+
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> lint = new ArrayList<>();
         Stack<TreeNode> s = new Stack<>();
         TreeNode t = root;
-        while (t!=null || !s.isEmpty()){
-            while (t != null){
+        while (t != null || !s.isEmpty()) {
+            while (t != null) {
                 s.push(t);
                 t = t.left;
             }
@@ -1155,11 +1179,11 @@ public class JZPractice {
     //剑指32
     public List<List<Integer>> pathSum(TreeNode root, int sum) {
         List<List<Integer>> llint = new ArrayList<>();
-        if (root == null || root.val > sum){
+        if (root == null || root.val > sum) {
             return llint;
         }
         List<Integer> lint = new ArrayList<>();
-        if (root.val == sum && root.left == null && root.right == null){
+        if (root.val == sum && root.left == null && root.right == null) {
             lint.add(root.val);
             llint.add(lint);
             return llint;
@@ -1169,12 +1193,13 @@ public class JZPractice {
         recur(root.right, root.val, sum, lint, llint);
         return llint;
     }
-    public void recur(TreeNode root, int ans, int sum, List<Integer> lint, List<List<Integer>> llint){
-        if (root == null || (root.val + ans == sum && (root.left != null || root.right != null))){
+
+    public void recur(TreeNode root, int ans, int sum, List<Integer> lint, List<List<Integer>> llint) {
+        if (root == null || (root.val + ans == sum && (root.left != null || root.right != null))) {
             return;
         }
         List<Integer> lint1 = new ArrayList<>(lint);
-        if (root.val + ans == sum && root.left == null && root.right == null){
+        if (root.val + ans == sum && root.left == null && root.right == null) {
             lint1.add(root.val);
             llint.add(lint1);
             return;
@@ -1184,7 +1209,7 @@ public class JZPractice {
         recur(root.right, root.val + ans, sum, lint1, llint);
     }
 
-    public List<List<Integer>> pathSum2(TreeNode root, int sum){
+    public List<List<Integer>> pathSum2(TreeNode root, int sum) {
         List<List<Integer>> llint = new ArrayList<>();
         if (root == null)
             return llint;
@@ -1192,15 +1217,15 @@ public class JZPractice {
         Stack<TreeNode> s = new Stack<>();
         List<Integer> lint = new ArrayList<>();
         int ans = 0;
-        while (t!=null || !s.isEmpty()){
-            while (t != null){
+        while (t != null || !s.isEmpty()) {
+            while (t != null) {
                 s.push(t);
                 ans += t.val;
                 lint.add(t.val);
                 t = t.left;
             }
             t = s.pop();
-            if(ans == sum && t == null && t.left == null)
+            if (ans == sum && t == null && t.left == null)
                 llint.add(new ArrayList<>(lint));
             ans -= t.val;
             lint.remove(llint.size() - 1);
@@ -1209,14 +1234,15 @@ public class JZPractice {
         return llint;
     }
 
-//    剑指33
+    //    剑指33
     public boolean verifyPostorder(int[] postorder) {
         if (postorder.length == 0 || postorder.length == 1)
             return true;
-        return dfs(postorder, 0, postorder.length-1);
+        return dfs(postorder, 0, postorder.length - 1);
 
     }
-    public boolean dfs(int []postorder,int left,int right){
+
+    public boolean dfs(int[] postorder, int left, int right) {
         if (left >= right)
             return true;
         int root = postorder[right];
@@ -1224,18 +1250,19 @@ public class JZPractice {
         while (postorder[i] < root)
             i++;
         int m = i;
-        for (;i<right;i++){
+        for (; i < right; i++) {
             if (postorder[i] < root)
                 return false;
         }
-        return dfs(postorder, left, m-1) && dfs(postorder, m, right-1);
+        return dfs(postorder, left, m - 1) && dfs(postorder, m, right - 1);
     }
-//    剑指35
+
+    //    剑指35
     public Node copyRandomList(Node head) {
         if (head == null)
             return null;
         Node res = head;
-        while (res != null){
+        while (res != null) {
             Node cp = new Node(res.val);
             Node res_next = res.next;
             res.next = cp;
@@ -1244,17 +1271,17 @@ public class JZPractice {
         }
 //        然后接上随机的结点
         res = head;
-        while (res != null){
-            res.next.random = res.random != null?res.random.next:null;
+        while (res != null) {
+            res.next.random = res.random != null ? res.random.next : null;
             res = res.next.next;
         }
 //        然后再把原来的链表拆开，注意哦不用管random指针
         res = head;
         Node head1 = res.next;
         Node cp = res.next;
-        while (res != null){
+        while (res != null) {
             res.next = res.next.next;
-            if(cp.next == null)
+            if (cp.next == null)
                 break;
             cp.next = cp.next.next;
             res = res.next;
@@ -1318,46 +1345,51 @@ public class JZPractice {
 //
 //    }
 
-//    剑指38
+    //    剑指38
     List<String> res = new ArrayList<>();
-    char []c;
+    char[] c;
+
     public String[] permutation(String s) {
         c = s.toCharArray();
         dfs(0);
         return res.toArray(new String[res.size()]);
     }
-    public void dfs(int x){
+
+    public void dfs(int x) {
         if (x == c.length - 1)
             res.add(String.valueOf(c));
         Set<Character> set = new HashSet<>();
-        for (int i=x;i<c.length;i++){
-            if(set.contains(c[i]))
+        for (int i = x; i < c.length; i++) {
+            if (set.contains(c[i]))
                 continue;
             set.add(c[i]);
-            swap(i,x);
-            dfs(x+1);
-            swap(i,x);
+            swap(i, x);
+            dfs(x + 1);
+            swap(i, x);
         }
     }
-    public void swap(int i, int j){
+
+    public void swap(int i, int j) {
         char temp = c[i];
         c[i] = c[j];
         c[j] = temp;
     }
-//  37
+
+    //  37
     public void solveSudoku(char[][] board) {
 //        BitSet bs = new BitSet();
     }
-//    剑指39
+
+    //    剑指39
     public int majorityElement(int[] nums) {
         int count = 1;
         int ans = nums[0];
-        for (int i=1;i<nums.length;i++){
+        for (int i = 1; i < nums.length; i++) {
             if (nums[i] == ans)
                 count++;
-            else{
+            else {
                 count--;
-                if (count == 0){
+                if (count == 0) {
                     ans = nums[i];
                     count++;
                 }
@@ -1365,35 +1397,36 @@ public class JZPractice {
         }
         return ans;
     }
-//    剑指40
+
+    //    剑指40
     public int[] getLeastNumbers2(int[] arr, int k) {
         List<Integer> lint = new LinkedList<>();
-        for (int i=0;i<k;i++){
+        for (int i = 0; i < k; i++) {
             lint.add(Integer.MAX_VALUE);
         }
-        for (int i=0;i<arr.length;i++){
-            for (int j=0;j<k;j++){
-                if (arr[i] < lint.get(j)){
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < k; j++) {
+                if (arr[i] < lint.get(j)) {
                     lint.add(j, arr[i]);
                     lint.remove(k);
                     break;
                 }
             }
         }
-        int []ans = new int[k];
-        for (int j=0;j<k;j++){
+        int[] ans = new int[k];
+        for (int j = 0; j < k; j++) {
             ans[j] = lint.get(j);
         }
         return ans;
     }
 
     public int[] getLeastNumbers(int[] arr, int k) {
-        if (arr.length == 0 || k==0){
+        if (arr.length == 0 || k == 0) {
             return new int[]{};
         }
-        quickSort(arr, 0, arr.length-1, k-1);
-        int [] ans = new int[k];
-        for (int i=0;i<k;i++){
+        quickSort(arr, 0, arr.length - 1, k - 1);
+        int[] ans = new int[k];
+        for (int i = 0; i < k; i++) {
             ans[i] = arr[i];
         }
         return ans;
@@ -1404,24 +1437,24 @@ public class JZPractice {
         if (k == j)
             return;
         if (j > k)
-            quickSort(arr, left, j-1, k);
+            quickSort(arr, left, j - 1, k);
         else
-            quickSort(arr, j+1, right, k);
+            quickSort(arr, j + 1, right, k);
     }
 
-    public int partition(int []arr, int left, int right){
+    public int partition(int[] arr, int left, int right) {
         int flag = arr[left];
         int flag_pos = left;
-        while (left < right){
-            while (left<right && flag <= arr[right])
-                right --;
-            if (left<right){
+        while (left < right) {
+            while (left < right && flag <= arr[right])
+                right--;
+            if (left < right) {
                 arr[flag_pos] = arr[right];
                 flag_pos = right;
             }
             while (left < right && flag >= arr[left])
-                left ++;
-            if (left<right){
+                left++;
+            if (left < right) {
                 arr[flag_pos] = arr[left];
                 flag_pos = left;
             }
@@ -1430,7 +1463,7 @@ public class JZPractice {
         return flag_pos;
     }
 
-//    226 翻转二叉树
+    //    226 翻转二叉树
     public TreeNode invertTree(TreeNode root) {
         if (root == null)
             return null;
@@ -1441,150 +1474,322 @@ public class JZPractice {
         return root;
     }
 
-//    剑指42
+    //    剑指42
     public int maxSubArray(int[] nums) {
         int dp = nums[0];
         int max = dp;
-        for (int i=1;i<nums.length;i++){
-            dp = dp > 0?dp+nums[i]:nums[i];
+        for (int i = 1; i < nums.length; i++) {
+            dp = dp > 0 ? dp + nums[i] : nums[i];
             max = Math.max(dp, max);
         }
         return max;
     }
-//    剑指43  好好斟酌
+
+    //    剑指43  好好斟酌
     public int countDigitOne(int n) {
         int high = n / 10; //高位数
-        int cur = n%10;     //当前位值
+        int cur = n % 10;     //当前位值
         int low = 0;    //低位数
         int digit = 1;  //什么指数级别的位数
         int count = 0;
-        while (high != 0 || cur !=0){
+        while (high != 0 || cur != 0) {
 //            System.out.print(high+" "+cur+" "+low+" "+digit + " ");
             if (cur == 0)
-                count += high * (int)Math.pow(10, digit-1);
-            else if (cur==1)
-                count += high * (int)Math.pow(10, digit-1) + low + 1;
+                count += high * (int) Math.pow(10, digit - 1);
+            else if (cur == 1)
+                count += high * (int) Math.pow(10, digit - 1) + low + 1;
             else
-                count += (high + 1) * (int)Math.pow(10, digit-1);
+                count += (high + 1) * (int) Math.pow(10, digit - 1);
 //            System.out.println(count);
-            digit ++;
+            digit++;
             high = high / 10;
-            cur = n % (int)Math.pow(10, digit) / (int)Math.pow(10, digit-1);
-            low = n % (int)Math.pow(10, digit-1);
+            cur = n % (int) Math.pow(10, digit) / (int) Math.pow(10, digit - 1);
+            low = n % (int) Math.pow(10, digit - 1);
         }
         return count;
     }
+
     public int findNthDigit(int n) {
         if (n < 10)
             return n;
         int num1 = 0;
         int num2 = 1;
         double sum = 1;
-        while (n - sum > 0)
-        {
-            sum = sum + 9 * Math.pow(10,num1++) * (num2++);
+        while (n - sum > 0) {
+            sum = sum + 9 * Math.pow(10, num1++) * (num2++);
         }
-        num1 = num1 - 1;num2=num2 -1;
-        sum -= 9 * Math.pow(10,num1) * num2;
-        int num_pos = (n - (int)sum) / (num2);
-        int pos = (n - (int)sum) % (num2);
-        System.out.println(num1+" "+num2+" "+sum+" "+num_pos+" "+pos);
-        int ans = String.valueOf((int)Math.pow(10,num1) + num_pos).charAt(pos) - 48;
+        num1 = num1 - 1;
+        num2 = num2 - 1;
+        sum -= 9 * Math.pow(10, num1) * num2;
+        int num_pos = (n - (int) sum) / (num2);
+        int pos = (n - (int) sum) % (num2);
+        System.out.println(num1 + " " + num2 + " " + sum + " " + num_pos + " " + pos);
+        int ans = String.valueOf((int) Math.pow(10, num1) + num_pos).charAt(pos) - 48;
 
         return ans;
     }
 
-//    剑指50
+    //    剑指50
     public char firstUniqChar(String s) {
         Map<Character, Integer> map = new LinkedHashMap<>();
-        for (int i=0;i<s.length();i++){
+        for (int i = 0; i < s.length(); i++) {
             map.putIfAbsent(s.charAt(i), 0);
-            map.compute(s.charAt(i), (x,y)->(y+1));
+            map.compute(s.charAt(i), (x, y) -> (y + 1));
         }
-        for (char c:map.keySet())
-        {
+        for (char c : map.keySet()) {
             if (map.get(c) == 1)
                 return c;
         }
         return ' ';
     }
-//  剑指57
+
+    //  剑指57
     public int[] twoSum(int[] nums, int target) {
-        int i=0;
-        int j=nums.length-1;
-        while (i<j){
+        int i = 0;
+        int j = nums.length - 1;
+        while (i < j) {
             if (nums[i] + nums[j] > target)
                 j--;
             else if (nums[i] + nums[j] < target)
                 i++;
             else
-                return new int[]{nums[i],nums[j]};
+                return new int[]{nums[i], nums[j]};
         }
-        return new int[]{nums[i],nums[j]};
+        return new int[]{nums[i], nums[j]};
     }
+
     public int[] twoSum2(int[] nums, int target) {
-        Map<Integer,Integer> map = new HashMap<>();
-        for (int i=0;i<nums.length;i++)
-        {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
             if (map.get(nums[i]) != null)
-                return new int[]{nums[i], target-nums[i]};
-            map.put(target-nums[i], nums[i]);
+                return new int[]{nums[i], target - nums[i]};
+            map.put(target - nums[i], nums[i]);
         }
-        return new int[]{2,2};
+        return new int[]{2, 2};
     }
-//    剑指51
+
+    //    剑指51
     public int reversePairsTimeOut(int[] nums) {
         int count = 0;
-        for (int i=0;i<nums.length;i++){
-            for (int j=i;j<nums.length;j++){
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = i; j < nums.length; j++) {
                 if (nums[i] > nums[j])
                     count++;
             }
         }
         return count;
     }
+
     int count = 0;
+
     public int reversePairs(int[] nums) {
         if (nums.length < 2)
             return 0;
-        mergeSortCount(nums,0,nums.length-1);
+        mergeSortCount(nums, 0, nums.length - 1);
         return count;
     }
-    public void mergeSortCount(int []nums, int left, int right){
+
+    public void mergeSortCount(int[] nums, int left, int right) {
         if (right - left + 1 <= 1)
             return;
-        int mid = (left+right) / 2;
+        int mid = (left + right) / 2;
         mergeSortCount(nums, left, mid);
-        mergeSortCount(nums, mid+1, right);
+        mergeSortCount(nums, mid + 1, right);
         int len1 = mid - left + 1;
         int len2 = right - mid;
-        int []nums1 = new int[len1];
-        int []nums2 = new int[len2];
-        int i=left,j=0,k=left;
-        for (;i<=mid;i++,j++)
+        int[] nums1 = new int[len1];
+        int[] nums2 = new int[len2];
+        int i = left, j = 0, k = left;
+        for (; i <= mid; i++, j++)
             nums1[j] = nums[i];
-        i=mid+1;j=0;
-        for (;i<=right;i++,j++)
+        i = mid + 1;
+        j = 0;
+        for (; i <= right; i++, j++)
             nums2[j] = nums[i];
-        i=0;j=0;
-        while (i<len1 && j<len2){
-            if (nums1[i] <= nums2[j]){
+        i = 0;
+        j = 0;
+        while (i < len1 && j < len2) {
+            if (nums1[i] <= nums2[j]) {
                 nums[k++] = nums1[i++];
-            }else {
+            } else {
                 nums[k++] = nums2[j++];
                 count += len1 - i;
             }
         }
-        while (i<len1)
+        while (i < len1)
             nums[k++] = nums1[i++];
-        while (j<len2)
+        while (j < len2)
             nums[k++] = nums2[j++];
     }
+
+    //    剑指58-1
+    public String reverseWords1(String s) {
+        s = s.trim();
+        if (s.length() == 0)
+            return "";
+        int i = 0;
+        int j = 0;
+        String sc = "";
+        Stack<String> stack = new Stack<>();
+        for (; j < s.length(); j++) {
+            if (s.charAt(j) == ' ') {
+                System.out.println(s.substring(i, j));
+                stack.push(s.substring(i, j));
+                while (j < s.length() && s.charAt(j++) == ' ') {
+                }
+                i = --j;
+            }
+
+        }
+        if (s.charAt(s.length() - 1) != ' ') {
+            stack.push(s.substring(i, j));
+        }
+        while (!stack.isEmpty()) {
+            sc += stack.pop() + ' ';
+        }
+        if (sc.length() == 0)
+            return sc;
+        return sc.substring(0, sc.length() - 1);
+    }
+
+    //剑指58
+    public String reverseWords(String s) {
+        s = s.trim();
+        int i = s.length() - 1;
+        int j = i;
+        StringBuilder sb = new StringBuilder();
+        for (; i >= 0; i--) {
+            if (s.charAt(i) == ' ')
+                sb.append(s.substring(i + 1, j + 1) + " ");
+            while (i >= 0 && s.charAt(i) == ' ') {
+                i--;
+                j = i;
+            }
+        }
+        sb.append(s.substring(i + 1, j + 1) + " ");
+        return sb.toString().trim();
+    }
+
+    //    剑指58-2
+    public String reverseLeftWords(String s, int n) {
+        String scp = "";
+        scp += s.substring(n);
+        scp += s.substring(0, n);
+        return scp;
+    }
+
+    //    剑指59-1
+    //      暴力
+    public int[] maxSlidingWindow2(int[] nums, int k) {
+        if (nums.length == 0)
+            return nums;
+        int i = 0, j;
+        int[] maxList = new int[nums.length - k + 1];
+        Arrays.fill(maxList, Integer.MIN_VALUE);
+        int count = 0;
+        for (; i <= nums.length - k; i++) {
+            j = i + k;
+            for (; i < j; i++) {
+                maxList[count] = Math.max(maxList[count], nums[i]);
+            }
+            i = j - k;
+            count++;
+        }
+        return maxList;
+    }
+    //  双端队列
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        if (nums.length == 0 || k == 0)
+            return new int[0];
+        int i=0;
+        Deque<Integer> deque = new LinkedList<>();
+        int []ans = new int[nums.length - k + 1];
+        for (;i<k;i++){
+            while (!deque.isEmpty() && deque.getLast() < nums[i])
+                deque.removeLast();
+            deque.add(nums[i]);
+        }
+        ans[0] = deque.getFirst();
+        for (i=k;i<nums.length;i++){
+            if (deque.getFirst() == nums[i-k]){
+                deque.removeFirst();
+            }
+            while (!deque.isEmpty() && deque.getLast() < nums[i])
+                deque.removeLast();
+            deque.add(nums[i]);
+            ans[i - k +1] = deque.getFirst();
+        }
+        return ans;
+    }
+    //    47
+    List<List<Integer>> llint = new ArrayList<>();
+
+    public List<List<Integer>> permuteUnique(int[] nums) {
+        int x = 0;
+        if (nums.length == 0) {
+            return llint;
+        }
+        permutedfs(x, nums);
+        return llint;
+    }
+
+    public void permutedfs(int x, int[] nums) {
+        if (x == nums.length - 1) {
+            List<Integer> lint = new ArrayList<>();
+            for (int k : nums)
+                lint.add(k);
+            llint.add(lint);
+            return;
+        }
+        System.out.println(x);
+        Set<Integer> set = new HashSet<>();
+        for (int i = x; i < nums.length; i++) {
+            if (set.contains(nums[i]))
+                continue;
+            set.add(nums[i]);
+            swap(x, i, nums);
+            permutedfs(x + 1, nums);
+            swap(x, i, nums);
+        }
+    }
+
+    public void swap(int i, int j, int[] nums) {
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    //    剑指57-2 双指针
+    public int[][] findContinuousSequence(int target) {
+        List<int []> llint = new ArrayList<>();
+        int sum = 0;
+        int i = 1;
+        int j = 2;
+        sum = i + j;
+        while (j <= target / 2 + target % 2) {
+            while (sum < target)
+                sum += ++j;
+            if (sum == target) {
+                int []heihei = new int[j-i+1];
+                for (int k = i; k <= j; k++)
+                    heihei[k-i] = k;
+                llint.add(heihei);
+                sum += ++j;
+            }
+            while (sum > target)
+                sum -= i++;
+        }
+
+        return llint.toArray(new int[llint.size()][]);
+    }
+
     public static void main(String[] args) {
-        int []nums = {7,5,6,3,2,1};
+        int []nums = {1,3,-1,-3,5,3,6,7};
+        int k = 3;
         JZPractice jzp = new JZPractice();
-        int ans = jzp.reversePairs(nums);
-//        new HelloWorld().out_list2(ans);
-        System.out.println(ans);
+        int []ans = jzp.maxSlidingWindow(nums, k);
+//        new HelloWorld().out_list(ans);
+        new HelloWorld().out_list2(ans);
+//        System.out.println(ans);
     }
 }

@@ -1986,7 +1986,7 @@ public class HelloWorld {
 
     public void out_list(int[][] flight_dst) {
         for (int i = 0; i < flight_dst.length; i++) {
-            for (int j = 0; j < flight_dst[0].length; j++) {
+            for (int j = 0; j < flight_dst[i].length; j++) {
                 System.out.print(flight_dst[i][j] + " ");
             }
             System.out.println();
