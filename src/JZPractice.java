@@ -1,3 +1,4 @@
+import org.omg.PortableInterceptor.INACTIVE;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 
 import javax.swing.*;
@@ -118,7 +119,12 @@ public class JZPractice {
         }
         System.out.println();
     }
-
+    public void out_list2(String[] nums) {
+        for (String num : nums) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
     //    剑指04
     public boolean findNumberIn2DArray1(int[][] matrix, int target) {
 
@@ -1782,14 +1788,422 @@ public class JZPractice {
 
         return llint.toArray(new int[llint.size()][]);
     }
+//    剑指46
+    public int translateNum2(int num) {
+//        dp[i] = dp[i-1]+1+dp[i-2]+1(要先判断是否再0-25区间内);
+        String s = String.valueOf(num);
+        if (s.length() == 1)
+            return 1;
+        int []dp = new int[s.length()];
+        dp[0] = 1;
+        dp[1] = 1;
+        if (Integer.parseInt(s.substring(0, 2))<26)
+            dp[1] = 2;
+        for (int i=2;i<s.length();i++){
+            dp[i] = dp[i-1];
+            if (Integer.parseInt(s.substring(i-1, i+1)) < 26 && s.charAt(i-1) != 48)
+                dp[i] += dp[i-2];
+        }
+        return dp[s.length()-1];
+    }
 
+    public int translateNum3(int num) {
+//        dp[i] = dp[i-1]+1+dp[i-2]+1(要先判断是否再0-25区间内);
+        String s = String.valueOf(num);
+        if (s.length() == 1)
+            return 1;
+        int dp0 = 1;
+        int dp1 = 1;
+        int dp2 = 0;
+        if (Integer.parseInt(s.substring(0, 2))<26)
+            dp1 = 2;
+        for (int i=2;i<s.length();i++){
+            dp2 = dp1;
+            if (Integer.parseInt(s.substring(i-1, i+1)) < 26 && s.charAt(i-1) != 48)
+                dp2 += dp0;
+            dp0 = dp1;
+            dp1 = dp2;
+            dp2 = 0;
+        }
+        return dp1;
+    }
+
+    public int translateNum(int num) {
+//        dp[i] = dp[i-1]+1+dp[i-2]+1(要先判断是否再0-25区间内);
+        if (num / 10 == 0)
+            return 1;
+        int dp0 = 1;
+        int dp1 = 1;
+        int dp2;
+        int p=0;
+        while ((long)Math.pow(10, ++p) <= num){}
+        if (num / (int)Math.pow(10, p-2) < 26)
+            dp1 = 2;
+        p -= 2;
+        while (p > 0){
+            dp2 = dp1;
+            if (num / (int)Math.pow(10,p-1) % 100 < 26 && num / (int)Math.pow(10,p) % 10 != 0)
+                dp2 += dp0;
+            dp0 = dp1;
+            dp1 = dp2;
+            p--;
+        }
+        return dp1;
+    }
+//    5519
+    public String reorderSpaces(String text) {
+        int space_num = 0;
+        int word_num = 0;
+        for (int i=0;i<text.length();i++){
+            if (text.charAt(i) == ' ')
+                space_num++;
+        }
+        String tCp = text.trim();
+        for (int i=0;i<tCp.length();i++) {
+            if (tCp.charAt(i) == ' ')
+                word_num++;
+            while (tCp.charAt(i) == ' ')
+                i++;
+        }
+        word_num ++;
+        String ans = "";
+        if (word_num == 1 || word_num == 0){
+            ans = tCp;
+            for (int i = 0;i<space_num;i++){
+                ans += ' ';
+            }
+            return ans;
+        }
+        int word_space_num = space_num / (word_num-1);
+        int tt = space_num % (word_num-1);
+        String s_space = "";
+        while (word_space_num-->0)
+            s_space += ' ';
+        int j=0;
+        for (int i=0;i<tCp.length();i++) {
+            if (tCp.charAt(i) == ' '){
+                ans += tCp.substring(j, i) + s_space;
+                j = i;
+            }
+            while (tCp.charAt(i) == ' '){
+                i++;
+                j=i;
+            }
+        }
+        ans += tCp.substring(j, tCp.length());
+        while (tt>0){
+            ans += ' ';
+            tt--;
+        }
+        return ans;
+    }
+
+//    5520
+    public int maxUniqueSplit(String s) {
+        if (s.length() == 1)
+            return 1;
+        Set<String> set = new HashSet<>();
+        int []dp = new int[s.length()];
+        dp[0] = 1;
+        set.add(s.substring(0, 1));
+        int i=1;
+        for (int j=1;j<s.length();j++){
+            dp[j] = dp[j-1];
+            String sub = s.substring(i, j+1);
+            if (!set.contains(sub)){
+                set.add(sub);
+                dp[j] = dp[j-1] + 1;
+                i = j + 1;
+            }
+        }
+        return dp[s.length()-1];
+    }
+    long sum = Integer.MIN_VALUE;
+    public int maxProductPathTimeOut(int[][] grid) {
+        int i=0,j=0;
+        long k = 1;
+        dfs(grid, i, j, k);
+        if (sum < 0)
+            return -1;
+        return (int)(sum%1000000007);
+    }
+    public void dfs(int[][] grid,int i, int j, long k){
+        if (i==grid.length || j==grid[0].length){
+            return;
+        }
+        k *= grid[i][j];
+        if (i==grid.length-1 && j == grid[0].length-1){
+            sum = Math.max(sum, k);
+            return;
+        }
+        dfs(grid, i+1, j, k);
+        dfs(grid, i, j+1, k);
+    }
+
+    public int maxProductPath3(int[][] grid) {
+        int n = grid.length;
+        int m = grid[0].length;
+        long[][] mindp = new long[n][m];
+        long[][] maxdp = new long[n][m];
+        long inf = (long) 1000000;
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(mindp[i], inf);
+            Arrays.fill(maxdp[i], -inf);
+        }
+        mindp[0][0] = maxdp[0][0] = grid[0][0];
+        int[][] dirs = new int[][]{
+                {1, 0},
+                {0, 1}
+        };
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                for (int[] d : dirs) {
+                    int x = i + d[0];
+                    int y = j + d[1];
+                    if (x >= n || y >= m) {
+                        continue;
+                    }
+                    long l = mindp[i][j] * grid[x][y];
+                    long r = maxdp[i][j] * grid[x][y];
+                    if (grid[x][y] < 0) {
+                        long tmp = l;
+                        l = r;
+                        r = tmp;
+                    }
+                    mindp[x][y] = Math.min(l, mindp[x][y]);
+                    maxdp[x][y] = Math.max(r, maxdp[x][y]);
+                }
+            }
+        }
+
+        int mod = (int) (1e9 + 7);
+        int ans = maxdp[n - 1][m - 1] < 0 ? -1 : (int) (maxdp[n - 1][m - 1] % mod);
+        return ans;
+    }
+
+    public int maxProductPath(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        long [][]maxdp = new long[m][n];
+        long [][]mindp = new long[m][n];
+        for (int i=0;i<m;i++){
+            Arrays.fill(maxdp[i], Integer.MIN_VALUE);
+            Arrays.fill(mindp[i], Integer.MAX_VALUE);
+        }
+        int [][]twoDirection = new int[][]{
+                {0, 1},
+                {1, 0}
+        };
+        maxdp[0][0] = grid[0][0];
+        mindp[0][0] = grid[0][0];
+        for (int i=0;i<m;i++){
+            for (int j=0;j<n;j++){
+                for (int []direction:twoDirection){
+                    int x = i + direction[0];
+                    int y = j + direction[1];
+                    if (x >= m || y >= n)
+                        continue;
+                    long l = mindp[i][j] * grid[x][y];
+                    long r = maxdp[i][j] * grid[x][y];
+                    if (grid[x][y] < 0){
+                        long temp = l;
+                        l = r;
+                        r = temp;
+                    }
+                    mindp[x][y] = Math.min(mindp[x][y], l);
+                    maxdp[x][y] = Math.max(maxdp[x][y], r);
+                }
+
+            }
+        }
+        return maxdp[m-1][n-1] < 0?-1:(int)(maxdp[m-1][n-1]%(1e9+7));
+    }
+
+//    剑指47
+    public int maxValue2(int[][] grid) {
+        int m = grid.length;
+        int n = grid[0].length;
+        int [][]maxdp = new int[m][n];
+        int [][]twoDir = new int[][]{
+                {1,0},
+                {0,1}
+        };
+        maxdp[0][0] = grid[0][0];
+        for (int i=0;i<m;i++){
+            for (int j=0;j<n;j++){
+                for (int []dir:twoDir){
+                    int x = i+dir[0];
+                    int y = j+dir[1];
+                    if (x == m || y == n){
+                        continue;
+                    }
+                    int max = maxdp[i][j] + grid[x][y];
+                    maxdp[x][y] = Math.max(maxdp[x][y], max);
+                }
+            }
+        }
+        return maxdp[m-1][n-1];
+    }
+    public int maxValue(int[][] grid) {
+
+        maxDfs(grid, 0, 0, 0);
+        return (int)sum;
+    }
+
+    private void maxDfs(int[][] grid, int i, int j, int k) {
+        if (i==grid.length || j==grid[0].length)
+        {
+            return;
+        }
+        k = k + grid[i][j];
+        if (i==grid.length-1 && j==grid[0].length-1)
+            sum = Math.max(sum, k);
+        maxDfs(grid, i, j+1, k);
+        maxDfs(grid, i+1, j, k);
+    }
+
+    public String minNumber(int[] nums) {
+        String[] strs = new String[nums.length];
+        for(int i = 0; i < nums.length; i++)
+            strs[i] = String.valueOf(nums[i]);
+        quickSort(strs, 0, strs.length - 1);
+        StringBuilder res = new StringBuilder();
+        for(String s : strs)
+            res.append(s);
+        return res.toString();
+    }
+    public void quickSort(String []strs, int i,int j){
+        if (i >= j)
+            return;
+        int left = i;
+        int right = j;
+        String flag = strs[i];
+        out_list2(strs);
+        while (left < right){
+            while (left<right && (flag + strs[right]).compareTo(strs[right] + flag) <= 0){right--;}
+            while (left<right && (flag + strs[left]).compareTo(strs[left] + flag) >= 0){left++;}
+            String temp = strs[left];
+            strs[left] = strs[right];
+            strs[right] = temp;
+        }
+        strs[i] = strs[left];
+        strs[left] = flag;
+        quickSort(strs, i, left-1);
+        quickSort(strs, left+1, j);
+    }
+//    剑指48 abba
+    public int lengthOfLongestSubstring(String s) {
+        if (s.length() == 0)
+            return 0;
+        int i=-1,j=0,k=0;
+        int max = 1;
+        Map<Character, Integer> map = new HashMap<>();
+        for (;j<s.length();j++){
+            k = map.get(s.charAt(j)) == null ? -1:map.get(s.charAt(j));
+            if (k == -1)
+                max = Math.max(j - i, max);
+            else{
+                i = Math.max(i, k);
+                max = Math.max(j - i, max);
+
+            }
+            map.put(s.charAt(j), j);
+//            System.out.println(max);
+//            System.out.println(map);
+        }
+        return max;
+    }
+//  剑指53-1
+    public int search(int[] nums, int target) {
+        int left = 0;
+        int right = nums.length-1;
+        int count = 0;
+        while (left <= right){
+            int mid = (left + right) /2;
+            if (nums[mid] < target)
+                left = mid + 1;
+            else if (nums[mid] > target)
+                right = mid -1;
+            else {
+                count = 1;
+                int i=mid - 1;
+                int j = mid + 1;
+                while (i>-1 && nums[i--] == target){count++;}
+                while (j<nums.length &&nums[j++] == target){count++;}
+                break;
+            }
+        }
+        return count;
+    }
+    public int lengthOfLongestSubstring2(String s) {
+        if (s.length() == 0)
+            return 0;
+        int []dp = new int[s.length()];
+        int max = 1;
+        int j = 0;
+        dp[0] = 1;
+        Map<Character, Integer> map = new HashMap<>();
+        map.put(s.charAt(0),0);
+        for (int i=1;i<s.length();i++){
+            j = map.get(s.charAt(i)) == null ? -1:map.get(s.charAt(i));
+            if (dp[i-1] < i - j)
+                dp[i] = dp[i-1] + 1;
+            else
+                dp[i] = i - j;
+            map.put(s.charAt(i), i);
+            max = Math.max(dp[i], max);
+        }
+        return max;
+    }
+//    剑指52  思路将两个链表倒序，然后数第一个非公共节点
+//    while (front != null){
+//        next = front.next;
+//        front.next = headB;
+//        headB = front;
+//        front = next;
+//    }
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if (headA == null || headB == null)
+            return null;
+        ListNode node1 = headA;
+        ListNode node2 = headB;
+        while (node1 != node2){
+            node1 = node1.next;
+            node2 = node2.next;
+            if (node1 == null && node2!=null)
+                node1 = headB;
+            if (node2 == null && node1!=null)
+                node2 = headA;
+        }
+        return node1;
+    }
+
+//    剑指49
+    public int nthUglyNumber(int n) {
+        int []dp = new int[n];
+        int a=0,b=0,c=0;
+        dp[0] = 1;
+        for (int i=1;i<n;i++){
+            int n1 = dp[a] * 2;
+            int n2 = dp[b] * 3;
+            int n3 = dp[c] * 5;
+            dp[i] = Math.min(Math.min(n1, n2), n3);
+            if (dp[i] == n1)
+                a++;
+            if (dp[i] == n2)
+                b++;
+            if (dp[i] == n3)
+                c++;
+        }
+        return dp[n-1];
+    }
     public static void main(String[] args) {
-        int []nums = {1,3,-1,-3,5,3,6,7};
-        int k = 3;
+        int []nums = {1};
+        int target = 1;
         JZPractice jzp = new JZPractice();
-        int []ans = jzp.maxSlidingWindow(nums, k);
+        int ans = jzp.search(nums, target);
 //        new HelloWorld().out_list(ans);
-        new HelloWorld().out_list2(ans);
-//        System.out.println(ans);
+//        new HelloWorld().out_list2(ans);
+        System.out.println(ans);
     }
 }

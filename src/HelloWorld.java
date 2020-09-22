@@ -1992,6 +1992,14 @@ public class HelloWorld {
             System.out.println();
         }
     }
+    public void out_list(long[][] flight_dst) {
+        for (int i = 0; i < flight_dst.length; i++) {
+            for (int j = 0; j < flight_dst[i].length; j++) {
+                System.out.print(flight_dst[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
 
     //    837
     public double new21Game(int N, int K, int W) {
