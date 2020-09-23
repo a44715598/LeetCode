@@ -2197,6 +2197,110 @@ public class JZPractice {
         }
         return dp[n-1];
     }
+
+//    剑指54 反中序
+    public int kthLargest(TreeNode root, int k) {
+        Stack<TreeNode> s = new Stack<>();
+        TreeNode t = root;
+        while (t!=null || !s.isEmpty()){
+            while (t!=null){
+                s.push(t);
+                t = t.right;
+            }
+            t = s.pop();
+            if (--k == 0)
+                return t.val;
+            t = t.left;
+        }
+        return t.val;
+    }
+//    剑指55-1
+    int maxDepth;
+    public int maxDepth(TreeNode root) {
+        if (root == null)
+            return 0;
+        int depth = 1;
+        dfs(root.left, depth);
+        dfs(root.right, depth);
+        return maxDepth;
+    }
+    public void dfs(TreeNode root, int depth){
+        if (root == null){
+            maxDepth = Math.max(maxDepth, depth);
+            return;
+        }
+        depth++;
+        dfs(root.left, depth);
+        dfs(root.right, depth);
+    }
+
+//    617合并二叉树
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1==null || t2==null) {
+            return t1==null? t2 : t1;
+        }
+        TreeNode t3 = new TreeNode(t1.val+t2.val);
+        t3.left = mergeTrees(t1.left, t2.left);
+        t3.right = mergeTrees(t1.right, t2.right);
+        return t3;
+    }
+
+//   平衡二叉树
+    public boolean isBalanced2(TreeNode root) {
+        if (root == null)
+            return true;
+        if(Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1){
+            return false;
+        }
+        return isBalanced2(root.left) && isBalanced2(root.right);
+    }
+    public boolean isBalanced(TreeNode root) {
+
+        return recur(root) != -1;
+    }
+
+    public int recur(TreeNode root){
+        if (root == null)
+            return 0;
+        int left_depth = recur(root.left);
+        int right_depth = recur(root.right);
+        if (left_depth == -1 || right_depth == -1)
+            return -1;
+        return Math.abs(left_depth - right_depth) > 1?-1:Math.max(left_depth, right_depth) + 1;
+    }
+//    位运算
+    public int singleNumber(int[] nums) {
+        int sum = 0;
+        for(int num:nums){
+            sum ^= num;
+        }
+        return sum;
+    }
+//    剑指56-1 同为0，异为1 这套路无敌
+    public int[] singleNumbers(int[] nums) {
+        int sum = 0;
+        for (int num:nums){
+            sum ^= num;
+        }
+        int mask = 1;
+        while ((sum & mask) == 0){
+            mask <<= 1;
+        }
+        int a = 0;
+        int b = 0;
+        for (int num:nums){
+            if ((mask & num) == 0)
+                a ^= num;
+            else
+                b ^= num;
+        }
+        return new int[]{a, b};
+    }
+
+//    剑指56-2 再思考一下
+//    public int singleNumber(int[] nums) {
+//
+//    }
     public static void main(String[] args) {
         int []nums = {1};
         int target = 1;
