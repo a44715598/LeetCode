@@ -2269,7 +2269,7 @@ public class JZPractice {
         return Math.abs(left_depth - right_depth) > 1?-1:Math.max(left_depth, right_depth) + 1;
     }
 //    位运算
-    public int singleNumber(int[] nums) {
+    public int singleNumber2(int[] nums) {
         int sum = 0;
         for(int num:nums){
             sum ^= num;
@@ -2298,16 +2298,66 @@ public class JZPractice {
     }
 
 //    剑指56-2 再思考一下
-//    public int singleNumber(int[] nums) {
-//
-//    }
+    public int singleNumber(int[] nums) {
+        int []counts = new int[32];
+        for (int i=0;i<nums.length;i++){
+            for (int j=0;j<32;j++){
+                counts[j] += (nums[i] & 1);
+                nums[i] >>>= 1;
+            }
+        }
+        int res = 0;
+        for (int j=0;j<32;j++){
+//            此处是指往左边移动，升位，然后让最低位和counts求或，然后
+//            一位一位的得到结果
+            res <<= 1;
+            res |= counts[31 - j] % 3;
+        }
+        return res;
+    }
+//  本题核心解法，用另一个数组和本数组做异或运算，那么就得到了x^y这个值，因为需要分开他俩，所以他俩异或肯定有为1的位置，根据这个位置再与运算分开它俩，最后判断缺失值是谁
+    public int[] findErrorNums(int[] nums) {
+        int ans = 0;
+        for (int i=0;i<nums.length;i++){
+            ans ^= nums[i];
+            ans ^= i+1;
+        }
+//        int mask = 1;
+//        while ((ans & mask) == 0){
+//            mask <<= 1;
+//        }
+        int mask = ans & ~(ans - 1);
+//        mask牛逼
+//        找到了不同的位置
+        int a = 0;
+        int b = 0;
+        for (int i=0;i<nums.length;i++){
+            if ((nums[i] & mask) == 0){
+                a ^= nums[i];
+            }else
+                b ^= nums[i];
+            if ((i+1 & mask) == 0){
+                a ^= i+1;
+            }else
+                b ^= i+1;
+        }
+        for (int i=0;i<nums.length;i++){
+            if (nums[i] == a){
+                return new int[]{a, b};
+            }
+            if (nums[i] == b){
+                return new int[]{b, a};
+            }
+        }
+        return new int[]{a, b};
+    }
+
     public static void main(String[] args) {
-        int []nums = {1};
-        int target = 1;
+        int []nums = {1,1};
         JZPractice jzp = new JZPractice();
-        int ans = jzp.search(nums, target);
+        int []ans = jzp.findErrorNums(nums);
 //        new HelloWorld().out_list(ans);
-//        new HelloWorld().out_list2(ans);
-        System.out.println(ans);
+        new HelloWorld().out_list2(ans);
+//        System.out.println(ans);
     }
 }
