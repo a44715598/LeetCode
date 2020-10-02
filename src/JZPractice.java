@@ -119,12 +119,14 @@ public class JZPractice {
         }
         System.out.println();
     }
+
     public void out_list2(String[] nums) {
         for (String num : nums) {
             System.out.print(num + " ");
         }
         System.out.println();
     }
+
     //    剑指04
     public boolean findNumberIn2DArray1(int[][] matrix, int target) {
 
@@ -1703,30 +1705,32 @@ public class JZPractice {
         }
         return maxList;
     }
+
     //  双端队列
     public int[] maxSlidingWindow(int[] nums, int k) {
         if (nums.length == 0 || k == 0)
             return new int[0];
-        int i=0;
+        int i = 0;
         Deque<Integer> deque = new LinkedList<>();
-        int []ans = new int[nums.length - k + 1];
-        for (;i<k;i++){
+        int[] ans = new int[nums.length - k + 1];
+        for (; i < k; i++) {
             while (!deque.isEmpty() && deque.getLast() < nums[i])
                 deque.removeLast();
             deque.add(nums[i]);
         }
         ans[0] = deque.getFirst();
-        for (i=k;i<nums.length;i++){
-            if (deque.getFirst() == nums[i-k]){
+        for (i = k; i < nums.length; i++) {
+            if (deque.getFirst() == nums[i - k]) {
                 deque.removeFirst();
             }
             while (!deque.isEmpty() && deque.getLast() < nums[i])
                 deque.removeLast();
             deque.add(nums[i]);
-            ans[i - k +1] = deque.getFirst();
+            ans[i - k + 1] = deque.getFirst();
         }
         return ans;
     }
+
     //    47
     List<List<Integer>> llint = new ArrayList<>();
 
@@ -1767,7 +1771,7 @@ public class JZPractice {
 
     //    剑指57-2 双指针
     public int[][] findContinuousSequence(int target) {
-        List<int []> llint = new ArrayList<>();
+        List<int[]> llint = new ArrayList<>();
         int sum = 0;
         int i = 1;
         int j = 2;
@@ -1776,9 +1780,9 @@ public class JZPractice {
             while (sum < target)
                 sum += ++j;
             if (sum == target) {
-                int []heihei = new int[j-i+1];
+                int[] heihei = new int[j - i + 1];
                 for (int k = i; k <= j; k++)
-                    heihei[k-i] = k;
+                    heihei[k - i] = k;
                 llint.add(heihei);
                 sum += ++j;
             }
@@ -1788,23 +1792,24 @@ public class JZPractice {
 
         return llint.toArray(new int[llint.size()][]);
     }
-//    剑指46
+
+    //    剑指46
     public int translateNum2(int num) {
 //        dp[i] = dp[i-1]+1+dp[i-2]+1(要先判断是否再0-25区间内);
         String s = String.valueOf(num);
         if (s.length() == 1)
             return 1;
-        int []dp = new int[s.length()];
+        int[] dp = new int[s.length()];
         dp[0] = 1;
         dp[1] = 1;
-        if (Integer.parseInt(s.substring(0, 2))<26)
+        if (Integer.parseInt(s.substring(0, 2)) < 26)
             dp[1] = 2;
-        for (int i=2;i<s.length();i++){
-            dp[i] = dp[i-1];
-            if (Integer.parseInt(s.substring(i-1, i+1)) < 26 && s.charAt(i-1) != 48)
-                dp[i] += dp[i-2];
+        for (int i = 2; i < s.length(); i++) {
+            dp[i] = dp[i - 1];
+            if (Integer.parseInt(s.substring(i - 1, i + 1)) < 26 && s.charAt(i - 1) != 48)
+                dp[i] += dp[i - 2];
         }
-        return dp[s.length()-1];
+        return dp[s.length() - 1];
     }
 
     public int translateNum3(int num) {
@@ -1815,11 +1820,11 @@ public class JZPractice {
         int dp0 = 1;
         int dp1 = 1;
         int dp2 = 0;
-        if (Integer.parseInt(s.substring(0, 2))<26)
+        if (Integer.parseInt(s.substring(0, 2)) < 26)
             dp1 = 2;
-        for (int i=2;i<s.length();i++){
+        for (int i = 2; i < s.length(); i++) {
             dp2 = dp1;
-            if (Integer.parseInt(s.substring(i-1, i+1)) < 26 && s.charAt(i-1) != 48)
+            if (Integer.parseInt(s.substring(i - 1, i + 1)) < 26 && s.charAt(i - 1) != 48)
                 dp2 += dp0;
             dp0 = dp1;
             dp1 = dp2;
@@ -1835,14 +1840,15 @@ public class JZPractice {
         int dp0 = 1;
         int dp1 = 1;
         int dp2;
-        int p=0;
-        while ((long)Math.pow(10, ++p) <= num){}
-        if (num / (int)Math.pow(10, p-2) < 26)
+        int p = 0;
+        while ((long) Math.pow(10, ++p) <= num) {
+        }
+        if (num / (int) Math.pow(10, p - 2) < 26)
             dp1 = 2;
         p -= 2;
-        while (p > 0){
+        while (p > 0) {
             dp2 = dp1;
-            if (num / (int)Math.pow(10,p-1) % 100 < 26 && num / (int)Math.pow(10,p) % 10 != 0)
+            if (num / (int) Math.pow(10, p - 1) % 100 < 26 && num / (int) Math.pow(10, p) % 10 != 0)
                 dp2 += dp0;
             dp0 = dp1;
             dp1 = dp2;
@@ -1850,94 +1856,98 @@ public class JZPractice {
         }
         return dp1;
     }
-//    5519
+
+    //    5519
     public String reorderSpaces(String text) {
         int space_num = 0;
         int word_num = 0;
-        for (int i=0;i<text.length();i++){
+        for (int i = 0; i < text.length(); i++) {
             if (text.charAt(i) == ' ')
                 space_num++;
         }
         String tCp = text.trim();
-        for (int i=0;i<tCp.length();i++) {
+        for (int i = 0; i < tCp.length(); i++) {
             if (tCp.charAt(i) == ' ')
                 word_num++;
             while (tCp.charAt(i) == ' ')
                 i++;
         }
-        word_num ++;
+        word_num++;
         String ans = "";
-        if (word_num == 1 || word_num == 0){
+        if (word_num == 1 || word_num == 0) {
             ans = tCp;
-            for (int i = 0;i<space_num;i++){
+            for (int i = 0; i < space_num; i++) {
                 ans += ' ';
             }
             return ans;
         }
-        int word_space_num = space_num / (word_num-1);
-        int tt = space_num % (word_num-1);
+        int word_space_num = space_num / (word_num - 1);
+        int tt = space_num % (word_num - 1);
         String s_space = "";
-        while (word_space_num-->0)
+        while (word_space_num-- > 0)
             s_space += ' ';
-        int j=0;
-        for (int i=0;i<tCp.length();i++) {
-            if (tCp.charAt(i) == ' '){
+        int j = 0;
+        for (int i = 0; i < tCp.length(); i++) {
+            if (tCp.charAt(i) == ' ') {
                 ans += tCp.substring(j, i) + s_space;
                 j = i;
             }
-            while (tCp.charAt(i) == ' '){
+            while (tCp.charAt(i) == ' ') {
                 i++;
-                j=i;
+                j = i;
             }
         }
         ans += tCp.substring(j, tCp.length());
-        while (tt>0){
+        while (tt > 0) {
             ans += ' ';
             tt--;
         }
         return ans;
     }
 
-//    5520
+    //    5520
     public int maxUniqueSplit(String s) {
         if (s.length() == 1)
             return 1;
         Set<String> set = new HashSet<>();
-        int []dp = new int[s.length()];
+        int[] dp = new int[s.length()];
         dp[0] = 1;
         set.add(s.substring(0, 1));
-        int i=1;
-        for (int j=1;j<s.length();j++){
-            dp[j] = dp[j-1];
-            String sub = s.substring(i, j+1);
-            if (!set.contains(sub)){
+        int i = 1;
+        for (int j = 1; j < s.length(); j++) {
+            dp[j] = dp[j - 1];
+            String sub = s.substring(i, j + 1);
+            if (!set.contains(sub)) {
                 set.add(sub);
-                dp[j] = dp[j-1] + 1;
+                dp[j] = dp[j - 1] + 1;
                 i = j + 1;
             }
         }
-        return dp[s.length()-1];
+        return dp[s.length() - 1];
     }
+
     long sum = Integer.MIN_VALUE;
+
     public int maxProductPathTimeOut(int[][] grid) {
-        int i=0,j=0;
+        int i = 0, j = 0;
         long k = 1;
         dfs(grid, i, j, k);
         if (sum < 0)
             return -1;
-        return (int)(sum%1000000007);
+        return (int) (sum % 1000000007);
     }
-    public void dfs(int[][] grid,int i, int j, long k){
-        if (i==grid.length || j==grid[0].length){
+
+    public void dfs(int[][] grid, int i, int j, long k) {
+        if (i == grid.length || j == grid[0].length) {
             return;
         }
         k *= grid[i][j];
-        if (i==grid.length-1 && j == grid[0].length-1){
+        if (i == grid.length - 1 && j == grid[0].length - 1) {
             sum = Math.max(sum, k);
             return;
         }
-        dfs(grid, i+1, j, k);
-        dfs(grid, i, j+1, k);
+        dfs(grid, i + 1, j, k);
+        dfs(grid, i, j + 1, k);
     }
 
     public int maxProductPath3(int[][] grid) {
@@ -1984,28 +1994,28 @@ public class JZPractice {
     public int maxProductPath(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        long [][]maxdp = new long[m][n];
-        long [][]mindp = new long[m][n];
-        for (int i=0;i<m;i++){
+        long[][] maxdp = new long[m][n];
+        long[][] mindp = new long[m][n];
+        for (int i = 0; i < m; i++) {
             Arrays.fill(maxdp[i], Integer.MIN_VALUE);
             Arrays.fill(mindp[i], Integer.MAX_VALUE);
         }
-        int [][]twoDirection = new int[][]{
+        int[][] twoDirection = new int[][]{
                 {0, 1},
                 {1, 0}
         };
         maxdp[0][0] = grid[0][0];
         mindp[0][0] = grid[0][0];
-        for (int i=0;i<m;i++){
-            for (int j=0;j<n;j++){
-                for (int []direction:twoDirection){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int[] direction : twoDirection) {
                     int x = i + direction[0];
                     int y = j + direction[1];
                     if (x >= m || y >= n)
                         continue;
                     long l = mindp[i][j] * grid[x][y];
                     long r = maxdp[i][j] * grid[x][y];
-                    if (grid[x][y] < 0){
+                    if (grid[x][y] < 0) {
                         long temp = l;
                         l = r;
                         r = temp;
@@ -2016,25 +2026,25 @@ public class JZPractice {
 
             }
         }
-        return maxdp[m-1][n-1] < 0?-1:(int)(maxdp[m-1][n-1]%(1e9+7));
+        return maxdp[m - 1][n - 1] < 0 ? -1 : (int) (maxdp[m - 1][n - 1] % (1e9 + 7));
     }
 
-//    剑指47
+    //    剑指47
     public int maxValue2(int[][] grid) {
         int m = grid.length;
         int n = grid[0].length;
-        int [][]maxdp = new int[m][n];
-        int [][]twoDir = new int[][]{
-                {1,0},
-                {0,1}
+        int[][] maxdp = new int[m][n];
+        int[][] twoDir = new int[][]{
+                {1, 0},
+                {0, 1}
         };
         maxdp[0][0] = grid[0][0];
-        for (int i=0;i<m;i++){
-            for (int j=0;j<n;j++){
-                for (int []dir:twoDir){
-                    int x = i+dir[0];
-                    int y = j+dir[1];
-                    if (x == m || y == n){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int[] dir : twoDir) {
+                    int x = i + dir[0];
+                    int y = j + dir[1];
+                    if (x == m || y == n) {
                         continue;
                     }
                     int max = maxdp[i][j] + grid[x][y];
@@ -2042,67 +2052,73 @@ public class JZPractice {
                 }
             }
         }
-        return maxdp[m-1][n-1];
+        return maxdp[m - 1][n - 1];
     }
+
     public int maxValue(int[][] grid) {
 
         maxDfs(grid, 0, 0, 0);
-        return (int)sum;
+        return (int) sum;
     }
 
     private void maxDfs(int[][] grid, int i, int j, int k) {
-        if (i==grid.length || j==grid[0].length)
-        {
+        if (i == grid.length || j == grid[0].length) {
             return;
         }
         k = k + grid[i][j];
-        if (i==grid.length-1 && j==grid[0].length-1)
+        if (i == grid.length - 1 && j == grid[0].length - 1)
             sum = Math.max(sum, k);
-        maxDfs(grid, i, j+1, k);
-        maxDfs(grid, i+1, j, k);
+        maxDfs(grid, i, j + 1, k);
+        maxDfs(grid, i + 1, j, k);
     }
 
     public String minNumber(int[] nums) {
         String[] strs = new String[nums.length];
-        for(int i = 0; i < nums.length; i++)
+        for (int i = 0; i < nums.length; i++)
             strs[i] = String.valueOf(nums[i]);
         quickSort(strs, 0, strs.length - 1);
         StringBuilder res = new StringBuilder();
-        for(String s : strs)
+        for (String s : strs)
             res.append(s);
         return res.toString();
     }
-    public void quickSort(String []strs, int i,int j){
+
+    public void quickSort(String[] strs, int i, int j) {
         if (i >= j)
             return;
         int left = i;
         int right = j;
         String flag = strs[i];
         out_list2(strs);
-        while (left < right){
-            while (left<right && (flag + strs[right]).compareTo(strs[right] + flag) <= 0){right--;}
-            while (left<right && (flag + strs[left]).compareTo(strs[left] + flag) >= 0){left++;}
+        while (left < right) {
+            while (left < right && (flag + strs[right]).compareTo(strs[right] + flag) <= 0) {
+                right--;
+            }
+            while (left < right && (flag + strs[left]).compareTo(strs[left] + flag) >= 0) {
+                left++;
+            }
             String temp = strs[left];
             strs[left] = strs[right];
             strs[right] = temp;
         }
         strs[i] = strs[left];
         strs[left] = flag;
-        quickSort(strs, i, left-1);
-        quickSort(strs, left+1, j);
+        quickSort(strs, i, left - 1);
+        quickSort(strs, left + 1, j);
     }
-//    剑指48 abba
+
+    //    剑指48 abba
     public int lengthOfLongestSubstring(String s) {
         if (s.length() == 0)
             return 0;
-        int i=-1,j=0,k=0;
+        int i = -1, j = 0, k = 0;
         int max = 1;
         Map<Character, Integer> map = new HashMap<>();
-        for (;j<s.length();j++){
-            k = map.get(s.charAt(j)) == null ? -1:map.get(s.charAt(j));
+        for (; j < s.length(); j++) {
+            k = map.get(s.charAt(j)) == null ? -1 : map.get(s.charAt(j));
             if (k == -1)
                 max = Math.max(j - i, max);
-            else{
+            else {
                 i = Math.max(i, k);
                 max = Math.max(j - i, max);
 
@@ -2113,41 +2129,47 @@ public class JZPractice {
         }
         return max;
     }
-//  剑指53-1
+
+    //  剑指53-1
     public int search(int[] nums, int target) {
         int left = 0;
-        int right = nums.length-1;
+        int right = nums.length - 1;
         int count = 0;
-        while (left <= right){
-            int mid = (left + right) /2;
+        while (left <= right) {
+            int mid = (left + right) / 2;
             if (nums[mid] < target)
                 left = mid + 1;
             else if (nums[mid] > target)
-                right = mid -1;
+                right = mid - 1;
             else {
                 count = 1;
-                int i=mid - 1;
+                int i = mid - 1;
                 int j = mid + 1;
-                while (i>-1 && nums[i--] == target){count++;}
-                while (j<nums.length &&nums[j++] == target){count++;}
+                while (i > -1 && nums[i--] == target) {
+                    count++;
+                }
+                while (j < nums.length && nums[j++] == target) {
+                    count++;
+                }
                 break;
             }
         }
         return count;
     }
+
     public int lengthOfLongestSubstring2(String s) {
         if (s.length() == 0)
             return 0;
-        int []dp = new int[s.length()];
+        int[] dp = new int[s.length()];
         int max = 1;
         int j = 0;
         dp[0] = 1;
         Map<Character, Integer> map = new HashMap<>();
-        map.put(s.charAt(0),0);
-        for (int i=1;i<s.length();i++){
-            j = map.get(s.charAt(i)) == null ? -1:map.get(s.charAt(i));
-            if (dp[i-1] < i - j)
-                dp[i] = dp[i-1] + 1;
+        map.put(s.charAt(0), 0);
+        for (int i = 1; i < s.length(); i++) {
+            j = map.get(s.charAt(i)) == null ? -1 : map.get(s.charAt(i));
+            if (dp[i - 1] < i - j)
+                dp[i] = dp[i - 1] + 1;
             else
                 dp[i] = i - j;
             map.put(s.charAt(i), i);
@@ -2155,7 +2177,8 @@ public class JZPractice {
         }
         return max;
     }
-//    剑指52  思路将两个链表倒序，然后数第一个非公共节点
+
+    //    剑指52  思路将两个链表倒序，然后数第一个非公共节点
 //    while (front != null){
 //        next = front.next;
 //        front.next = headB;
@@ -2167,23 +2190,23 @@ public class JZPractice {
             return null;
         ListNode node1 = headA;
         ListNode node2 = headB;
-        while (node1 != node2){
+        while (node1 != node2) {
             node1 = node1.next;
             node2 = node2.next;
-            if (node1 == null && node2!=null)
+            if (node1 == null && node2 != null)
                 node1 = headB;
-            if (node2 == null && node1!=null)
+            if (node2 == null && node1 != null)
                 node2 = headA;
         }
         return node1;
     }
 
-//    剑指49
+    //    剑指49
     public int nthUglyNumber(int n) {
-        int []dp = new int[n];
-        int a=0,b=0,c=0;
+        int[] dp = new int[n];
+        int a = 0, b = 0, c = 0;
         dp[0] = 1;
-        for (int i=1;i<n;i++){
+        for (int i = 1; i < n; i++) {
             int n1 = dp[a] * 2;
             int n2 = dp[b] * 3;
             int n3 = dp[c] * 5;
@@ -2195,15 +2218,15 @@ public class JZPractice {
             if (dp[i] == n3)
                 c++;
         }
-        return dp[n-1];
+        return dp[n - 1];
     }
 
-//    剑指54 反中序
+    //    剑指54 反中序
     public int kthLargest(TreeNode root, int k) {
         Stack<TreeNode> s = new Stack<>();
         TreeNode t = root;
-        while (t!=null || !s.isEmpty()){
-            while (t!=null){
+        while (t != null || !s.isEmpty()) {
+            while (t != null) {
                 s.push(t);
                 t = t.right;
             }
@@ -2214,8 +2237,10 @@ public class JZPractice {
         }
         return t.val;
     }
-//    剑指55-1
+
+    //    剑指55-1
     int maxDepth;
+
     public int maxDepth(TreeNode root) {
         if (root == null)
             return 0;
@@ -2224,8 +2249,9 @@ public class JZPractice {
         dfs(root.right, depth);
         return maxDepth;
     }
-    public void dfs(TreeNode root, int depth){
-        if (root == null){
+
+    public void dfs(TreeNode root, int depth) {
+        if (root == null) {
             maxDepth = Math.max(maxDepth, depth);
             return;
         }
@@ -2234,61 +2260,64 @@ public class JZPractice {
         dfs(root.right, depth);
     }
 
-//    617合并二叉树
+    //    617合并二叉树
     public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
-        if(t1==null || t2==null) {
-            return t1==null? t2 : t1;
+        if (t1 == null || t2 == null) {
+            return t1 == null ? t2 : t1;
         }
-        TreeNode t3 = new TreeNode(t1.val+t2.val);
+        TreeNode t3 = new TreeNode(t1.val + t2.val);
         t3.left = mergeTrees(t1.left, t2.left);
         t3.right = mergeTrees(t1.right, t2.right);
         return t3;
     }
 
-//   平衡二叉树
+    //   平衡二叉树
     public boolean isBalanced2(TreeNode root) {
         if (root == null)
             return true;
-        if(Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1){
+        if (Math.abs(maxDepth(root.left) - maxDepth(root.right)) > 1) {
             return false;
         }
         return isBalanced2(root.left) && isBalanced2(root.right);
     }
+
     public boolean isBalanced(TreeNode root) {
 
         return recur(root) != -1;
     }
 
-    public int recur(TreeNode root){
+    public int recur(TreeNode root) {
         if (root == null)
             return 0;
         int left_depth = recur(root.left);
         int right_depth = recur(root.right);
         if (left_depth == -1 || right_depth == -1)
             return -1;
-        return Math.abs(left_depth - right_depth) > 1?-1:Math.max(left_depth, right_depth) + 1;
+        return Math.abs(left_depth - right_depth) > 1 ? -1 : Math.max(left_depth, right_depth) + 1;
     }
-//    位运算
+
+    //    位运算
     public int singleNumber2(int[] nums) {
         int sum = 0;
-        for(int num:nums){
+        for (int num : nums) {
             sum ^= num;
         }
         return sum;
     }
-//    剑指56-1 同为0，异为1 这套路无敌
+
+    //    剑指56-1 同为0，异为1 这套路无敌
     public int[] singleNumbers(int[] nums) {
         int sum = 0;
-        for (int num:nums){
+        for (int num : nums) {
             sum ^= num;
         }
         int mask = 1;
-        while ((sum & mask) == 0){
+        while ((sum & mask) == 0) {
             mask <<= 1;
         }
         int a = 0;
         int b = 0;
-        for (int num:nums){
+        for (int num : nums) {
             if ((mask & num) == 0)
                 a ^= num;
             else
@@ -2297,17 +2326,17 @@ public class JZPractice {
         return new int[]{a, b};
     }
 
-//    剑指56-2 再思考一下
+    //    剑指56-2 再思考一下
     public int singleNumber(int[] nums) {
-        int []counts = new int[32];
-        for (int i=0;i<nums.length;i++){
-            for (int j=0;j<32;j++){
+        int[] counts = new int[32];
+        for (int i = 0; i < nums.length; i++) {
+            for (int j = 0; j < 32; j++) {
                 counts[j] += (nums[i] & 1);
                 nums[i] >>>= 1;
             }
         }
         int res = 0;
-        for (int j=0;j<32;j++){
+        for (int j = 0; j < 32; j++) {
 //            此处是指往左边移动，升位，然后让最低位和counts求或，然后
 //            一位一位的得到结果
             res <<= 1;
@@ -2315,12 +2344,13 @@ public class JZPractice {
         }
         return res;
     }
-//  本题核心解法，用另一个数组和本数组做异或运算，那么就得到了x^y这个值，因为需要分开他俩，所以他俩异或肯定有为1的位置，根据这个位置再与运算分开它俩，最后判断缺失值是谁
+
+    //  本题核心解法，用另一个数组和本数组做异或运算，那么就得到了x^y这个值，因为需要分开他俩，所以他俩异或肯定有为1的位置，根据这个位置再与运算分开它俩，最后判断缺失值是谁
     public int[] findErrorNums(int[] nums) {
         int ans = 0;
-        for (int i=0;i<nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             ans ^= nums[i];
-            ans ^= i+1;
+            ans ^= i + 1;
         }
 //        int mask = 1;
 //        while ((ans & mask) == 0){
@@ -2331,33 +2361,135 @@ public class JZPractice {
 //        找到了不同的位置
         int a = 0;
         int b = 0;
-        for (int i=0;i<nums.length;i++){
-            if ((nums[i] & mask) == 0){
+        for (int i = 0; i < nums.length; i++) {
+            if ((nums[i] & mask) == 0) {
                 a ^= nums[i];
-            }else
+            } else
                 b ^= nums[i];
-            if ((i+1 & mask) == 0){
-                a ^= i+1;
-            }else
-                b ^= i+1;
+            if ((i + 1 & mask) == 0) {
+                a ^= i + 1;
+            } else
+                b ^= i + 1;
         }
-        for (int i=0;i<nums.length;i++){
-            if (nums[i] == a){
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == a) {
                 return new int[]{a, b};
             }
-            if (nums[i] == b){
+            if (nums[i] == b) {
                 return new int[]{b, a};
             }
         }
         return new int[]{a, b};
     }
 
+    //    771
+    public int numJewelsInStones(String J, String S) {
+        Set<Character> set = new HashSet<>();
+        int count = 0;
+        for (int i = 0; i < J.length(); i++) {
+            set.add(J.charAt(i));
+        }
+        for (int i = 0; i < S.length(); i++) {
+            if (set.contains(S.charAt(i)))
+                count++;
+        }
+        return count;
+    }
+
+    //    jz60 加个记忆
+    Map<String, Integer> map = new HashMap<>();
+    public double[] twoSum2(int n) {
+//        保存得到的各数的概率
+        double[] ans = new double[5 * n + 1];
+
+        for (int i=5 * n;i>=0;i--){
+            int a = n;
+            int b = i+n;
+            if (map.get(a+" "+b) == null){
+                map.put(a+" "+b,getCount(a, b));
+            }
+            ans[i] = (double)map.get(a+" "+b) / Math.pow(6, n);
+        }
+        return ans;
+    }
+
+    public int getCount(int n, int k){
+        if (6*n < k)
+            return 0;
+        if (n == 1)
+            return 1;
+        int sum = 0;
+        for (int i=1;i<=Math.min(k-1, 6);i++){
+            int a = n-1;
+            int b = k - i;
+            if (map.get(a+" "+b) == null){
+                map.put(a+" "+b,getCount(a, b));
+            }
+            sum += map.get(a+" "+b);
+        }
+        return sum;
+    }
+//  动态规划
+    public double[] twoSum(int n) {
+//        保存得到的各数的概率
+        double[] ans = new double[5 * n + 1];
+        int []dp = new int[6*n+1];
+        int []dp2 = new int[6*n+1];
+        int []temp;
+        for (int j=1;j<=6;j++){
+            dp[j] = 1;
+        }
+        for (int i=2;i<=n;i++){
+            for (int j=i;j<=6*i;j++){
+                for (int k=1;k<=6 && j>=k;k++){
+                    dp2[j] += dp[j-k];
+                }
+            }
+            temp = dp;
+            dp = dp2;
+            dp2 = temp;
+            Arrays.fill(dp2, 0);
+        }
+        for (int j=n;j<=6*n;j++){
+            ans[j-n] = (double) dp[j] / Math.pow(6, n);
+        }
+        return ans;
+    }
+//    jz61
+    public boolean isStraight(int[] nums) {
+        Arrays.sort(nums);
+        int count = 0;
+        for (int i=0;i<nums.length - 1;i++){
+            if (nums[i] == nums[i+1] && nums[i] != 0)
+                return false;
+            if (nums[i] == 0){
+                count++;
+                continue;
+            }
+            count -= (nums[i+1] - nums[i] - 1);
+            if (count < 0)
+                return false;
+        }
+        return true;
+    }
+
+
+//    jz62 约瑟夫环
+    public int lastRemaining(int n, int m) {
+        int ans = 1;
+        for (int i=2;i<=n;i++){
+            ans = (ans + m) % n;
+        }
+        return ans;
+    }
     public static void main(String[] args) {
-        int []nums = {1,1};
         JZPractice jzp = new JZPractice();
-        int []ans = jzp.findErrorNums(nums);
+        double[] ans = jzp.twoSum(2);
 //        new HelloWorld().out_list(ans);
-        new HelloWorld().out_list2(ans);
+//        new HelloWorld().out_list2(ans);
 //        System.out.println(ans);
+        for (int i=0;i<ans.length;i++){
+            System.out.print(ans[i]+" ");
+        }
     }
 }
