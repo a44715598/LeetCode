@@ -2482,14 +2482,170 @@ public class JZPractice {
         }
         return ans;
     }
+//    jz63
+    public int maxProfit(int[] prices) {
+        if (prices.length < 2)
+            return 0;
+        int min = Integer.MAX_VALUE;
+        int ans = 0;
+        for (int i=0;i<prices.length;i++){
+            if (prices[i] < min)
+                min = prices[i];
+            ans = Math.max(prices[i] - min, ans);
+        }
+        return ans;
+    }
+//    jz64 位运算
+    public int sumNums(int n) {
+        boolean x = n > 1 && (n += sumNums(n - 1)) > 0;
+        return n;
+    }
+
+//  剑指 Offer 65. 不用加减乘除做加法
+    public int add(int a, int b) {
+        while(b != 0) { // 当进位为 0 时跳出
+            int c = (a & b) << 1;  // 第一次先得到进位的，然后判断异或运算有没有再一次进位
+            a ^= b; // a = 非进位和
+            b = c; // b = 进位
+        }
+        return a;
+    }
+
+//    剑指 Offer 66. 构建乘积数组
+    public int[] constructArr(int[] a) {
+        int sum = 1;
+        int zero_count = 0;
+        int zero_pos = 0;
+        for (int i=0;i<a.length;i++){
+            if (a[i] == 0){
+                zero_count++;
+                zero_pos = i;
+                continue;
+            }
+            sum *= a[i];
+        }
+        for (int i=0;i<a.length;i++){
+
+            if (zero_count >= 2){
+                a[i] = 0;
+                continue;
+            }
+            if (zero_count == 1){
+                a[i] = 0;
+                if (i == zero_pos)
+                    a[i] = sum;
+                continue;
+            }
+            a[i] = sum / a[i];
+        }
+        return a;
+    }
+
+//  剑指 Offer 67. 把字符串转换成整数
+    public int strToInt(String str) {
+        str = str.trim();
+        if (str.length() == 0)
+            return 0;
+        long sum = 0;
+        boolean flag = true;
+        int begin = 0;
+        if ((str.charAt(0)<48 || str.charAt(0) > 57) && (str.charAt(0) != '-' && str.charAt(0) != '+'))
+            return 0;
+        if (str.charAt(0) == '-')
+            flag = false;
+        if (str.charAt(0) == '-' || str.charAt(0) == '+')
+            begin = 1;
+        for (int i=begin;i<str.length();i++){
+            if ((str.charAt(i)<48 || str.charAt(i) > 57))
+                return (int) (flag?sum:-sum);
+            if (i==begin){
+                sum = str.charAt(i) - 48;
+                continue;
+            }
+            sum = sum * 10 + (str.charAt(i) - 48);
+            if ((flag?sum:-sum) > Integer.MAX_VALUE)
+                return Integer.MAX_VALUE;
+            if ((flag?sum:-sum) < Integer.MIN_VALUE)
+                return Integer.MIN_VALUE;
+        }
+        return (int) (flag?sum:-sum);
+    }
+
+//
+    public TreeNode lowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q) {
+        while(root != null){
+            if(root.val > p.val && root.val > q.val)
+                root = root.left;
+            else if(root.val < p.val && root.val < q.val)
+                root = root.right;
+            else
+                return root;
+        }
+        return root;
+    }
+//    剑指 Offer 68 - I. 二叉搜索树的最近公共祖先
+    public TreeNode lowestCommonAncestor3(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null)
+            return null;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        Map<TreeNode, TreeNode> map = new HashMap<>();
+        TreeNode ans = null;
+        int count = 0;
+        while (!queue.isEmpty()){
+            TreeNode temp = queue.poll();
+            if (temp == p || temp == q){
+                count++;
+                if (count == 2)
+                    break;
+            }
+            if (temp.left != null){
+                queue.add(temp.left);
+                map.put(temp.left, temp);
+            }
+            if (temp.right != null){
+                queue.add(temp.right);
+                map.put(temp.right, temp);
+            }
+        }
+        TreeNode p1 = p;
+        TreeNode q1 = q;
+        while (true){
+            if (map.get(p) == null){
+                p = q1;
+            }
+            if (map.get(q) == null){
+                q = p1;
+            }
+            if (map.get(p) != map.get(q)){
+                p = map.get(p);
+                q = map.get(q);
+            }else
+                return map.get(p);
+        }
+    }
+
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q)
+            return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        if (left == null)
+            return right;
+        if (right == null)
+            return left;
+        return root;
+    }
+
     public static void main(String[] args) {
+        String str = "  -0012a42";
         JZPractice jzp = new JZPractice();
-        double[] ans = jzp.twoSum(2);
+        int ans = jzp.strToInt(str);
 //        new HelloWorld().out_list(ans);
 //        new HelloWorld().out_list2(ans);
-//        System.out.println(ans);
-        for (int i=0;i<ans.length;i++){
-            System.out.print(ans[i]+" ");
-        }
+        System.out.println(ans);
+//        for (int i=0;i<ans.length;i++){
+//            System.out.print(ans[i]+" ");
+//        }
     }
 }
