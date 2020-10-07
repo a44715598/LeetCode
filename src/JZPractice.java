@@ -2108,7 +2108,7 @@ public class JZPractice {
     }
 
     //    剑指48 abba
-    public int lengthOfLongestSubstring(String s) {
+    public int lengthOfLongestSubstring3(String s) {
         if (s.length() == 0)
             return 0;
         int i = -1, j = 0, k = 0;
@@ -2637,10 +2637,215 @@ public class JZPractice {
         return root;
     }
 
+//    2 两数相加 不能用int存，太小了
+    public ListNode addTwoNumbers2(ListNode l1, ListNode l2) {
+        int sum1 = 0;
+        int sum2 = 0;
+        while (l1 != null){
+            sum1 = sum1 * 10 + l1.val;
+            l1 = l1.next;
+        }
+        while (l2 != null){
+            sum2 = sum2 * 10 + l2.val;
+            l2 = l2.next;
+        }
+        sum1 = Integer.parseInt(new StringBuilder(String.valueOf(sum1)).reverse().toString());
+        sum2 = Integer.parseInt(new StringBuilder(String.valueOf(sum2)).reverse().toString());
+        StringBuilder sum3 = new StringBuilder(String.valueOf(sum1 + sum2)).reverse();
+        ListNode node = new ListNode((int)sum3.charAt(0));
+        ListNode head = node;
+        for (int i=1;i<sum3.length();i++){
+            node.next = new ListNode((int)sum3.charAt(i));
+            node = node.next;
+            node.next = null;
+        }
+        return head;
+    }
+    public ListNode addTwoNumbers3(ListNode l1, ListNode l2) {
+        StringBuilder sum1 = new StringBuilder();
+        StringBuilder sum2 = new StringBuilder();
+        while (l1 != null){
+            sum1.append(l1.val);
+            l1 = l1.next;
+        }
+        while (l2 != null){
+            sum2.append(l2.val);
+            l2 = l2.next;
+        }
+        StringBuilder sum3 = new StringBuilder();
+        int carry = 0;
+        int aaa = Math.max(sum1.length(), sum2.length()) - Math.min(sum1.length(), sum2.length());
+        for (int i=0;i<aaa;i++){
+            if (sum2.length()<sum1.length())
+                sum2.append(0);
+            else
+                sum1.append(0);
+        }
+        for (int i=0;i<Math.max(sum1.length(), sum2.length());i++){
+            int a = (sum1.charAt(i) + sum2.charAt(i) - 96 + carry) % 10;
+            carry = (sum1.charAt(i) + sum2.charAt(i) - 96 + carry) / 10;
+            sum3.append(a);
+        }
+        if (carry > 0)
+            sum3.append(carry);
+        ListNode node = new ListNode((int)sum3.charAt(0) - 48);
+        ListNode head = node;
+        for (int i=1;i<sum3.length();i++){
+            node.next = new ListNode((int)sum3.charAt(i) - 48);
+            node = node.next;
+            node.next = null;
+        }
+        return head;
+    }
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        ListNode head = new ListNode(-1);
+        ListNode node = head;
+        int sum = 0;
+        int carry = 0;
+        while (l1!=null || l2!=null){
+            sum += carry;
+            if (l1 != null){
+                sum += l1.val;
+                l1 = l1.next;
+            }
+            if (l2 != null){
+                sum += l2.val;
+                l2 = l2.next;
+            }
+            node.next = new ListNode(sum % 10);
+            node.next.next = null;
+            node = node.next;
+            carry = sum / 10;
+        }
+        if (carry > 0){
+            node.next = new ListNode(carry);
+            node.next.next = null;
+        }
+        return head.next;
+    }
+
+//    3无重复字符的最长子串
+    public int lengthOfLongestSubstring(String s) {
+        Set<Character> set = new HashSet<>();
+        int left = 0;
+        int max = 0;
+        for (int i=0;i<s.length();i++){
+            if (set.contains(s.charAt(i))){
+                while (s.charAt(left++) != s.charAt(i))
+                    set.remove(s.charAt(left));
+                max = Math.max(i-left+1, max);
+                continue;
+            }
+            set.add(s.charAt(i));
+            max = Math.max(i-left+1, max);
+        }
+        return max;
+    }
+
+//    4 寻找两个正序数组的中位数
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        int len1 = nums1.length;
+        int len2 = nums2.length;
+        int len3 = len1 + len2;
+        int []nums3 = new int[len3];
+        int i=0;
+        int p1=0;
+        int p2=0;
+        while(p1 < len1 && p2 < len2)
+        {
+            if (nums1[p1]<nums2[p2])
+                nums3[i++] = nums1[p1++];
+            else if (nums1[p1]>nums2[p2])
+                nums3[i++] = nums2[p2++];
+            else{
+                nums3[i++] = nums1[p1++];
+                nums3[i++] = nums2[p2++];
+            }
+        }
+        if (p1 < len1){
+            while (i<len3)
+                nums3[i++] = nums1[p1++];
+        }
+        if (p2 < len2){
+            while (i<len3)
+                nums3[i++] = nums2[p2++];
+        }
+        if (len3 % 2 == 0)
+            return (double) (nums3[len3 / 2] + nums3[len3 / 2 - 1]) / 2;
+        return (double) nums3[len3 / 2];
+    }
+//    恶心，不写了
+//    public double findMedianSortedArrays(int[] nums1, int[] nums2){
+//
+//    }
+//    6. Z 字形变换
+    public String convert(String s, int numRows) {
+        if (numRows == 1)
+            return s;
+        List<List<Character>> llint = new ArrayList<>();
+        for (int i=0;i<numRows;i++)
+            llint.add(new ArrayList<Character>());
+        int j = -1;
+        int flag = 1;
+        for (int i=0;i<s.length();i++){
+            j += flag;
+            llint.get(j).add(s.charAt(i));
+            if ((j == numRows - 1 && flag == 1) || (j == 0 && flag == -1))
+                flag = -flag;
+        }
+        String ans = "";
+        for (int i=0;i<numRows;i++){
+            for (char c:llint.get(i))
+                ans += c;
+        }
+        return ans;
+    }
+//    7整数反转
+    public int reverse(int x) {
+        boolean flag = false;
+        if (x < 0)
+            flag = true;
+        StringBuilder str = null;
+        if (flag)
+            str = new StringBuilder(String.valueOf(x).substring(1));
+        else
+            str = new StringBuilder(String.valueOf(x));
+        str = str.reverse();
+        long long_x = 0;
+        for (int i=0;i<str.length();i++){
+            long_x = long_x * 10 + str.charAt(i) - 48;
+        }
+        long_x = (flag?-1:1) * long_x;
+        if(long_x > Integer.MAX_VALUE || long_x < Integer.MIN_VALUE)
+            long_x = 0;
+
+        return (int)long_x;
+    }
+//    13 罗马数字转整数
+    public int romanToInt(String s) {
+        String []s1 = {"I","V","X","L","C","D","M","IV", "IX", "XL", "XC", "CD", "CM"};
+        int []s1_int = {1, 5, 10, 50, 100, 500, 1000, 4, 9, 40, 90, 400, 900};
+        Map<String, Integer> map = new HashMap<>();
+        for(int i=0;i<s1.length;i++){
+            map.put(s1[i], s1_int[i]);
+        }
+        int sum = 0;
+
+        for(int i=0;i<s.length();i++){
+            if(i<s.length()-1 && map.get(s.substring(i, i+2)) != null){
+                sum += map.get(s.substring(i, i+2));
+                i++;
+                continue;
+            }
+            sum += map.get(s.substring(i, i+1));
+        }
+        return sum;
+    }
     public static void main(String[] args) {
-        String str = "  -0012a42";
+        String str = "LEETCODEISHIRING";
+        int row = 3;
         JZPractice jzp = new JZPractice();
-        int ans = jzp.strToInt(str);
+        String ans = jzp.convert(str, 4);
 //        new HelloWorld().out_list(ans);
 //        new HelloWorld().out_list2(ans);
         System.out.println(ans);
